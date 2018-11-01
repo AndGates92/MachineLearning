@@ -7,10 +7,23 @@
 */
 
 /**
- * @brief Stringify macros
+ * @brief STRINGIFY(x)
+ *
+ * \param x : argument to stringify
+ *
+ * Stringify input argumet
  *
  */
 #define STRINGIFY(x) #x
+
+/**
+ * @brief STRINGIFY_EXPR(x)
+ *
+ * \param x : argument to stringify
+ *
+ * Evaluate input argument and pass it on to STRINGIFY macro
+ *
+ */
 #define STRINGIFY_EXPR(x) STRINGIFY(x)
 
 /** @} */ // End of UtilityFunc group
