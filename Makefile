@@ -15,10 +15,16 @@ VERBOSE = @
 MKDIR = mkdir -p
 
 # Executable filename
-EXE_NAME = ml
+EXE_NAME ?= ml
 
-# Logfile
-LOGFILE = $(EXE_NAME).log
+# Log directory
+LOG_DIR ?= log
+
+# Log filename
+LOGFILENAME = $(EXE_NAME).log
+
+# Log file
+LOGFILE=$(LOG_DIR)/$(LOGFILENAME)
 
 # Select compiler:
 # - gcc for C files
@@ -45,7 +51,7 @@ INCLUDE_DIR = include
 OBJ_DIR = obj
 
 # Directory containing binary files
-BIN_DIR = bin
+BIN_DIR ?= bin
 
 DIR_LIST = $(LIB_DIR) \
            $(TOP_DIR) \
@@ -71,6 +77,7 @@ TOP = $(TOP_DIR)/$(SRC_DIR)/$(MAIN)
 EXE = $(BIN_DIR)/$(EXE_NAME)
 
 $(EXE) : $(OBJS)
+	$(MKDIR) $(LOG_DIR)
 	$(MKDIR) $(@D)
 	$(VERBOSE)echo "Compiling $(@F). Object files are: $^"
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) -o $@ $(DFLAGS) $^ 
@@ -88,13 +95,19 @@ all : $(EXE)
 
 debug :
 	$(VERBOSE)echo "Compiler: $(CC)"
-	$(VERBOSE)echo "Compiler options: $(CFLAGS)"
+	$(VERBOSE)echo "Compiler options:"
+	$(VERBOSE)echo "--> C flags: $(CFLAGS)"
+	$(VERBOSE)echo "--> defines: $(DFLAGS)"
+	$(VERBOSE)echo "--> libs: $(LIBS)"
 	$(VERBOSE)echo "Files lists:"
 	$(VERBOSE)echo "--> Source files: $(SRCS)"
-	$(VERBOSE)echo "--> Object files: $(OBJS)"
+	$(VERBOSE)echo "--> Object files: $(notdir $(OBJS))"
+	$(VERBOSE)echo "--> Executable file: $(notdir $(EXE_NAME))"
 	$(VERBOSE)echo "Directories lists:"
 	$(VERBOSE)echo "--> Source directories: $(VPATH)"
 	$(VERBOSE)echo "--> Include directories: $(INCLUDE_PATH)"
+	$(VERBOSE)echo "--> Exeutable directory: $(BIN_DIR)"
+	$(VERBOSE)echo "--> Log directory: $(LOG_DIR)"
 
 clean :
 	$(VERBOSE)echo "Remove object files: $(OBJS)"
@@ -104,7 +117,7 @@ clean :
 	$(VERBOSE)echo "Remove binary file: $(EXE)"
 	rm -rf $(BIN_DIR)
 	$(VERBOSE)echo "Remove log file: $(LOGFILE)"
-	rm -rf $(LOGFILE)
+	rm -rf $(LOG_DIR)
 	$(VERBOSE)echo "Clean completed"
 
 doc :
