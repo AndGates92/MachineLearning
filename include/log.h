@@ -16,6 +16,10 @@
 	#define LOGFILE ml.log
 #endif
 
+/**
+ * @brief log filename max length
+ *
+ */
 #define LOGFILE_MAX_LENGTH 20
 
 /**
