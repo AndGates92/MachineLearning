@@ -41,13 +41,14 @@ typedef char byte;
 void parse_idx (char * test_set, char * train_set, char * test_label, char * train_label);
 
 /** 
- * @brief Function: void parse_idx_file (char * filename)
+ * @brief Function: void parse_idx_file (char * filename, data_t ** data)
  *
  * \param filename: filename of IDX file to parse
+ * \param data:     data strcuture storing informations extracted from the file parsed 
  *
  * Parse IDX file and store data into structure
  */
-void parse_idx_file (char * filename);
+void parse_idx_file (char * filename, data_t ** data);
 
 /** 
  * @brief Function: int read_header (FILE * fid)
@@ -59,9 +60,10 @@ void parse_idx_file (char * filename);
 int read_header(FILE * fid);
 
 /** 
- * @brief Function: void parse_header (FILE * fid)
+ * @brief Function: void parse_header (FILE * fid, data_t ** data)
  *
- * \param fid: file description of the file to parse
+ * \param fid:  file description of the file to parse
+ * \param data: data strcuture storing informations extracted from the file parsed 
  *
  * Parse the header of the IDX file.
  * Extract the following informations:
@@ -69,8 +71,19 @@ int read_header(FILE * fid);
  *   -# Number of dimensions
  *   -# Dimensions
  */
-void parse_header(FILE * fid);
+void parse_header(FILE * fid, data_t ** data);
 
-
+/** 
+ * @brief Function: void parse_body (FILE * fid, data_t ** data)
+ *
+ * \param fid:  file description of the file to parse
+ * \param data: data strcuture storing informations extracted from the file parsed 
+ *
+ * Parse the body the IDX file.
+ * Extract the informations:
+ *   -# Labels
+ *   -# Samples
+ */
+void parse_body(FILE * fid, data_t ** data);
 
 /** @} */ // End of ParseIDX group

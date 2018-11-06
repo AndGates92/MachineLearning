@@ -74,9 +74,10 @@ int main (int argc, char * argv []) {
 		LOG_ERROR("Can't allocate memory for training label filename at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
 	}
 
-	log_info("Command line:\n\tnumber of arguments %0d\n", argc);
+	log_info("File %s in function %s at line %0d: Command line:\n", __FILE__, __func__, __LINE__);
+	log_info("File %s in function %s at line %0d: Number of arguments %0d\n", __FILE__, __func__, __LINE__,  argc);
 	for (int i = 0; i < argc; i++) {
-		log_info("\targument %0d: %s\n", i, argv[i]);
+		log_info("File %s in function %s at line %0d:\targument %0d: %s\n", __FILE__, __func__, __LINE__,  i, argv[i]);
 	}
 
 	for (int i = 1; i < argc; i++) {
@@ -91,7 +92,7 @@ int main (int argc, char * argv []) {
 				LOG_ERROR("Training set filename not given as number of arguments is %0d and filename expected position number is %0d\n", argc, (i+1))
 			}
 			train_set_no = i+1;
-			log_info("Training Set argument number: %0d\n", (train_set_no/2));
+			log_info("File %s in function %s at line %0d: Training Set argument number: %0d\n", __FILE__, __func__, __LINE__,  (train_set_no/2));
 		} else if (!(strcmp(argv[i],tes_opt))) {
 			if (test_set_no > 0) {
 				LOG_ERROR("Test set file has already been provided as an argument. Previous rgument position was %0d. New argument position is %0d\n", test_set_no, (i+1))
@@ -100,7 +101,7 @@ int main (int argc, char * argv []) {
 				LOG_ERROR("Test set filename not given as number of arguments is %0d and filename expected position number is %0d\n", argc, (i+1))
 			}
 			test_set_no = i+1;
-			log_info("Test Set argument number: %0d\n", (test_set_no/2));
+			log_info("File %s in function %s at line %0d: Test Set argument number: %0d\n", __FILE__, __func__, __LINE__,  (test_set_no/2));
 		} else if (!(strcmp(argv[i],trl_opt))) {
 			if (train_label_no > 0) {
 				LOG_ERROR("Training label file has already been provided as an argument. Previous rgument position was %0d. New argument position is %0d\n", train_label_no, (i+1))
@@ -109,7 +110,7 @@ int main (int argc, char * argv []) {
 				LOG_ERROR("Training label filename not given as number of arguments is %0d and filename expected position number is %0d\n", argc, (i+1))
 			}
 			train_label_no = i+1;
-			log_info("Training Label argument number: %0d\n", (train_label_no/2));
+			log_info("File %s in function %s at line %0d: Training Label argument number: %0d\n", __FILE__, __func__, __LINE__,  (train_label_no/2));
 		} else if (!(strcmp(argv[i],tel_opt))) {
 			if (test_label_no > 0) {
 				LOG_ERROR("Test label file has already been provided as an argument. Previous rgument position was %0d. New argument position is %0d\n", test_label_no, (i+1))
@@ -118,29 +119,29 @@ int main (int argc, char * argv []) {
 				LOG_ERROR("Test label filename not given as number of arguments is %0d and filename expected position number is %0d\n", argc, (i+1))
 			}
 			test_label_no = i+1;
-			log_info("Test Label argument number: %0d\n", (test_label_no/2));
+			log_info("File %s in function %s at line %0d: Test Label argument number: %0d\n", __FILE__, __func__, __LINE__,  (test_label_no/2));
 		}
 	}
 
-	log_info("Input files:\n");
+	log_info("File %s in function %s at line %0d: Input files:\n", __FILE__, __func__, __LINE__);
 	if (test_set_no > 0) {
 		strcpy(test_set, argv[test_set_no]);
-		log_info("\ttest set: %s\n", test_set);
+		log_info("File %s in function %s at line %0d: \ttest set: %s\n", __FILE__, __func__, __LINE__,  test_set);
 		inputfile_given = true;
 	}
 	if (train_set_no > 0) {
 		strcpy(train_set, argv[train_set_no]);
-		log_info("\ttrain set: %s\n", train_set);
+		log_info("File %s in function %s at line %0d: \ttrain set: %s\n", __FILE__, __func__, __LINE__,  train_set);
 		inputfile_given = true;
 	}
 	if (test_label_no > 0) {
 		strcpy(test_label, argv[test_label_no]);
-		log_info("\ttest label: %s\n", test_label);
+		log_info("File %s in function %s at line %0d: \ttest label: %s\n", __FILE__, __func__, __LINE__,  test_label);
 		inputfile_given = true;
 	}
 	if (train_label_no > 0) {
 		strcpy(train_label, argv[train_label_no]);
-		log_info("\ttrain label: %s\n", train_label);
+		log_info("File %s in function %s at line %0d: \ttrain label: %s\n", __FILE__, __func__, __LINE__,  train_label);
 		inputfile_given = true;
 	}
 
@@ -156,7 +157,7 @@ int main (int argc, char * argv []) {
 	free(test_label);
 	free(train_label);
 
-	log_info("Tests completed.\n");
+	log_info("File %s in function %s at line %0d: Tests completed.\n", __FILE__, __func__, __LINE__);
 	close_logfile();
 
 	return EXIT_SUCCESS;

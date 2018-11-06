@@ -9,19 +9,31 @@
 #include <stdio.h>
 #include <string.h>
 #include "log.h"
+#include "data.h"
 #include "file.h"
 #include "parse_idx.h"
 
 void parse_idx (char * test_set, char * train_set, char * test_label, char * train_label) {
 
-	parse_idx_file(test_set);
-	parse_idx_file(test_label);
-	parse_idx_file(train_set);
-	parse_idx_file(train_label);
+	data_t * test_set_struct_t;
+	data_t * test_label_struct_t;
+	data_t * train_set_struct_t;
+	data_t * train_label_struct_t;
+
+	parse_idx_file(test_set, &test_set_struct_t);
+	parse_idx_file(test_label, &test_label_struct_t);
+	parse_idx_file(train_set, &train_set_struct_t);
+	parse_idx_file(train_label, &train_label_struct_t);
+
+	log_info("File %s in function %s at line %0d: Freeing memory allocated for data strcture data_t.\n", __FILE__, __func__, __LINE__);
+	free(test_set_struct_t);
+	free(test_label_struct_t);
+	free(train_set_struct_t);
+	free(train_label_struct_t);
 
 }
 
-void parse_idx_file (char * filename) {
+void parse_idx_file (char * filename, data_t ** data) {
 	FILE * fid = NULL;
 
 	// Check is string is empty
@@ -31,10 +43,14 @@ void parse_idx_file (char * filename) {
 
 	if (fid!=NULL) {
 		log_info("================================================================\n", filename);
-		log_info("Parsing file %s\n", filename);
+		log_info("Parsing file %s\n", __FILE__, __func__, __LINE__,  filename);
 		log_info("================================================================\n", filename);
-		parse_header(fid);
-		log_info("Parsing complete.\nClosing file %s\n", filename);
+		log_info("File %s in function %s at line %0d: Parse header of file %s\n", __FILE__, __func__, __LINE__,  filename);
+		parse_header(fid, data);
+		log_info("File %s in function %s at line %0d: Parse body of file %s\n", __FILE__, __func__, __LINE__,  filename);
+		parse_body(fid, data);
+		log_info("File %s in function %s at line %0d: Parsing complete.\n", __FILE__, __func__, __LINE__);
+		log_info("File %s in function %s at line %0d: Closing file %s\n", __FILE__, __func__, __LINE__,  filename);
 
 	}
 
@@ -42,6 +58,7 @@ void parse_idx_file (char * filename) {
 	file_close(fid);
 }
 
+// Header stores informations in 32-bit integer variables
 int read_header(FILE * fid) {
 	int value_le = 0;
 	fread(&value_le, sizeof(value_le), 1, fid);
@@ -57,7 +74,7 @@ int read_header(FILE * fid) {
 	return value_be;
 }
 
-void parse_header(FILE * fid) {
+void parse_header(FILE * fid, data_t ** data) {
 
 	// Variable storing the 32 bits fo the magic number
 	int magic_number;
@@ -79,7 +96,9 @@ void parse_header(FILE * fid) {
 	// Number of dimensions is always the LSB of the magic number (i.e. byte0)
 	data_type = magic_number_bytes[1];
 
-	log_info("Magic number %0d\n    -> number of dimensions %0d\n    -> data type %0d\n", magic_number, no_dims, data_type);
+	log_info("File %s in function %s at line %0d: Magic number %0d\n", __FILE__, __func__, __LINE__,  magic_number);
+	log_info("File %s in function %s at line %0d:     -> number of dimensions %0d\n", __FILE__, __func__, __LINE__,  no_dims);
+	log_info("File %s in function %s at line %0d:     -> data type %0d\n", __FILE__, __func__, __LINE__,  data_type);
 
 	int * dimensions = NULL;
 	dimensions = (int *) malloc(no_dims*sizeof(int));
@@ -90,11 +109,16 @@ void parse_header(FILE * fid) {
 	// Loop through dimensions
 	for (int dim = 0; dim < no_dims; dim++) {
 		dimensions[dim] = read_header(fid);
-		log_info("Dimension %0d: %0d\n", dim, dimensions[dim]);
+		log_info("File %s in function %s at line %0d: Dimension %0d: %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
 	}
+
+	log_info("File %s in function %s at line %0d: Creating data structure\n", __FILE__, __func__, __LINE__);
+	*data = add_data(dimensions, no_dims);
 
 	free (dimensions);
 	free (magic_number_bytes);
 }
 
+void parse_body(FILE * fid, data_t ** data) {
 
+}

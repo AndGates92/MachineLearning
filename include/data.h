@@ -1,157 +1,189 @@
 /**
  * @copyright
- * @file image.h
+ * @file data.h
  * @author Andrea Gianarda
  * @date 16th of October 2018
  * @brief Image handling header file
 */
 
 /**
- * @brief pixel type
+ * @brief element type
  *
  * Pixel type as per input file
  */
 
-// Uncomment pixel data type
-//typedef int pixeldatatype_t;
-//typedef unsigned char pixeldatatype_t;
-//typedef char pixeldatatype_t;
-//typedef unsigned short pixeldatatype_t;
-typedef short pixeldatatype_t;
-//typedef float pixeldatatype_t;
-//typedef double pixeldatatype_t;
+// Uncomment element data type
+//typedef int elementdatatype_t;
+//typedef unsigned char elementdatatype_t;
+//typedef char elementdatatype_t;
+//typedef unsigned short elementdatatype_t;
+typedef short elementdatatype_t;
+//typedef float elementdatatype_t;
+//typedef double elementdatatype_t;
 
 /**
- * @brief image structure
+ * @brief data strcture data_t
  *
  */
-typedef struct image {
-	int width; /**< width of the image */
-	int height; /**< height of the image */
-	pixeldatatype_t * pixels; /**< pixels of the image */
-} image_t;
+typedef struct data {
+	int * dimensions; /**< Array of dimensions of the data structure data_t */
+	int no_dims; /**< number of dimensions of the data structure data_t */
+	data_type_e data_type; /**< datat type of the data strcture data_t */
+	elementdatatype_t * elements; /**< elements of the data structure data_t */
+} data_t;
+
+/**
+ * @brief data type enumeration data_type_e
+ *
+ */
+enum data_type_e {
+	SBYTE,
+	UBYTE,
+	SHORT,
+	INTEGER,
+	FLOAT,
+	DOUBLE
+}
 
 /** @defgroup ImageFunc Image Functions
- *  Functions concerning image
+ *  Functions concerning data strcture data_t
  *  @{
  */
 /** 
- * @brief Function: image_t * add_image (int width, int height)
+ * @brief Function: data_t * add_data (int * dimensions, int no_dims)
  *
- * \param width:     width of the image
- * \param height:    height of the image
- * \return a pointer to an image structure
+ * \param dimensions: array with the dimensions of the data strcture data_t
+ * \param no_dims:    number of dimensions of the data strcture data_t
+ * \return a pointer to an data strcture data_t
  *
- * Create and allocate memory for a new image
+ * Create and allocate memory for a new data strcture data_t
  */
-image_t * add_image (int width, int height);
+data_t * add_data (int * dimensions, int no_dims);
 
 /**
- * @brief Function: void delete_image (image_t * img)
+ * @brief Function: void delete_data (data_t * data)
  *
- * \param img:  image to delete
+ * \param data:  data strcture data_t to delete
  * 
- * Delete an image. Frees up memory as well.
+ * Delete an data strcture data_t. Frees up memory as well.
  */
-void delete_image (image_t * img);
+void delete_data (data_t * data);
 
-// Set fields of image structure
+// Set fields of data strcture data_t
 
 /**
- * @brief Function: void set_width (image_t ** img, int width)
+ * @brief Function: void set_dimensions (data_t ** data, int * dimensions)
  *
- * \param img:    input image structure
- * \param width:  width of the image
+ * \param data:        input data strcture data_t
+ * \param dimensions:  array with the dimensions of the data strcture data_t
  * 
- * Set the width of the image.
+ * Set the dimensions of the data strcture data_t.
  */
-void set_width (image_t ** img, int width);
+void set_dimensions (data_t ** data, int * dimensions);
 
 /**
- * @brief Function: void set_height (image_t ** img, int height)
+ * @brief Function: void set_no_dims (data_t ** data, int no_dims)
  *
- * \param img:    input image structure
- * \param height: height of the image
+ * \param data:    input data strcture data_t
+ * \param no_dims: number of dimensions of the data strcture data_t
  * 
- * Set the height of the image.
+ * Set the number of domensions of the data strcture data_t.
  */
-void set_height (image_t ** img, int height);
+void set_no_dims (data_t ** data, int no_dims);
 
 /**
- * @brief Function: void set_dimensions (image_t ** img, int width, int height)
+ * @brief Function: void set_data_type (data_t ** data, data_type_e data_type)
  *
- * \param img:    input image structure
- * \param width:  width of the image
- * \param height: height of the image
+ * \param data:    input data strcture data_t
+ * \param data_type: data type of elements of the data strcture data_t
  * 
- * Set the width and the height of the image.
+ * Set the data type of the data strcture data_t.
  */
-void set_dimensions (image_t ** img, int width, int height);
+void set_data_type (data_t ** data, data_type_e data_type);
 
 /**
- * @brief Function: void set_pixel (image_t ** img, pixeldatatype_t pixel, int x_pixel, int y_pixel)
+ * @brief Function: void set_element (data_t ** data, elementdatatype_t element, int * coordinates)
  *
- * \param img:      input image structure 
- * \param pixel:    pixel of the image to add
- * \param x_pixel:  x coordinate of pixel to add
- * \param y_pixel:  y coordinate of pixel to add
+ * \param data:      input data strcture data_t 
+ * \param element:    element of the data strcture data_t to add
+ * \param coordinates:  coordinates of element to add
  * 
- * Set a pixel of the image.
+ * Set an element of the data strcture data_t.
  */
-void set_pixel (image_t ** img, pixeldatatype_t pixel, int x_pixel, int y_pixel);
+void set_element (data_t ** data, elementdatatype_t element, int * coordinates);
 
 /**
- * @brief Function: void set_pixel (image_t ** img, pixeldatatype_t* pixel)
+ * @brief Function: void set_data_elements (data_t ** data, elementdatatype_t* elements)
  *
- * \param img:      input image structure 
- * \param pixel:    pixel of the image to add
+ * \param data:      input data strcture data_t 
+ * \param elements:    element of the data strcture data_t to add
  * 
- * Set pixels of the image.
+ * Set elements of the data strcture data_t.
  */
-void set_img_pixels (image_t ** img, pixeldatatype_t * pixel);
+void set_data_elements (data_t ** data, elementdatatype_t * elements);
 
-// Get fields of image structure
-
-/**
- * @brief Function: void get_width (image_t * img)
- *
- * \param img:    input image structure
- * \return the width of the image structure
- * 
- * Get the width of the image.
- */
-int get_width (image_t * img);
+// Get fields of data strcture data_t
 
 /**
- * @brief Function: void get_height (image_t * img)
+ * @brief Function: int * get_width (data_t * data)
  *
- * \param img:    input image structure
- * \return the height of the image structure
+ * \param data:    input data strcture data_t
+ * \return an array of the dimensions of the data structure data_t
  * 
- * Get the height of the image.
+ * Get the dimensions of the data structure data_t.
  */
-int get_height (image_t * img);
+int * get_dimensions (data_t * data);
 
 /**
- * @brief Function: void get_img_pixels (image_t * img)
+ * @brief Function: int get_no_dims (data_t * data)
  *
- * \param img:    input image structure
- * \return the pixels of the image structure
+ * \param data:    input data strcture data_t
+ * \return the number of dimensions of the data structure
  * 
- * Get an array of pixels of the image.
+ * Get the number of dimensions of the data structure.
  */
-pixeldatatype_t* get_img_pixels (image_t * img);
+int get_no_dims (data_t * data);
 
 /**
- * @brief Function: void get_pixel (image_t * img, int x_pixel, int y_pixel)
+ * @brief Function: data_type_e get_data_type (data_t * data)
  *
- * \param img:    input image structure
- * \param x_pixel:  x coordinate of pixel to return
- * \param y_pixel:  y coordinate of pixel to return
- * \return the pixel of the image structure at coordinates passed as input
+ * \param data:    input data strcture data_t
+ * \return the data type of elements in the data structure
  * 
- * Get a pixel of the image.
+ * Get the data type of element in the data structure.
  */
-pixeldatatype_t get_pixel (image_t * img, int x_pixel, int y_pixel);
+data_type_e get_data_type (data_t * data);
+
+/**
+ * @brief Function: elementdatatype_t * get_data_elements (data_t * data)
+ *
+ * \param data:    input data strcture data_t
+ * \return the elements of the data strcture data_t
+ * 
+ * Get an array of elements of the data strcture data_t.
+ */
+elementdatatype_t * get_data_elements (data_t * data);
+
+/**
+ * @brief Function: elementdatatype_t get_element (data_t * data, int * coordinates)
+ *
+ * \param data:    input data strcture data_t
+ * \param coordinates:  coordinates of element to return
+ * \return the element of the data strcture data_t at coordinates passed as input
+ * 
+ * Get an element of the data strcture data_t.
+ */
+elementdatatype_t get_element (data_t * data, int * coordinates);
+
+/**
+ * @brief Function: int compute_element_offset (data_t * data, int * coordinates)
+ *
+ * \param data:    input data strcture data_t
+ * \param coordinates:  coordinates of element to return the absolute index
+ * \return the absolute index of the element of the data strcture data_t at coordinates passed as input
+ * 
+ * Compute the coordinates of an element of the data strcture data_t.
+ */
+int compute_element_offset (data_t * data, int * coordinates);
 
 /** @} */ // End of ImageFunc group
