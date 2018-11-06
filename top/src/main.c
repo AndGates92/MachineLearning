@@ -156,6 +156,7 @@ int main (int argc, char * argv []) {
 	free(test_label);
 	free(train_label);
 
+	log_info("Tests completed.\n");
 	close_logfile();
 
 	return EXIT_SUCCESS;
