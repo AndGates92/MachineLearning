@@ -11,9 +11,9 @@ EXEDIR=bin
 
 DATASET_DIR=dataset/mnist
 TRAIN_SET=train-images-idx3-ubyte
-TRAIN_LABEL=train-label-idx1-ubyte
+TRAIN_LABEL=train-labels-idx1-ubyte
 TEST_SET=t10k-images-idx3-ubyte
-TEST_LABEL=t10k-label-idx1-ubyte
+TEST_LABEL=t10k-labels-idx1-ubyte
 
 echo "Run script variables"
 echo "\n========================================================================="
@@ -42,7 +42,7 @@ echo "\n========================================================================
 echo "Clean workspace"
 echo "========================================================================="
 (set -x; \
- make clean LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} > ${LOGDIR}/${CLEANLOG})
+ make clean LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR})
 
 echo "\n========================================================================="
 echo "Create log directory"
@@ -72,4 +72,4 @@ echo "\n========================================================================
 echo "Run program"
 echo "========================================================================="
 (set -x; \
- ./bin/ml -trs ${DATASET_DIR}/${TRAIN_SET})
+ ./bin/ml -tes ${DATASET_DIR}/${TEST_LABEL})
