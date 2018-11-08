@@ -33,7 +33,8 @@ CC = gcc
 
 # Compile-time flags
 CFLAGS = -g -Wall -Werror -Wextra -Wpedantic -std=gnu99 -rdynamic
-DFLAGS = -DLOGFILE="$(LOGFILE)"
+EXTRADFLAGS =
+DFLAGS = -DLOGFILE="$(LOGFILE)" $(EXTRADFLAGS)
 LIBS= -lm
 
 # Directory containing source and header files
