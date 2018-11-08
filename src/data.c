@@ -130,9 +130,9 @@ void set_data_elements (data_t ** data, elementdatatype_t * elements) {
 
 	#ifdef VERBOSE
 		for (int idx=0; idx<total_elements; idx++) {
-			log_info("File %s in function %s at line %0d: Set element(%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(element+idx)));
+			log_info("File %s in function %s at line %0d: Set element(%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)));
 			#ifdef DEBUG
-				log_info("File %s in function %s at line %0d: Element(%0d) of data structure data_t : expected %0lf actual %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(element+idx)), (double)((*data)->elements[idx]));
+				log_info("File %s in function %s at line %0d: Element(%0d) of data structure data_t : expected %0lf actual %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)), (double)((*data)->elements[idx]));
 			#endif // DEBUG
 		}
 	#endif // VERBOSE
@@ -211,11 +211,6 @@ elementdatatype_t * get_data_elements (data_t * data) {
 	memcpy(elements, data->elements, (total_elements*sizeof(elementdatatype_t)));
 
 	#ifdef VERBOSE
-		int total_elements = 1;
-		for (int dim = 0; dim < (*data)->no_dims; dim++) {
-			total_elements = (*data)->dimensions[dim];
-		}
-	}
 		for (int idx=0; idx<total_elements; idx++) {
 			log_info("File %s in function %s at line %0d: Get element%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)));
 		}
