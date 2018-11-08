@@ -15,6 +15,9 @@ TRAIN_LABEL=train-labels-idx1-ubyte
 TEST_SET=t10k-images-idx3-ubyte
 TEST_LABEL=t10k-labels-idx1-ubyte
 
+VERBOSEFLAG=VERBOSE
+DEBUGFLAG=DEBUG
+
 echo "Run script variables"
 echo "\n========================================================================="
 echo "DATASET"
@@ -60,7 +63,7 @@ echo "\n========================================================================
 echo "Compile sources"
 echo "========================================================================="
 (set -x; \
- make all LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} > ${LOGDIR}/${COMPLOG})
+ make all LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} EXTRADFLAGS="-D${VERBOSEFLAG} -D${DEBUGFLAG}" > ${LOGDIR}/${COMPLOG})
 
 echo "\n========================================================================="
 echo "Compile documetation"
