@@ -1,3 +1,5 @@
+#ifndef FILE_H
+#define FILE_H
 /**
  * @copyright
  * @file file.h
@@ -36,3 +38,4 @@ FILE * file_open (const char * filename, const char * permission);
  */
 void file_close (FILE * fid);
 /** @} */ // End of FileFunc group
+#endif // FILE_H

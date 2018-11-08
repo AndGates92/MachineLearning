@@ -1,3 +1,5 @@
+#ifndef DATA_H
+#define DATA_H
 /**
  * @copyright
  * @file data.h
@@ -22,28 +24,36 @@ typedef short elementdatatype_t;
 //typedef double elementdatatype_t;
 
 /**
+ * @brief Length of data type string
+ *
+ */
+#define MAX_DATA_TYPE_LENGTH 8
+
+/**
+ * @brief data type enumeration data_type_e
+ *
+ */
+typedef enum data_type_list {
+	SBYTE,
+	UBYTE,
+	SHORT,
+	INTEGER,
+	FLOAT,
+	DOUBLE,
+	UNKNOWN
+} data_type_e;
+
+/**
  * @brief data strcture data_t
  *
  */
 typedef struct data {
 	int * dimensions; /**< Array of dimensions of the data structure data_t */
 	int no_dims; /**< number of dimensions of the data structure data_t */
-	data_type_e data_type; /**< datat type of the data strcture data_t */
+	data_type_e data_type; /**< data type of the data strcture data_t */
+	short no_bytes; /**< number of bytes of the data structure data_t data type */
 	elementdatatype_t * elements; /**< elements of the data structure data_t */
 } data_t;
-
-/**
- * @brief data type enumeration data_type_e
- *
- */
-enum data_type_e {
-	SBYTE,
-	UBYTE,
-	SHORT,
-	INTEGER,
-	FLOAT,
-	DOUBLE
-}
 
 /** @defgroup ImageFunc Image Functions
  *  Functions concerning data strcture data_t
@@ -135,6 +145,17 @@ void set_data_elements (data_t ** data, elementdatatype_t * elements);
 int * get_dimensions (data_t * data);
 
 /**
+ * @brief Function: int get_width (data_t * data, int idx)
+ *
+ * \param data: input data strcture data_t
+ * \param idx:  index of the dimension to return
+ * \return the dimension of the data structure data_t matching the index
+ * 
+ * Get the dimension at index idx of the data structure data_t.
+ */
+int get_dimension (data_t * data, int idx);
+
+/**
  * @brief Function: int get_no_dims (data_t * data)
  *
  * \param data:    input data strcture data_t
@@ -153,6 +174,16 @@ int get_no_dims (data_t * data);
  * Get the data type of element in the data structure.
  */
 data_type_e get_data_type (data_t * data);
+
+/**
+ * @brief Function: short get_no_dims (data_t * data)
+ *
+ * \param data:    input data strcture data_t
+ * \return the number of bytes of the data type of the data structure
+ * 
+ * Get the number of bytes of the data type of the data structure.
+ */
+short get_no_bytes (data_t * data);
 
 /**
  * @brief Function: elementdatatype_t * get_data_elements (data_t * data)
@@ -186,4 +217,24 @@ elementdatatype_t get_element (data_t * data, int * coordinates);
  */
 int compute_element_offset (data_t * data, int * coordinates);
 
+/**
+ * @brief Function: char * data_type_to_str (data_type_e data_type)
+ *
+ * \param data_type:    data type of data strcture data_t
+ * \return a string with the name of the data type
+ * 
+ * Convert the data type to a string that can be printed.
+ */
+char * data_type_to_str (data_type_e data_type);
+
+/**
+ * @brief Function: short data_type_bytes (data_type_e data_type)
+ *
+ * \param data_type:    data type of data strcture data_t
+ * \return the number of bytes of the data type
+ * 
+ * Compute the number of bytes of the data type.
+ */
+short data_type_bytes (data_type_e data_type);
 /** @} */ // End of ImageFunc group
+#endif // DATA_H

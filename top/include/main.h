@@ -1,3 +1,5 @@
+#ifndef MAIN_H
+#define MAIN_H
 /**
  * @copyright
  * @file main.h
@@ -35,3 +37,4 @@ const char* tes_opt = "-tes";
  *
  */
 const char* tel_opt = "-tel";
+#endif // MAIN_H

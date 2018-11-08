@@ -1,3 +1,5 @@
+#ifndef LOG_H
+#define LOG_H
 /**
  * @copyright
  * @file log.h
@@ -6,6 +8,8 @@
  * @brief Log handling header file
 */
 
+#include <stdbool.h>
+#include "utility.h"
 #include "file.h"
 
 /**
@@ -23,6 +27,12 @@
 #define LOGFILE_MAX_LENGTH 20
 
 /**
+ * @brief Bolean sring max length
+ *
+ */
+#define BOOL_MAX_LENGTH 5
+
+/**
  * @brief Pointer to log file
  *
  */
@@ -33,12 +43,24 @@ extern FILE * logfile;
  *
  * \param ... : variable number of arguments to provide to fprintf
  *
- * Print an error message to stderr and exists with EXIT_FAILURE status
+ * Print an error message to stderr and exits with EXIT_FAILURE status
  */
 #define LOG_ERROR(...)\
 	fprintf (stderr, __VA_ARGS__);\
 	close_logfile ();\
 	exit(EXIT_FAILURE);
+
+/**
+ * @brief ASSERT(EXPR)
+ *
+ * \param EXPR : expression to assert
+ *
+ * Assert the expression and if it fails, an error message is printed to stderr and the program exits with EXIT_FAILURE status
+ */
+#define ASSERT(EXPR)\
+	if (!(EXPR)) {\
+		LOG_ERROR("ASSERTION FAILED (%s) at %s, function %s, line %0d\n", STRINGIFY_EXPR(EXPR), __FILE__, __func__, __LINE__);\
+	}
 
 /** @defgroup LogFunc Log Functions
  *  Functions logging progress
@@ -62,4 +84,12 @@ void log_info (const char * str_format, ...);
  */
 void close_logfile ();
 
+/** 
+ * @brief Function: char * bool_to_str (bool expr)
+ *
+ * Convert boolean to string
+ */
+char * bool_to_str (bool expr);
+
 /** @} */ // End of LogFunc group
+#endif // LOG_H

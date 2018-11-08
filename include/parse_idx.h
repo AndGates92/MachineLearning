@@ -1,3 +1,5 @@
+#ifndef PARSE_IDX_H
+#define PARSE_IDX_H
 /**
  * @copyright
  * @file parse_idx.h
@@ -5,6 +7,9 @@
  * @date 16th of October 2018
  * @brief Parse IDX file header file
 */
+
+#include <stdbool.h>
+#include "data.h"
 
 /**
  * @brief Rename char type as byte for readability reasons
@@ -74,6 +79,16 @@ int read_header(FILE * fid);
 void parse_header(FILE * fid, data_t ** data);
 
 /** 
+ * @brief Function: bool read_body (FILE * fid, elementdatatype_t* value)
+ *
+ * \param fid:            file description of the file to parse
+ * \param value:          value read from file
+ *
+ * Read the value of one field of the body of a IDX file and convert little endian to big endian
+ */
+bool read_body(FILE * fid, elementdatatype_t* value);
+
+/** 
  * @brief Function: void parse_body (FILE * fid, data_t ** data)
  *
  * \param fid:  file description of the file to parse
@@ -86,4 +101,15 @@ void parse_header(FILE * fid, data_t ** data);
  */
 void parse_body(FILE * fid, data_t ** data);
 
+/** 
+ * @brief Function: data_type_e IDX_data_type_to_enum (byte data_type)
+ *
+ * \param data_type:  data type code as defined by IDX standard
+ * \return return the enumerated data type
+ *
+ * Convert data type as defined in IDX standard to enumerated type
+ */
+data_type_e IDX_data_type_to_enum (byte data_type);
+
 /** @} */ // End of ParseIDX group
+#endif // PARSE_IDX_H

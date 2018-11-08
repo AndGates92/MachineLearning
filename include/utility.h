@@ -1,3 +1,5 @@
+#ifndef UTILITY_H
+#define UTILITY_H
 /**
  * @copyright
  * @file file.h
@@ -27,3 +29,4 @@
 #define STRINGIFY_EXPR(x) STRINGIFY(x)
 
 /** @} */ // End of UtilityFunc group
+#endif // UTILITY_H

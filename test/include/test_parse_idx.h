@@ -1,6 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-
+#ifndef TEST_PARSE_IDX_H
+#define TEST_PARSE_IDX_H
 /**
  * @copyright
  * @file test_parse_idx.h
@@ -25,3 +24,4 @@
  */
 void test_parse_idx (char * test_set, char * train_set, char * test_label, char * train_label);
 /** @} */ // End of ImageFunc group
+#endif // TEST_PARSE_IDX_H
