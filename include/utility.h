@@ -2,12 +2,16 @@
 #define UTILITY_H
 /**
  * @copyright
- * @file file.h
+ * @file utility.h
  * @author Andrea Gianarda
  * @date 24th of October 2018
  * @brief Utility handling header file
 */
 
+/** @defgroup UtilityFunc Utility Functions
+ *  Functions concerning utility
+ *  @{
+ */
 /**
  * @brief STRINGIFY(x)
  *
