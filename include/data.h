@@ -5,7 +5,7 @@
  * @file data.h
  * @author Andrea Gianarda
  * @date 16th of October 2018
- * @brief Image handling header file
+ * @brief Data handling header file
 */
 
 /**
@@ -55,7 +55,7 @@ typedef struct data {
 	elementdatatype_t * elements; /**< elements of the data structure data_t */
 } data_t;
 
-/** @defgroup ImageFunc Image Functions
+/** @defgroup DataFunc Data Functions
  *  Functions concerning data strcture data_t
  *  @{
  */
@@ -236,5 +236,5 @@ char * data_type_to_str (data_type_e data_type);
  * Compute the number of bytes of the data type.
  */
 short data_type_bytes (data_type_e data_type);
-/** @} */ // End of ImageFunc group
+/** @} */ // End of DataFunc group
 #endif // DATA_H
