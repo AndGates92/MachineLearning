@@ -77,7 +77,7 @@ echo "START:Test to parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
 (set -x; \
  ./bin/ml -tel ${DATASET_DIR}/${TEST_LABEL})
 echo "COMPLETED:Test to parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
-echo "START:Test to parsing test set file ${DATASET_DIR}/${TEST_SETL}"
+echo "START:Test to parsing test set file ${DATASET_DIR}/${TEST_SET}"
 (set -x; \
  ./bin/ml -tes ${DATASET_DIR}/${TEST_SET})
-echo "COMPLETED:Test to parsing test set file ${DATASET_DIR}/${TEST_SETL}"
+echo "COMPLETED:Test to parsing test set file ${DATASET_DIR}/${TEST_SET}"

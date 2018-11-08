@@ -25,7 +25,7 @@ void parse_idx (char * test_set, char * train_set, char * test_label, char * tra
 	parse_idx_file(train_set, &train_set_struct_t);
 	parse_idx_file(train_label, &train_label_struct_t);
 
-	log_info(DEBUG, "File %s in function %s at line %0d: Freeing memory allocated for data strcture data_t.\n", __FILE__, __func__, __LINE__);
+	LOG_INFO(DEBUG,"Freeing memory allocated for data strcture data_t.\n");
 	free(test_set_struct_t);
 	free(test_label_struct_t);
 	free(train_set_struct_t);
@@ -45,12 +45,12 @@ void parse_idx_file (char * filename, data_t ** data) {
 		log_info(ZERO, "================================================================\n", filename);
 		log_info(ZERO, "Parsing file %s\n", filename);
 		log_info(ZERO, "================================================================\n", filename);
-		log_info(MEDIUM, "File %s in function %s at line %0d: Parse header of file %s\n", __FILE__, __func__, __LINE__,  filename);
+		LOG_INFO(MEDIUM,"Parse header of file %s\n",  filename);
 		parse_header(fid, data);
-		log_info(MEDIUM, "File %s in function %s at line %0d: Parse body of file %s\n", __FILE__, __func__, __LINE__,  filename);
+		LOG_INFO(MEDIUM,"Parse body of file %s\n",  filename);
 		parse_body(fid, data);
-		log_info(ZERO, "File %s in function %s at line %0d: Parsing complete.\n", __FILE__, __func__, __LINE__);
-		log_info(DEBUG, "File %s in function %s at line %0d: Closing file %s\n", __FILE__, __func__, __LINE__,  filename);
+		LOG_INFO(ZERO,"Parsing complete.\n");
+		LOG_INFO(DEBUG,"Closing file %s\n",  filename);
 
 	}
 
@@ -86,7 +86,7 @@ void parse_header(FILE * fid, data_t ** data) {
 	byte * magic_number_bytes = NULL;
 	magic_number_bytes = (byte *) malloc(sizeof(int)*sizeof(byte));
 	if (magic_number_bytes == NULL) {
-		LOG_ERROR("Can't allocate memory for magic number at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+		LOG_ERROR("Can't allocate memory for magic number");
 	}
 
 	magic_number = read_header(fid);
@@ -102,25 +102,25 @@ void parse_header(FILE * fid, data_t ** data) {
 	data_type = magic_number_bytes[1];
 	data_type_enum = IDX_data_type_to_enum(data_type);
 
-	log_info(MEDIUM, "File %s in function %s at line %0d: Magic number %0d\n", __FILE__, __func__, __LINE__,  magic_number);
-	log_info(MEDIUM, "File %s in function %s at line %0d:     -> number of dimensions %0d\n", __FILE__, __func__, __LINE__,  no_dims);
-	log_info(MEDIUM, "File %s in function %s at line %0d:     -> data type %0d (%s)\n", __FILE__, __func__, __LINE__,  data_type, data_type_to_str(data_type_enum));
+	LOG_INFO(MEDIUM,"Magic number %0d\n",  magic_number);
+	LOG_INFO(MEDIUM,"    -> number of dimensions %0d\n",  no_dims);
+	LOG_INFO(MEDIUM,"    -> data type %0d (%s)\n",  data_type, data_type_to_str(data_type_enum));
 
 	free(magic_number_bytes);
 
 	int * dimensions = NULL;
 	dimensions = (int *) malloc(no_dims*sizeof(int));
 	if (dimensions == NULL) {
-		LOG_ERROR("Can't allocate memory for dimensions of data at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+		LOG_ERROR("Can't allocate memory for dimensions of data");
 	}
 
 	// Loop through dimensions
 	for (int dim = 0; dim < no_dims; dim++) {
 		dimensions[dim] = read_header(fid);
-		log_info(MEDIUM, "File %s in function %s at line %0d: Dimension %0d: %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
+		LOG_INFO(MEDIUM,"Dimension %0d: %0d\n",  dim, dimensions[dim]);
 	}
 
-	log_info(MEDIUM, "File %s in function %s at line %0d: Creating data structure data_t\n", __FILE__, __func__, __LINE__);
+	LOG_INFO(MEDIUM,"Creating data structure data_t\n");
 	*data = add_data(dimensions, no_dims);
 	set_data_type(data, data_type_enum);
 
@@ -185,13 +185,13 @@ void parse_body(FILE * fid, data_t ** data) {
 		elementdatatype_t data_read = 0;
 		eof = read_body(fid, &data_read);
 
-		log_info(DEBUG, "File %s in function %s at line %0d: Data read %0d, End of file %s\n", __FILE__, __func__, __LINE__, data_read, bool_to_str(eof));
+		LOG_INFO(DEBUG,"Data read %0d, End of file %s\n", data_read, bool_to_str(eof));
 
 		// Variable storing the 32 bits fo the magic number grouped as bytes (8 bits)
 		byte * element_bytes = NULL;
 		element_bytes = (byte *) malloc(sizeof(int)*sizeof(byte));
 		if (element_bytes == NULL) {
-			LOG_ERROR("Can't allocate memory for an array to split elements in single bytes at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+			LOG_ERROR("Can't allocate memory for an array to split elements in single bytes");
 		}
 
 		memcpy(element_bytes, &data_read, sizeof(elementdatatype_t));
@@ -212,12 +212,12 @@ void parse_body(FILE * fid, data_t ** data) {
 				idx = (el*no_bytes)+byte;
 				element += (element_bytes[idx] << (BIT_IN_BYTE*byte));
 			}
-			log_info(HIGH, "File %s in function %s at line %0d: Element %0d out of %0d: %0d\n", __FILE__, __func__, __LINE__, element_cnt, total_elements, element);
+			LOG_INFO(HIGH,"Element %0d out of %0d: %0d\n", element_cnt, total_elements, element);
 
 			int * coordinates = NULL;
 			coordinates = (int *) malloc(no_dims*sizeof(int));
 			if (coordinates==NULL) {
-				LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+				LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data");
 			}
 
 			int remainder = 0;
@@ -269,7 +269,7 @@ data_type_e IDX_data_type_to_enum (byte data_type) {
 			data_type_enum = DOUBLE;
 			break;
 		default:
-			LOG_ERROR("Unknown data type ID %0d. Can't generate convert to data_type_e type at %s, function %s, line %0d\n", data_type, __FILE__, __func__, __LINE__);
+			LOG_ERROR("Unknown data type ID %0d. Can't generate convert to data_type_e type", data_type);
 			break;
 	}
 

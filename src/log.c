@@ -28,15 +28,15 @@ void log_info(verb_level_e verbosity, const char * str_format, ...) {
 			char * filename = NULL;
 			filename = (char *) malloc(LOGFILE_MAX_LENGTH*sizeof(char));
 			if (filename==NULL) {
-				LOG_ERROR("Can't allocate memory for log filename at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+				LOG_ERROR("Can't allocate memory for log filename");
 			}
 			strcpy(filename, STRINGIFY_EXPR(LOGFILE));
 
 			logfile = fopen(filename, "a");
 			if (logfile==NULL) {
-				LOG_ERROR("Can't open file %s for write at %s, function %s, line %0d\n", filename, __FILE__, __func__, __LINE__);
+				LOG_ERROR("Can't open file %s for write", filename);
 			}
-			log_info(HIGH, "File %s in function %s at line %0d: Opened file %s for write. File descriptor %0d\n", __FILE__, __func__, __LINE__,  filename, fileno(logfile));
+			LOG_INFO(HIGH, "Opened file %s for write. File descriptor %0d\n", filename, fileno(logfile));
 			free(filename);
 		}
 		vfprintf (logfile, str_format, arglist);
@@ -49,11 +49,11 @@ void close_logfile () {
 	char * filename = NULL;
 	filename = (char *) malloc(LOGFILE_MAX_LENGTH*sizeof(char));
 	if (filename==NULL) {
-		LOG_ERROR("Can't allocate memory for log filename at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+		LOG_ERROR("Can't allocate memory for log filename");
 	}
 	strcpy(filename, STRINGIFY_EXPR(LOGFILE));
 
-	log_info(HIGH, "File %s in function %s at line %0d: Closing logfile %s\n", __FILE__, __func__, __LINE__,  filename);
+	LOG_INFO(HIGH,"Closing logfile %s\n",  filename);
 	file_close(logfile);
 }
 

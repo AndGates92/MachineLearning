@@ -16,7 +16,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 
 	data = (data_t *) malloc(sizeof(data_t));
 	if (data==NULL) {
-		LOG_ERROR("Can't allocate memory for a new data strcuture data_t at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+		LOG_ERROR("Can't allocate memory for a new data strcuture data_t");
 	}
 	// ===========================================================================
 	// Number of dimensions
@@ -29,18 +29,18 @@ data_t * add_data (int* dimensions, int no_dims) {
 	// 3 -> Number of columns
 	ASSERT(no_dims <= 3);
 	data->no_dims = no_dims;
-	log_info(DEBUG, "File %s in function %s at line %0d: Set number of dimensions to %0d\n", __FILE__, __func__, __LINE__,  no_dims);
+	LOG_INFO(DEBUG,"Set number of dimensions to %0d\n",  no_dims);
 
 	// ===========================================================================
 	// Dimensions
 	// ===========================================================================
 	data->dimensions = (int *) malloc(no_dims*sizeof(int));
 	if (data->dimensions==NULL) {
-		LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+		LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data");
 	}
 	memcpy(data->dimensions, dimensions, (no_dims*sizeof(int)));
 	for (int dim = 0; dim < data->no_dims; dim++) {
-		log_info(DEBUG,"File %s in function %s at line %0d: Set dimension %0d to %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
+		LOG_INFO(DEBUG,"Set dimension %0d to %0d\n",  dim, dimensions[dim]);
 	}
 
 	// ===========================================================================
@@ -54,7 +54,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	data->elements = NULL;
 	data->elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
 	if (data->elements==NULL) {
-		LOG_ERROR("Can't allocate memory for elements of data struct data_t at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+		LOG_ERROR("Can't allocate memory for elements of data struct data_t");
 	}
 
 	// ===========================================================================
@@ -77,23 +77,23 @@ void delete_data (data_t * data) {
 
 void set_no_dims (data_t ** data, int no_dims) {
 	(*data)->no_dims = no_dims;
-	log_info(DEBUG,"File %s in function %s at line %0d: Set number of dimensions to %0d\n", __FILE__, __func__, __LINE__,  no_dims);
-	log_info(DEBUG,"File %s in function %s at line %0d: Number of dimensions: expected %0d actual %0d\n", __FILE__, __func__, __LINE__,  no_dims, (*data)->no_dims);
+	LOG_INFO(DEBUG,"Set number of dimensions to %0d\n",  no_dims);
+	LOG_INFO(DEBUG,"Number of dimensions: expected %0d actual %0d\n",  no_dims, (*data)->no_dims);
 }
 
 void set_data_type (data_t ** data, data_type_e data_type) {
 	(*data)->data_type = data_type;
 	(*data)->no_bytes = data_type_bytes(data_type);
 	// Assert that each element is large enough to store a value from the IDX file
-	log_info(DEBUG,"File %s in function %s at line %0d: Set data type to %s (%0hi bytes)\n", __FILE__, __func__, __LINE__,  data_type_to_str(data_type), (*data)->no_bytes);
+	LOG_INFO(DEBUG,"Set data type to %s (%0hi bytes)\n",  data_type_to_str(data_type), (*data)->no_bytes);
 	ASSERT ((size_t)((*data)->no_bytes) <= sizeof(elementdatatype_t));
 }
 
 void set_dimensions (data_t ** data, int * dimensions) {
 	memcpy((*data)->dimensions, dimensions, (get_no_dims(*data)*sizeof(int)));
 	for (int dim = 0; dim < (*data)->no_dims; dim++) {
-		log_info(DEBUG,"File %s in function %s at line %0d: Set dimension %0d to %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
-		log_info(DEBUG,"File %s in function %s at line %0d: Dimension %0d: expected %0d actual %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim], (*data)->dimensions[dim]);
+		LOG_INFO(DEBUG,"Set dimension %0d to %0d\n",  dim, dimensions[dim]);
+		LOG_INFO(DEBUG,"Dimension %0d: expected %0d actual %0d\n",  dim, dimensions[dim], (*data)->dimensions[dim]);
 	}
 }
 
@@ -102,8 +102,8 @@ void set_element (data_t ** data, elementdatatype_t element, int* coordinates) {
 	total_offset = compute_element_offset(*data, coordinates);
 
 	(*data)->elements[total_offset] = element;
-	log_info(DEBUG,"File %s in function %s at line %0d: Set element %0d of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)element);
-	log_info(DEBUG,"File %s in function %s at line %0d: Element(%0d) of data structure data_t : expected %0lf actual %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)element, (double)((*data)->elements[total_offset]));
+	LOG_INFO(DEBUG,"Set element %0d of data structure data_t : %0lf\n",  total_offset, (double)element);
+	LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf\n",  total_offset, (double)element, (double)((*data)->elements[total_offset]));
 }
 
 void set_data_elements (data_t ** data, elementdatatype_t * elements) {
@@ -123,8 +123,8 @@ void set_data_elements (data_t ** data, elementdatatype_t * elements) {
 	free (dimensions);
 
 	for (int idx=0; idx<total_elements; idx++) {
-		log_info(DEBUG,"File %s in function %s at line %0d: Set element(%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)));
-		log_info(DEBUG,"File %s in function %s at line %0d: Element(%0d) of data structure data_t : expected %0lf actual %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)), (double)((*data)->elements[idx]));
+		LOG_INFO(DEBUG,"Set element(%0d) of data structure data_t : %0lf\n",  idx, (double)(*(elements+idx)));
+		LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf\n",  idx, (double)(*(elements+idx)), (double)((*data)->elements[idx]));
 	}
 }
 
@@ -136,13 +136,13 @@ int * get_dimensions (data_t * data) {
 	dimensions = (int *) malloc(no_dims*sizeof(int));
 
 	if (dimensions==NULL) {
-		LOG_ERROR("Can't allocate memory for array of dimensions at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+		LOG_ERROR("Can't allocate memory for array of dimensions");
 	}
 
 	memcpy(dimensions, data->dimensions, (no_dims*sizeof(int)));
 
 	for (int dim = 0; dim < data->no_dims; dim++) {
-		log_info(DEBUG,"File %s in function %s at line %0d: Dimensions %0d of data structure datat_t is: %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
+		LOG_INFO(DEBUG,"Dimensions %0d of data structure datat_t is: %0d\n",  dim, dimensions[dim]);
 	}
 
 	return dimensions;
@@ -161,17 +161,17 @@ int get_dimension (data_t * data, int idx) {
 }
 
 int get_no_dims (data_t * data) {
-	log_info(DEBUG,"File %s in function %s at line %0d: Number of dimensions of data structure data_t: %0d\n", __FILE__, __func__, __LINE__,  data->no_dims);
+	LOG_INFO(DEBUG,"Number of dimensions of data structure data_t: %0d\n",  data->no_dims);
 	return data->no_dims;
 }
 
 data_type_e get_data_type (data_t * data) {
-	log_info(DEBUG,"File %s in function %s at line %0d: Data type of elements in data structure data_t: %s\n", __FILE__, __func__, __LINE__,  data_type_to_str(data->data_type));
+	LOG_INFO(DEBUG,"Data type of elements in data structure data_t: %s\n",  data_type_to_str(data->data_type));
 	return data->data_type;
 }
 
 short get_no_bytes (data_t * data) {
-	log_info(DEBUG,"File %s in function %s at line %0d: Number of bytes of data type %s of data structure data_t: %0hi\n", __FILE__, __func__, __LINE__, data_type_to_str(get_data_type(data)), data->no_bytes);
+	LOG_INFO(DEBUG,"Number of bytes of data type %s of data structure data_t: %0hi\n", data_type_to_str(get_data_type(data)), data->no_bytes);
 	return data->no_bytes;
 }
 
@@ -180,7 +180,7 @@ elementdatatype_t get_element (data_t * data, int * coordinates) {
 	total_offset = compute_element_offset(data, coordinates);
 
 	elementdatatype_t element = data->elements[total_offset];
-	log_info(DEBUG,"File %s in function %s at line %0d: Get element(%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)(element));
+	LOG_INFO(DEBUG,"Get element(%0d) of data structure data_t : %0lf\n",  total_offset, (double)(element));
 	return element;
 }
 
@@ -201,7 +201,7 @@ elementdatatype_t * get_data_elements (data_t * data) {
 	memcpy(elements, data->elements, (total_elements*sizeof(elementdatatype_t)));
 
 	for (int idx=0; idx<total_elements; idx++) {
-		log_info(DEBUG,"File %s in function %s at line %0d: Get element%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)));
+		LOG_INFO(DEBUG,"Get element%0d) of data structure data_t : %0lf\n",  idx, (double)(*(elements+idx)));
 	}
 
 	free(dimensions);
@@ -234,7 +234,7 @@ int compute_element_offset (data_t * data, int * coordinates) {
 				unit_offset += coordinates[dim];
 				break;
 			default:
-				LOG_ERROR("Not supported more than 3 dimensions.\n Failure at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+				LOG_ERROR("Not supported more than 3 dimensions.\n Failure");
 				break;
 		}
 	}
@@ -253,7 +253,7 @@ char * data_type_to_str (data_type_e data_type) {
 	data_type_str = (char *) malloc(MAX_DATA_TYPE_LENGTH*sizeof(char));
 
 	if (data_type_str==NULL) {
-		LOG_ERROR("Can't allocate memory for string for data type at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+		LOG_ERROR("Can't allocate memory for string for data type");
 	}
 
 	switch (data_type) {
@@ -276,7 +276,7 @@ char * data_type_to_str (data_type_e data_type) {
 			strcpy(data_type_str, "DOUBLE");
 			break;
 		default:
-			LOG_ERROR("Unknown data type. Can't generate string with data type name at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+			LOG_ERROR("Unknown data type. Can't generate string with data type name");
 			break;
 	}
 
@@ -306,7 +306,7 @@ short data_type_bytes (data_type_e data_type) {
 			data_type_bytes = 8;
 			break;
 		default:
-			LOG_ERROR("Unknown data type. Can't compute number of bytes at %s, function %s, line %0d\n", __FILE__, __func__, __LINE__);
+			LOG_ERROR("Unknown data type. Can't compute number of bytes");
 			break;
 	}
 

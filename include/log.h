@@ -67,9 +67,22 @@ extern FILE * logfile;
  * Print an error message to stderr and exits with EXIT_FAILURE status
  */
 #define LOG_ERROR(...)\
+	fprintf (stderr, "File %s at line %0d: ", __FILE__, __LINE__);\
 	fprintf (stderr, __VA_ARGS__);\
 	close_logfile ();\
 	exit(EXIT_FAILURE);
+
+/**
+ * @brief LOG_INFO(VERBOSITY, ...)
+ *
+ * \param VERBOSITY : verbosity level
+ * \param ... :       variable number of arguments to provide to log_info
+ *
+ * Print an message message to the log file if the chosen verbosity is less or equal to the default verbosity
+ */
+#define LOG_INFO(VERBOSITY, ...)\
+	log_info(VERBOSITY, "File %s at line %0d: ", __FILE__, __LINE__);\
+	log_info(VERBOSITY, __VA_ARGS__);
 
 /**
  * @brief ASSERT(EXPR)
