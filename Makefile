@@ -26,6 +26,8 @@ LOGFILENAME = $(EXE_NAME).log
 # Log file
 LOGFILE=$(LOG_DIR)/$(LOGFILENAME)
 
+VERBOSITY ?= MEDIUM
+
 # Select compiler:
 # - gcc for C files
 # - g++ for C++ files
@@ -34,7 +36,7 @@ CC = gcc
 # Compile-time flags
 CFLAGS = -g -Wall -Werror -Wextra -Wpedantic -std=gnu99 -rdynamic
 EXTRADFLAGS ?=
-DFLAGS = -DLOGFILE="$(LOGFILE)" $(EXTRADFLAGS)
+DFLAGS = -DLOGFILE="$(LOGFILE)" -DVERBISITY=$(VERBOSITY)
 LIBS= -lm
 
 # Directory containing source and header files

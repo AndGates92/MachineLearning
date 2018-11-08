@@ -29,7 +29,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	// 3 -> Number of columns
 	ASSERT(no_dims <= 3);
 	data->no_dims = no_dims;
-	log_info("File %s in function %s at line %0d: Set number of dimensions to %0d\n", __FILE__, __func__, __LINE__,  no_dims);
+	log_info(DEBUG, "File %s in function %s at line %0d: Set number of dimensions to %0d\n", __FILE__, __func__, __LINE__,  no_dims);
 
 	// ===========================================================================
 	// Dimensions
@@ -40,7 +40,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	}
 	memcpy(data->dimensions, dimensions, (no_dims*sizeof(int)));
 	for (int dim = 0; dim < data->no_dims; dim++) {
-		log_info("File %s in function %s at line %0d: Set dimension %0d to %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
+		log_info(DEBUG,"File %s in function %s at line %0d: Set dimension %0d to %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
 	}
 
 	// ===========================================================================
@@ -68,36 +68,32 @@ data_t * add_data (int* dimensions, int no_dims) {
 
 void delete_data (data_t * data) {
 	free(data->elements);
-	log_info("Free data elements -> COMPLETED\n");
+	log_info(DEBUG,"Free data elements -> COMPLETED\n");
 	free(data->dimensions);
-	log_info("Free data dimensions -> COMPLETED\n");
+	log_info(DEBUG,"Free data dimensions -> COMPLETED\n");
 	free(data);
-	log_info("Free data structure -> COMPLETED\n");
+	log_info(DEBUG,"Free data structure -> COMPLETED\n");
 }
 
 void set_no_dims (data_t ** data, int no_dims) {
 	(*data)->no_dims = no_dims;
-	log_info("File %s in function %s at line %0d: Set number of dimensions to %0d\n", __FILE__, __func__, __LINE__,  no_dims);
-	#ifdef DEBUG
-		log_info("File %s in function %s at line %0d: Number of dimensions: expected %0d actual %0d\n", __FILE__, __func__, __LINE__,  no_dims, (*data)->no_dims);
-	#endif // DEBUG
+	log_info(DEBUG,"File %s in function %s at line %0d: Set number of dimensions to %0d\n", __FILE__, __func__, __LINE__,  no_dims);
+	log_info(DEBUG,"File %s in function %s at line %0d: Number of dimensions: expected %0d actual %0d\n", __FILE__, __func__, __LINE__,  no_dims, (*data)->no_dims);
 }
 
 void set_data_type (data_t ** data, data_type_e data_type) {
 	(*data)->data_type = data_type;
 	(*data)->no_bytes = data_type_bytes(data_type);
 	// Assert that each element is large enough to store a value from the IDX file
-	log_info("File %s in function %s at line %0d: Set data type to %s (%0hi bytes)\n", __FILE__, __func__, __LINE__,  data_type_to_str(data_type), (*data)->no_bytes);
+	log_info(DEBUG,"File %s in function %s at line %0d: Set data type to %s (%0hi bytes)\n", __FILE__, __func__, __LINE__,  data_type_to_str(data_type), (*data)->no_bytes);
 	ASSERT ((size_t)((*data)->no_bytes) <= sizeof(elementdatatype_t));
 }
 
 void set_dimensions (data_t ** data, int * dimensions) {
 	memcpy((*data)->dimensions, dimensions, (get_no_dims(*data)*sizeof(int)));
 	for (int dim = 0; dim < (*data)->no_dims; dim++) {
-		log_info("File %s in function %s at line %0d: Set dimension %0d to %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
-		#ifdef DEBUG
-			log_info("File %s in function %s at line %0d: Dimension %0d: expected %0d actual %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim], (*data)->dimensions[dim]);
-		#endif // DEBUG
+		log_info(DEBUG,"File %s in function %s at line %0d: Set dimension %0d to %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
+		log_info(DEBUG,"File %s in function %s at line %0d: Dimension %0d: expected %0d actual %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim], (*data)->dimensions[dim]);
 	}
 }
 
@@ -106,10 +102,8 @@ void set_element (data_t ** data, elementdatatype_t element, int* coordinates) {
 	total_offset = compute_element_offset(*data, coordinates);
 
 	(*data)->elements[total_offset] = element;
-	log_info("File %s in function %s at line %0d: Set element %0d of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)element);
-	#ifdef DEBUG
-		log_info("File %s in function %s at line %0d: Element(%0d) of data structure data_t : expected %0lf actual %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)element, (double)((*data)->elements[total_offset]));
-	#endif // DEBUG
+	log_info(DEBUG,"File %s in function %s at line %0d: Set element %0d of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)element);
+	log_info(DEBUG,"File %s in function %s at line %0d: Element(%0d) of data structure data_t : expected %0lf actual %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)element, (double)((*data)->elements[total_offset]));
 }
 
 void set_data_elements (data_t ** data, elementdatatype_t * elements) {
@@ -128,14 +122,10 @@ void set_data_elements (data_t ** data, elementdatatype_t * elements) {
 
 	free (dimensions);
 
-	#ifdef VERBOSE
-		for (int idx=0; idx<total_elements; idx++) {
-			log_info("File %s in function %s at line %0d: Set element(%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)));
-			#ifdef DEBUG
-				log_info("File %s in function %s at line %0d: Element(%0d) of data structure data_t : expected %0lf actual %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)), (double)((*data)->elements[idx]));
-			#endif // DEBUG
-		}
-	#endif // VERBOSE
+	for (int idx=0; idx<total_elements; idx++) {
+		log_info(DEBUG,"File %s in function %s at line %0d: Set element(%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)));
+		log_info(DEBUG,"File %s in function %s at line %0d: Element(%0d) of data structure data_t : expected %0lf actual %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)), (double)((*data)->elements[idx]));
+	}
 }
 
 int * get_dimensions (data_t * data) {
@@ -152,7 +142,7 @@ int * get_dimensions (data_t * data) {
 	memcpy(dimensions, data->dimensions, (no_dims*sizeof(int)));
 
 	for (int dim = 0; dim < data->no_dims; dim++) {
-		log_info("File %s in function %s at line %0d: Dimensions %0d of data structure datat_t is: %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
+		log_info(DEBUG,"File %s in function %s at line %0d: Dimensions %0d of data structure datat_t is: %0d\n", __FILE__, __func__, __LINE__,  dim, dimensions[dim]);
 	}
 
 	return dimensions;
@@ -171,17 +161,17 @@ int get_dimension (data_t * data, int idx) {
 }
 
 int get_no_dims (data_t * data) {
-	log_info("File %s in function %s at line %0d: Number of dimensions of data structure data_t: %0d\n", __FILE__, __func__, __LINE__,  data->no_dims);
+	log_info(DEBUG,"File %s in function %s at line %0d: Number of dimensions of data structure data_t: %0d\n", __FILE__, __func__, __LINE__,  data->no_dims);
 	return data->no_dims;
 }
 
 data_type_e get_data_type (data_t * data) {
-	log_info("File %s in function %s at line %0d: Data type of elements in data structure data_t: %s\n", __FILE__, __func__, __LINE__,  data_type_to_str(data->data_type));
+	log_info(DEBUG,"File %s in function %s at line %0d: Data type of elements in data structure data_t: %s\n", __FILE__, __func__, __LINE__,  data_type_to_str(data->data_type));
 	return data->data_type;
 }
 
 short get_no_bytes (data_t * data) {
-	log_info("File %s in function %s at line %0d: Number of bytes of data type %s of data structure data_t: %0hi\n", __FILE__, __func__, __LINE__, data_type_to_str(get_data_type(data)), data->no_bytes);
+	log_info(DEBUG,"File %s in function %s at line %0d: Number of bytes of data type %s of data structure data_t: %0hi\n", __FILE__, __func__, __LINE__, data_type_to_str(get_data_type(data)), data->no_bytes);
 	return data->no_bytes;
 }
 
@@ -190,7 +180,7 @@ elementdatatype_t get_element (data_t * data, int * coordinates) {
 	total_offset = compute_element_offset(data, coordinates);
 
 	elementdatatype_t element = data->elements[total_offset];
-	log_info("File %s in function %s at line %0d: Get element(%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)(element));
+	log_info(DEBUG,"File %s in function %s at line %0d: Get element(%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  total_offset, (double)(element));
 	return element;
 }
 
@@ -210,11 +200,9 @@ elementdatatype_t * get_data_elements (data_t * data) {
 	elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
 	memcpy(elements, data->elements, (total_elements*sizeof(elementdatatype_t)));
 
-	#ifdef VERBOSE
-		for (int idx=0; idx<total_elements; idx++) {
-			log_info("File %s in function %s at line %0d: Get element%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)));
-		}
-	#endif // VERBOSE
+	for (int idx=0; idx<total_elements; idx++) {
+		log_info(DEBUG,"File %s in function %s at line %0d: Get element%0d) of data structure data_t : %0lf\n", __FILE__, __func__, __LINE__,  idx, (double)(*(elements+idx)));
+	}
 
 	free(dimensions);
 

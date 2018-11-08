@@ -21,6 +21,14 @@
 #endif
 
 /**
+ * @brief Default verbosity level
+ *
+ */
+#if !defined(VERBOSITY)
+	#define DEFAULT_VERBOSITY MEDIUM
+#endif
+
+/**
  * @brief log filename max length
  *
  */
@@ -31,6 +39,19 @@
  *
  */
 #define BOOL_MAX_LENGTH 5
+
+/**
+ * @brief Verbosity levels
+ *
+ */
+typedef enum verb_level_list {
+	ZERO,
+	LOW,
+	MEDIUM,
+	HIGH,
+	DEBUG
+} verb_level_e;
+
 
 /**
  * @brief Pointer to log file
@@ -67,15 +88,16 @@ extern FILE * logfile;
  *  @{
  */
 /** 
- * @brief Function: void log_info (const char * str_format, ...)
+ * @brief Function: void log_info (verb_level_e verbosity, const char * str_format, ...)
  *
+ * \param verbosity:   specify the minimum verbosity level required to print a message
  * \param str_format:  format string following same specification as format in printf
  * \param ...:         argument to replace whose value is replace in str_format string
  *
  * Log information to a logfile
  * If log file is not opened, it will open for write
  */
-void log_info (const char * str_format, ...);
+void log_info (verb_level_e verbosity, const char * str_format, ...);
 
 /** 
  * @brief Function: void close_logfile ()

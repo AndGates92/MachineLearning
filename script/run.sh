@@ -15,8 +15,7 @@ TRAIN_LABEL=train-labels-idx1-ubyte
 TEST_SET=t10k-images-idx3-ubyte
 TEST_LABEL=t10k-labels-idx1-ubyte
 
-VERBOSEFLAG=VERBOSE
-DEBUGFLAG=DEBUG
+VERBOSITY=LOW
 
 echo "Run script variables"
 echo "\n========================================================================="
@@ -63,7 +62,7 @@ echo "\n========================================================================
 echo "Compile sources"
 echo "========================================================================="
 (set -x; \
- make all LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} EXTRADFLAGS="-D${VERBOSEFLAG} -D${DEBUGFLAG}" > ${LOGDIR}/${COMPLOG})
+ make all LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VERBOSITY=${VERBOSITY} > ${LOGDIR}/${COMPLOG})
 
 echo "\n========================================================================="
 echo "Compile documetation"
@@ -74,5 +73,11 @@ echo "========================================================================="
 echo "\n========================================================================="
 echo "Run program"
 echo "========================================================================="
+echo "START:Test to parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
 (set -x; \
- ./bin/ml -tes ${DATASET_DIR}/${TEST_LABEL})
+ ./bin/ml -tel ${DATASET_DIR}/${TEST_LABEL})
+echo "COMPLETED:Test to parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
+echo "START:Test to parsing test set file ${DATASET_DIR}/${TEST_SETL}"
+(set -x; \
+ ./bin/ml -tes ${DATASET_DIR}/${TEST_SET})
+echo "COMPLETED:Test to parsing test set file ${DATASET_DIR}/${TEST_SETL}"
