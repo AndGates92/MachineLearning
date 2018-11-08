@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <assert.h>
 #include <string.h>
 #include "test_parse_idx.h"
 #include "log.h"
@@ -50,9 +49,9 @@ int main (int argc, char * argv []) {
 	bool inputfile_given = false;
 
 	// Needs at list 1 input file
-	assert(argc > 1);
+	ASSERT(argc > 1);
 	// Program needs to know what the input file represents
-	assert((argc-1)%2 == 0 );
+	ASSERT((argc-1)%2 == 0 );
 
 	test_set = (char *) malloc(FILENAME_MAX_LENGTH*sizeof(char));
 	if (test_set==NULL) {
@@ -82,7 +81,7 @@ int main (int argc, char * argv []) {
 
 	for (int i = 1; i < argc; i++) {
 		// Assert that input file is shorter than estimation of input file length
-		assert(strlen(argv[i]) < FILENAME_MAX_LENGTH);
+		ASSERT(strlen(argv[i]) < FILENAME_MAX_LENGTH);
 
 		if (!(strcmp(argv[i],trs_opt))) {
 			if (train_set_no > 0) {

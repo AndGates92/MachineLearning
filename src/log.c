@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
-#include <assert.h>
+#include <stdbool.h>
 #include "log.h"
 #include "file.h"
 #include "utility.h"
@@ -53,4 +53,8 @@ void close_logfile () {
 
 	log_info("File %s in function %s at line %0d: Closing logfile %s\n", __FILE__, __func__, __LINE__,  filename);
 	file_close(logfile);
+}
+
+char * bool_to_str (bool expr) {
+	return (expr ? "True" : "False");
 }
