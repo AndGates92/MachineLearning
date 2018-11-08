@@ -76,7 +76,7 @@ int main (int argc, char * argv []) {
 	LOG_INFO(DEBUG,"Command line:\n");
 	LOG_INFO(DEBUG,"Number of arguments %0d\n",  argc);
 	for (int i = 0; i < argc; i++) {
-		log_info(DEBUG, "File %s in function %s at line %0d:\targument %0d: %s\n", __FILE__, __func__, __LINE__,  i, argv[i]);
+		LOG_INFO(DEBUG,"\targument %0d: %s\n",  i, argv[i]);
 	}
 
 	for (int i = 1; i < argc; i++) {
@@ -125,22 +125,22 @@ int main (int argc, char * argv []) {
 	LOG_INFO(LOW, "Input files:\n");
 	if (test_set_no > 0) {
 		strcpy(test_set, argv[test_set_no]);
-		LOG_INFO(LOW,"\ttest set: %s\n", test_set);
+		LOG_INFO(LOW,"\ttest set file: %s\n", test_set);
 		inputfile_given = true;
 	}
 	if (train_set_no > 0) {
 		strcpy(train_set, argv[train_set_no]);
-		log_info(LOW, "File %s in function %s at line %0d:\ttrain set: %s\n", __FILE__, __func__, __LINE__,  train_set);
+		LOG_INFO(LOW,"\ttraining set file: %s\n",  train_set);
 		inputfile_given = true;
 	}
 	if (test_label_no > 0) {
 		strcpy(test_label, argv[test_label_no]);
-		log_info(LOW, "File %s in function %s at line %0d:\ttest label: %s\n", __FILE__, __func__, __LINE__,  test_label);
+		LOG_INFO(LOW,"\ttest label file: %s\n",  test_label);
 		inputfile_given = true;
 	}
 	if (train_label_no > 0) {
 		strcpy(train_label, argv[train_label_no]);
-		log_info(LOW, "File %s in function %s at line %0d:\ttrain label: %s\n", __FILE__, __func__, __LINE__,  train_label);
+		LOG_INFO(LOW,"\ttraining label file: %s\n",  train_label);
 		inputfile_given = true;
 	}
 
