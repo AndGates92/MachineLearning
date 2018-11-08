@@ -83,12 +83,12 @@ $(EXE) : $(OBJS)
 	$(MKDIR) $(LOG_DIR)
 	$(MKDIR) $(@D)
 	$(VERBOSE)echo "Compiling $(@F). Object files are: $^"
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) -o $@ $(DFLAGS) $^ 
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(DFLAGS) $^ $(LIBS)
 
 $(OBJ_DIR)/%.o : %.c
 	$(MKDIR) $(@D)
 	$(VERBOSE)echo "Compiling $(<F) and creating object $@"
-	$(CC) $(CFLAGS) $(LIBS) $(INCLUDES)  -c $< $(DFLAGS) -o $@
+	$(CC) $(CFLAGS) $(INCLUDES)  -c $< $(DFLAGS) -o $@ $(LIBS)
 
 depend :
 	makedepend $(INCLUDES) $^
