@@ -33,7 +33,7 @@ CC = gcc
 
 # Compile-time flags
 CFLAGS = -g -Wall -Werror -Wextra -Wpedantic -std=gnu99 -rdynamic
-EXTRADFLAGS =
+EXTRADFLAGS ?=
 DFLAGS = -DLOGFILE="$(LOGFILE)" $(EXTRADFLAGS)
 LIBS= -lm
 
