@@ -126,7 +126,7 @@ void set_element (data_t ** data, elementdatatype_t element, int * coordinates);
  * @brief Function: void set_data_elements (data_t ** data, elementdatatype_t* elements)
  *
  * \param data:      input data strcture data_t 
- * \param elements:    element of the data strcture data_t to add
+ * \param elements:    elements of the data strcture data_t to add
  * 
  * Set elements of the data strcture data_t.
  */
