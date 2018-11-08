@@ -13,27 +13,7 @@
 #include "file.h"
 #include "parse_idx.h"
 
-void parse_idx (char * test_set, char * train_set, char * test_label, char * train_label) {
-
-	data_t * test_set_struct_t = NULL;
-	data_t * test_label_struct_t = NULL;
-	data_t * train_set_struct_t = NULL;
-	data_t * train_label_struct_t = NULL;
-
-	parse_idx_file(test_set, &test_set_struct_t);
-	parse_idx_file(test_label, &test_label_struct_t);
-	parse_idx_file(train_set, &train_set_struct_t);
-	parse_idx_file(train_label, &train_label_struct_t);
-
-	LOG_INFO(DEBUG,"Freeing memory allocated for data strcture data_t.\n");
-	free(test_set_struct_t);
-	free(test_label_struct_t);
-	free(train_set_struct_t);
-	free(train_label_struct_t);
-
-}
-
-void parse_idx_file (char * filename, data_t ** data) {
+void parse_idx (char * filename, data_t ** data) {
 	FILE * fid = NULL;
 
 	// Check is string is empty

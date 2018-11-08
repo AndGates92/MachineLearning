@@ -33,27 +33,16 @@ typedef char byte;
  *  Functions concerning image
  *  @{
  */
-/** 
- * @brief Function: void parse_idx (char * test_set, char * train_set, char * test_label, char * train_label)
- *
- * \param test_set: test set filename
- * \param train_set: training set filename
- * \param test_label: test label filename
- * \param train_label: training label filename
- *
- * Top level function parsing IDX files
- */
-void parse_idx (char * test_set, char * train_set, char * test_label, char * train_label);
 
 /** 
- * @brief Function: void parse_idx_file (char * filename, data_t ** data)
+ * @brief Function: void parse_idx (char * filename, data_t ** data)
  *
  * \param filename: filename of IDX file to parse
  * \param data:     data strcuture storing informations extracted from the file parsed 
  *
  * Parse IDX file and store data into structure
  */
-void parse_idx_file (char * filename, data_t ** data);
+void parse_idx (char * filename, data_t ** data);
 
 /** 
  * @brief Function: int read_header (FILE * fid)
