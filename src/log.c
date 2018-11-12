@@ -55,6 +55,7 @@ void close_logfile () {
 
 	LOG_INFO(HIGH,"Closing logfile %s\n",  filename);
 	file_close(logfile);
+	free(filename);
 }
 
 char * bool_to_str (bool expr) {
