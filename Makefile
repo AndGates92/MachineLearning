@@ -9,6 +9,16 @@ DOX_CFG_FILE = $(DOX_DIR)/$(DOX_CFG_FILENAME)
 
 DOX_DOC_DIR = doc
 
+# Valgrind variables
+VALGRIND=valgrind
+
+MEMCHECKOPTS = --leak-check=full --error-limit=no --show-leak-kinds=all --track-origins=yes
+VALGRINDTOOLOPTS =
+VALGRINDLOGFILENAME ?= valgrind.log
+VALGRINDLOGFILE = $(LOG_DIR)/$(VALGRINDLOGFILENAME)
+VALGRINDLOGOPTS = -v --log-file=$(VALGRINDLOGFILE) --time-stamp=yes
+VALGRINDEXEARGS ?=
+
 # Makefile variables
 VERBOSE = @
 
@@ -96,6 +106,9 @@ depend :
 all : $(EXE)
 	$(VERBOSE)echo "Compile machine learning C algorithm"
 
+valgrind : $(EXE)
+	valgrind $(MEMCHECKOPTS) $(VALGRINDTOOLOPTS) $(VALGRINDLOGOPTS) $(EXE) $(VALGRINDEXEARGS)
+
 debug :
 	$(VERBOSE)echo "Compiler: $(CC)"
 	$(VERBOSE)echo "Compiler options:"
@@ -127,4 +140,4 @@ doc :
 	$(MKDIR) $(DOX_DOC_DIR)
 	$(DOXYGEN) $(DOX_CFG_FILE)
 
-.PHONY: all,clean,depend,$(EXE),debug,doc
+.PHONY: all,clean,depend,$(EXE),debug,doc,valgrind

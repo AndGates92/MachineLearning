@@ -5,6 +5,7 @@ DEBUGLOG=debug.log
 COMPLOG=compile.log
 DOCLOG=doc.log
 CLEANLOG=clean.log
+VALGRINDLOG=valgrind.log
 
 EXENAME=ml
 EXEDIR=bin
@@ -85,3 +86,9 @@ echo "START:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set 
 (set -x; \
  ./bin/ml -tel ${DATASET_DIR}/${TEST_LABEL} -tes ${DATASET_DIR}/${TEST_SET} -trl ${DATASET_DIR}/${TRAIN_LABEL} -trs ${DATASET_DIR}/${TRAIN_SET})
 echo "COMPLETED:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
+
+echo "\n========================================================================="
+echo "Run valgrind"
+echo "========================================================================="
+(set -x; \
+ make valgrind LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VALGRINDLOGFILENAME=${VALGRINDLOG} VALGRINDEXEARGS='-tes ${DATASET_DIR}/${TEST_SET} -trl ${DATASET_DIR}/${TRAIN_LABEL} -trs ${DATASET_DIR}/${TRAIN_SET}')
