@@ -31,7 +31,7 @@ EXE_NAME ?= ml
 LOG_DIR ?= log
 
 # Log filename
-LOGFILENAME = $(EXE_NAME).log
+LOGFILENAME ?= $(EXE_NAME).log
 
 # Log file
 LOGFILE=$(LOG_DIR)/$(LOGFILENAME)
