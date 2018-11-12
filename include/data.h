@@ -188,7 +188,7 @@ short get_no_bytes (data_t * data);
  * @brief Function: elementdatatype_t * get_data_elements (data_t * data)
  *
  * \param data:    input data strcture data_t
- * \return the elements of the data strcture data_t
+ * \return the elements of the data structure data_t
  * 
  * Get an array of elements of the data strcture data_t.
  */
@@ -204,6 +204,20 @@ elementdatatype_t * get_data_elements (data_t * data);
  * Get an element of the data strcture data_t.
  */
 elementdatatype_t get_element (data_t * data, int * coordinates);
+
+/**
+ * @brief Function: void get_data_fields(data_t * data, int * no_dims, int ** dimensions, data_type_e * data_type, short * no_bytes, elementdatatype_t ** elements)
+ *
+ * \param data:    input data strcture data_t
+ * \param no_dims: number of dimensions of the data structure
+ * \param dimensions: dimensions of the data structure
+ * \param data_type: data type of the data structure
+ * \param no_bytes: number fo bytes
+ * \param elements: elements of the data stucture
+ * 
+ * Get all fields of the data structure.
+ */
+void get_data_fields(data_t * data, int * no_dims, int ** dimensions, data_type_e * data_type, short * no_bytes, elementdatatype_t ** elements);
 
 /**
  * @brief Function: int compute_element_offset (data_t * data, int * coordinates)
@@ -235,5 +249,16 @@ char * data_type_to_str (data_type_e data_type);
  * Compute the number of bytes of the data type.
  */
 short data_type_bytes (data_type_e data_type);
+
+ /**
+ * @brief Function: int compute_total_no_elements(data_t * data);
+ *
+ * \param data:    data structure
+ * \return the total number of elements in the array of elements
+ * 
+ * Compute the total number of elements in the array of elements.
+ */
+int compute_total_no_elements(data_t * data);
+
 /** @} */ // End of DataGroup group
 #endif // DATA_H

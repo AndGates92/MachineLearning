@@ -35,6 +35,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	// Dimensions
 	// ===========================================================================
 	data->dimensions = (int *) malloc(no_dims*sizeof(int));
+
 	if (data->dimensions==NULL) {
 		LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data");
 	}
@@ -47,10 +48,8 @@ data_t * add_data (int* dimensions, int no_dims) {
 	// Elements
 	// ===========================================================================
 	// Total number of units to allocate
-	int total_elements = 1;
-	for (int dim = 0; dim < data->no_dims; dim++) {
-		total_elements *= dimensions[dim];
-	}
+	int total_elements = 0;
+	total_elements = compute_total_no_elements(data);
 	data->elements = NULL;
 	data->elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
 	if (data->elements==NULL) {
@@ -86,6 +85,7 @@ void set_data_type (data_t ** data, data_type_e data_type) {
 	(*data)->no_bytes = data_type_bytes(data_type);
 	// Assert that each element is large enough to store a value from the IDX file
 	LOG_INFO(DEBUG,"Set data type to %s (%0hi bytes)\n",  data_type_to_str(data_type), (*data)->no_bytes);
+	ASSERT (((*data)->no_bytes) >= 1);
 	ASSERT ((size_t)((*data)->no_bytes) <= sizeof(elementdatatype_t));
 }
 
@@ -107,20 +107,13 @@ void set_element (data_t ** data, elementdatatype_t element, int* coordinates) {
 }
 
 void set_data_elements (data_t ** data, elementdatatype_t * elements) {
-	int total_elements = 1;
-	int no_dims = 0;
-	int * dimensions = NULL;
-
-	no_dims = get_no_dims(*data);
-	dimensions = get_dimensions(*data);
+	int total_elements = 0;
 
 	// Compute total dimension of the array of elements
-	for (int dim = 0; dim < no_dims; dim++) {
-		total_elements = dimensions[dim];
-	}
+	total_elements = compute_total_no_elements(*data);
+
 	memcpy((*data)->elements, elements, (total_elements*sizeof(elementdatatype_t)));
 
-	free (dimensions);
 
 	for (int idx=0; idx<total_elements; idx++) {
 		LOG_INFO(DEBUG,"Set element(%0d) of data structure data_t : %0lf\n",  idx, (double)(*(elements+idx)));
@@ -186,25 +179,17 @@ elementdatatype_t get_element (data_t * data, int * coordinates) {
 
 elementdatatype_t * get_data_elements (data_t * data) {
 	elementdatatype_t * elements = NULL;
-	int total_elements = 1;
-	int no_dims = 0;
-	int * dimensions = NULL;
-
-	no_dims = get_no_dims(data);
-	dimensions = get_dimensions(data);
+	int total_elements = 0;
 
 	// Compute total dimension of the array of elements
-	for (int dim = 0; dim < no_dims; dim++) {
-		total_elements *= dimensions[dim];
-	}
+	total_elements = compute_total_no_elements(data);
+
 	elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
 	memcpy(elements, data->elements, (total_elements*sizeof(elementdatatype_t)));
 
 	for (int idx=0; idx<total_elements; idx++) {
 		LOG_INFO(DEBUG,"Get element%0d) of data structure data_t : %0lf\n",  idx, (double)(*(elements+idx)));
 	}
-
-	free(dimensions);
 
 	return elements;
 }
@@ -245,6 +230,14 @@ int compute_element_offset (data_t * data, int * coordinates) {
 	free (dimensions);
 
 	return total_offset;
+}
+
+void get_data_fields(data_t * data, int * no_dims, int ** dimensions, data_type_e * data_type, short * no_bytes, elementdatatype_t ** elements) {
+	*no_dims = get_no_dims(data);
+	*dimensions = get_dimensions(data);
+	*data_type = get_data_type(data);
+	*no_bytes = get_no_bytes(data);
+	*elements = get_data_elements(data);
 }
 
 char * data_type_to_str (data_type_e data_type) {
@@ -311,4 +304,22 @@ short data_type_bytes (data_type_e data_type) {
 	}
 
 	return data_type_bytes;
+}
+
+int compute_total_no_elements(data_t * data) {
+	int no_dims = 0;
+	int * dimensions = NULL;
+
+	no_dims = get_no_dims(data);
+	dimensions = get_dimensions(data);
+
+	int total_elements = 1;
+	// Compute total dimension of the array of elements
+	for (int dim = 0; dim < no_dims; dim++) {
+		total_elements *= dimensions[dim];
+	}
+
+	free (dimensions);
+
+	return total_elements;
 }

@@ -34,7 +34,6 @@ void parse_idx (char * filename, data_t ** data) {
 
 	}
 
-
 	file_close(fid);
 }
 
@@ -156,9 +155,7 @@ void parse_body(FILE * fid, data_t ** data) {
 
 	int total_elements = 1;
 	// Compute total dimension of the array of elements
-	for (int dim = 0; dim < no_dims; dim++) {
-		total_elements *= dimensions[dim];
-	}
+	total_elements = compute_total_no_elements(*data);
 
 	do {
 		// Variable storing parsed data
@@ -167,9 +164,9 @@ void parse_body(FILE * fid, data_t ** data) {
 
 		LOG_INFO(DEBUG,"Data read %0d, End of file %s\n", data_read, bool_to_str(eof));
 
-		// Variable storing the 32 bits fo the magic number grouped as bytes (8 bits)
+		// Variable storing the 32 bits of the magic number grouped as bytes (8 bits)
 		byte * element_bytes = NULL;
-		element_bytes = (byte *) malloc(sizeof(int)*sizeof(byte));
+		element_bytes = (byte *) malloc(sizeof(elementdatatype_t));
 		if (element_bytes == NULL) {
 			LOG_ERROR("Can't allocate memory for an array to split elements in single bytes");
 		}
@@ -184,7 +181,6 @@ void parse_body(FILE * fid, data_t ** data) {
 			ASSERT((total_elements - element_cnt) >= datatype_element_ratio);
 			valid_elements = datatype_element_ratio;
 		}
-
 		for (int el = 0; el < valid_elements; el++) {
 			elementdatatype_t element = 0;
 			for (int byte = 0; byte < no_bytes; byte++) {
@@ -212,6 +208,8 @@ void parse_body(FILE * fid, data_t ** data) {
 			ASSERT(remainder == 0);
 
 			set_element(data, element, coordinates);
+
+			ASSERT(element_cnt < total_elements);
 
 			element_cnt++;
 		}
