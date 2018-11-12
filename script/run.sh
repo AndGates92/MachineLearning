@@ -9,7 +9,7 @@ COMPLOG=compile.log
 DOCLOG=doc.log
 CLEANLOG=clean.log
 VALGRINDLOG=valgrind.log
-EXEVALGRINDLOG=${EXE_NAME}_valgrind.log
+EXEVALGRINDLOG=${EXENAME}_valgrind.log
 
 DATASET_DIR=dataset/mnist
 TRAIN_SET=train-images-idx3-ubyte
