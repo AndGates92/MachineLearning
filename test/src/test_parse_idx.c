@@ -11,19 +11,18 @@
 #include "parse_idx.h"
 #include "log.h"
 
+const char* testname = "test_parse_idx";
+
 void test_parse_idx (char * test_set, char * train_set, char * test_label, char * train_label) {
 
-	LOG_INFO(LOW,"Start input file parsing\n");
+	LOG_INFO(LOW,"Start test: %s\n", testname);
 
 	data_t * test_set_struct_t = NULL;
 	data_t * test_label_struct_t = NULL;
 	data_t * train_set_struct_t = NULL;
 	data_t * train_label_struct_t = NULL;
 
-	parse_idx(test_set, &test_set_struct_t);
-	parse_idx(test_label, &test_label_struct_t);
-	parse_idx(train_set, &train_set_struct_t);
-	parse_idx(train_label, &train_label_struct_t);
+	parse_all_idx (test_set, train_set, test_label, train_label, &test_set_struct_t, &test_label_struct_t, &train_set_struct_t, &train_label_struct_t);
 
 	LOG_INFO(DEBUG,"Freeing memory allocated for data strcture data_t.\n");
 	free(test_set_struct_t);
@@ -31,6 +30,6 @@ void test_parse_idx (char * test_set, char * train_set, char * test_label, char 
 	free(train_set_struct_t);
 	free(train_label_struct_t);
 
-	LOG_INFO(LOW,"End input file parsing\n");
+	LOG_INFO(LOW,"End test: %s\n", testname);
 
 }
