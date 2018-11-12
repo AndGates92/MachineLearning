@@ -8,10 +8,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "test_parse_idx.h"
-#include "parse_idx.h"
+#include "neural_network.h"
 #include "log.h"
 
+/** \addtogroup ParseIDX Parse IDX Functions
+ *  @{
+ */
+
+/**
+ * @brief Test name
+ *
+ */
 const char* testname = "test_parse_idx";
+
+/** @} */ // End of addtogroup ParseIDX
 
 void test_parse_idx (char * test_set, char * train_set, char * test_label, char * train_label) {
 
