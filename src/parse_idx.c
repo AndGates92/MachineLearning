@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "log.h"
 #include "file.h"
 #include "parse_idx.h"
@@ -44,7 +45,7 @@ int read_header(FILE * fid) {
 	no_el_read = fread(&value_le, sizeof(value_le), 1, fid);
 
 	// Assert that fread successfully read 1 element
-	ASSERT(no_el_read == 1);
+	ASSERT(no_el_read == (size_t)1);
 
 	// Convert from little endian to big endian
 	int value_be=0;
@@ -247,7 +248,7 @@ data_type_e IDX_data_type_to_enum (byte data_type) {
 			data_type_enum = DOUBLE;
 			break;
 		default:
-			LOG_ERROR("Unknown data type ID %0d. Can't generate convert to data_type_e type", data_type);
+			LOG_ERROR("Unknown data type ID %0d. Can't generate convert to data_type_e type\n", data_type);
 			break;
 	}
 
