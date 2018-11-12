@@ -73,15 +73,15 @@ echo "========================================================================="
 echo "\n========================================================================="
 echo "Run program"
 echo "========================================================================="
-echo "START:Test to parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
+echo "START:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
 (set -x; \
  ./bin/ml -tel ${DATASET_DIR}/${TEST_LABEL})
-echo "COMPLETED:Test to parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
-echo "START:Test to parsing test set file ${DATASET_DIR}/${TEST_SET}"
+echo "COMPLETED:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
+echo "START:Test parsing test set file ${DATASET_DIR}/${TEST_SET}"
 (set -x; \
  ./bin/ml -tes ${DATASET_DIR}/${TEST_SET})
-echo "COMPLETED:Test to parsing test set file ${DATASET_DIR}/${TEST_SET}"
-echo "START:Test to parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
+echo "COMPLETED:Test parsing test set file ${DATASET_DIR}/${TEST_SET}"
+echo "START:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
 (set -x; \
  ./bin/ml -tel ${DATASET_DIR}/${TEST_LABEL} -tes ${DATASET_DIR}/${TEST_SET} -trl ${DATASET_DIR}/${TRAIN_LABEL} -trs ${DATASET_DIR}/${TRAIN_SET})
-echo "COMPLETED:Test to parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
+echo "COMPLETED:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
