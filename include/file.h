@@ -8,16 +8,16 @@
  * @brief File handling header file
 */
 
+/** @defgroup FileGroup File Doxygen Group
+ *  Functions and defines concerning file manipulation
+ *  @{
+ */
 /**
  * @brief Maximum number of character for file opening mode
  *
  */
 #define MODE_MAX_CHAR 7
 
-/** @defgroup FileFunc File Functions
- *  Functions concerning file manipulation
- *  @{
- */
 /** 
  * @brief Function: FILE * file_open (const char * filename, const char * permission)
  *
@@ -37,5 +37,5 @@ FILE * file_open (const char * filename, const char * permission);
  * Close a file
  */
 void file_close (FILE * fid);
-/** @} */ // End of FileFunc group
+/** @} */ // End of FileGroup group
 #endif // FILE_H

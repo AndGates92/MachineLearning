@@ -8,8 +8,8 @@
  * @brief Test parse IDX file header file
 */
 
-/** @defgroup TestParseIDX Test parse IDX Functions
- *  Functions concerning image
+/** @defgroup TestParseIDXGroup Test parse IDX Doxygen Group
+ *  Functions and defines concerning image
  *  @{
  */
 /** 
@@ -23,5 +23,5 @@
  * Parse IDX file and ensure data is correctly stored in structure
  */
 void test_parse_idx (char * test_set, char * train_set, char * test_label, char * train_label);
-/** @} */ // End of ImageFunc group
+/** @} */ // End of TestParseIDXGroup group
 #endif // TEST_PARSE_IDX_H

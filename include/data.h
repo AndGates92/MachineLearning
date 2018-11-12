@@ -8,12 +8,15 @@
  * @brief Data handling header file
 */
 
+/** @defgroup DataGroup Data Doxygen Group
+ *  Functions and defines concerning data strcture data_t
+ *  @{
+ */
 /**
  * @brief element type
  *
- * Pixel type as per input file
+ * Datatype of elements in data structure data_t
  */
-
 // Uncomment element data type
 //typedef int elementdatatype_t;
 //typedef unsigned char elementdatatype_t;
@@ -55,11 +58,7 @@ typedef struct data {
 	elementdatatype_t * elements; /**< elements of the data structure data_t */
 } data_t;
 
-/** @defgroup DataFunc Data Functions
- *  Functions concerning data strcture data_t
- *  @{
- */
-/** 
+/**
  * @brief Function: data_t * add_data (int * dimensions, int no_dims)
  *
  * \param dimensions: array with the dimensions of the data strcture data_t
@@ -236,5 +235,5 @@ char * data_type_to_str (data_type_e data_type);
  * Compute the number of bytes of the data type.
  */
 short data_type_bytes (data_type_e data_type);
-/** @} */ // End of DataFunc group
+/** @} */ // End of DataGroup group
 #endif // DATA_H

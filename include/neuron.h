@@ -10,8 +10,8 @@
 
 #include "data.h"
 
-/** @defgroup NeuronFunc Neuron Functions
- *  Functions concerning neurons
+/** @defgroup NeuronNetworkGroup Neuron Doxygen Group
+ *  Functions and defines concerning neurons
  *  @{
  */
 /** 
@@ -23,5 +23,5 @@
  */
 double sigmoid (elementdatatype_t * elements);
 
-/** @} */ // End of NeuronFunc group
+/** @} */ // End of NeuronNetworkGroup group
 #endif // NEURON_H

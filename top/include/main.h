@@ -8,6 +8,10 @@
  * @brief main header file
 */
 
+/** @defgroup MainGroup Main file Doxygen Group
+ *  Function and defines concerning top level file
+ *  @{
+ */
 /**
  * @brief Maximum number of character allowed in the filename
  *
@@ -37,4 +41,5 @@ const char* tes_opt = "-tes";
  *
  */
 const char* tel_opt = "-tel";
+/** @} */ // End of MainGroup group
 #endif // MAIN_H

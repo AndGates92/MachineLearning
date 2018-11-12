@@ -11,8 +11,8 @@
 #include <stdbool.h>
 #include "data.h"
 
-/** @defgroup ParseIDX Parse IDX Functions
- *  Functions concerning image
+/** @defgroup ParseIDXGroup Parse IDX Functions
+ *  Functions and defines concerning image
  *  @{
  */
 
@@ -116,5 +116,5 @@ void parse_body(FILE * fid, data_t ** data);
  */
 data_type_e IDX_data_type_to_enum (byte data_type);
 
-/** @} */ // End of ParseIDX group
+/** @} */ // End of ParseIDXGroup group
 #endif // PARSE_IDX_H

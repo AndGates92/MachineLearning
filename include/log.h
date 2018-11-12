@@ -12,6 +12,10 @@
 #include "utility.h"
 #include "file.h"
 
+/** @defgroup LogGroup Log Doxygen Group
+ *  Functions and defines logging progress
+ *  @{
+ */
 /**
  * @brief log filename
  *
@@ -96,10 +100,6 @@ extern FILE * logfile;
 		LOG_ERROR("ASSERTION FAILED (%s) at %s, function %s, line %0d\n", STRINGIFY_EXPR(EXPR), __FILE__, __func__, __LINE__);\
 	}
 
-/** @defgroup LogFunc Log Functions
- *  Functions logging progress
- *  @{
- */
 /** 
  * @brief Function: void log_info (verb_level_e verbosity, const char * str_format, ...)
  *
@@ -126,5 +126,5 @@ void close_logfile ();
  */
 char * bool_to_str (bool expr);
 
-/** @} */ // End of LogFunc group
+/** @} */ // End of LogGroup group
 #endif // LOG_H

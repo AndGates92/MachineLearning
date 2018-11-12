@@ -8,8 +8,8 @@
  * @brief Utility handling header file
 */
 
-/** @defgroup UtilityFunc Utility Functions
- *  Functions concerning utility
+/** @defgroup UtilityGroup Utility Doxygen Group
+ *  Functions and defines concerning utility
  *  @{
  */
 /**
@@ -32,5 +32,5 @@
  */
 #define STRINGIFY_EXPR(x) STRINGIFY(x)
 
-/** @} */ // End of UtilityFunc group
+/** @} */ // End of UtilityGroup group
 #endif // UTILITY_H

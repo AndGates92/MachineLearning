@@ -13,8 +13,7 @@
 #include "log.h"
 #include "main.h"
 
-/** @defgroup MainFunc Main Function
- *  Main function
+/** @addtogroup MainGroup
  *  @{
  */
 /** 
@@ -160,4 +159,4 @@ int main (int argc, char * argv []) {
 	return EXIT_SUCCESS;
 
 }
-/** @} */ // End of MainFunc group
+/** @} */ // End of addtogroup Main group

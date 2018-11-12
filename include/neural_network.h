@@ -13,7 +13,7 @@
 
 
 /** @defgroup NeuralNetowrk Neural network top level functions
- *  Functions neural network
+ *  Functions and defines neural network
  *  @{
  */
 

@@ -11,7 +11,7 @@
 #include "neural_network.h"
 #include "log.h"
 
-/** \addtogroup ParseIDX Parse IDX Functions
+/** \addtogroup TestParseIDXGroup
  *  @{
  */
 
@@ -21,7 +21,7 @@
  */
 const char* testname = "test_parse_idx";
 
-/** @} */ // End of addtogroup ParseIDX
+/** @} */ // End of addtogroup TestParseIDXGroup
 
 void test_parse_idx (char * test_set, char * train_set, char * test_label, char * train_label) {
 
