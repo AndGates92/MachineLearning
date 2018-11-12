@@ -95,10 +95,17 @@ extern FILE * logfile;
  *
  * Assert the expression and if it fails, an error message is printed to stderr and the program exits with EXIT_FAILURE status
  */
+#ifdef ENABLE_ASSERTIONS
 #define ASSERT(EXPR)\
 	if (!(EXPR)) {\
-		LOG_ERROR("ASSERTION FAILED (%s) at %s, function %s, line %0d\n", STRINGIFY_EXPR(EXPR), __FILE__, __func__, __LINE__);\
+		LOG_ERROR("ASSERTION FAILED (%s)\n", STRINGIFY_EXPR(EXPR));\
 	}
+#else
+#define ASSERT(EXPR)\
+	if (!(EXPR)) {\
+		LOG_INFO(ZERO,"ASSERTION FAILED (%s)\n", STRINGIFY_EXPR(EXPR));\
+	}
+#endif // ENABLE_ASSERTIONS
 
 /** 
  * @brief Function: void log_info (verb_level_e verbosity, const char * str_format, ...)
