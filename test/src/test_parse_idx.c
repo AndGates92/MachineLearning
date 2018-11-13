@@ -53,16 +53,16 @@ void test_parse_idx (char * test_set, char * train_set, char * test_label, char 
 	compare(train_label_struct_t, train_label2_struct_t);
 
 	LOG_INFO(DEBUG,"Freeing memory allocated for 1st set of data strcture data_t.\n");
-	free(test_set_struct_t);
-	free(test_label_struct_t);
-	free(train_set_struct_t);
-	free(train_label_struct_t);
+	delete_data(test_set_struct_t);
+	delete_data(test_label_struct_t);
+	delete_data(train_set_struct_t);
+	delete_data(train_label_struct_t);
 
 	LOG_INFO(DEBUG,"Freeing memory allocated for 2nd set of data strcture data_t.\n");
-	free(test_set2_struct_t);
-	free(test_label2_struct_t);
-	free(train_set2_struct_t);
-	free(train_label2_struct_t);
+	delete_data(test_set2_struct_t);
+	delete_data(test_label2_struct_t);
+	delete_data(train_set2_struct_t);
+	delete_data(train_label2_struct_t);
 
 	LOG_INFO(LOW,"Test %s: PASSED\n", testname);
 
@@ -113,7 +113,13 @@ void compare(data_t * data1, data_t * data2) {
 		ASSERT (no_bytes1 == no_bytes2);
 
 		// Compare data types
-		LOG_INFO(DEBUG,"Data type: %s vs %s\n", data_type_to_str(data_type1), data_type_to_str(data_type2));
+		char * data_type1_str = NULL;
+		data_type1_str = data_type_to_str(data_type1);
+		char * data_type2_str = NULL;
+		data_type2_str = data_type_to_str(data_type2);
+		LOG_INFO(DEBUG,"Data type: %s vs %s\n", data_type1_str, data_type2_str);
+		free(data_type1_str);
+		free(data_type2_str);
 		ASSERT (data_type1 != UNKNOWN);
 		ASSERT (data_type2 != UNKNOWN);
 		ASSERT (data_type1 == data_type2);

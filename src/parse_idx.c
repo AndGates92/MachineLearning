@@ -82,10 +82,14 @@ void parse_header(FILE * fid, data_t ** data) {
 	data_type = magic_number_bytes[1];
 	data_type_enum = IDX_data_type_to_enum(data_type);
 
+	char * data_type_str = NULL;
+	data_type_str = data_type_to_str(data_type_enum);
+
 	LOG_INFO(MEDIUM,"Magic number %0d\n",  magic_number);
 	LOG_INFO(MEDIUM,"    -> number of dimensions %0d\n",  no_dims);
-	LOG_INFO(MEDIUM,"    -> data type %0d (%s)\n",  data_type, data_type_to_str(data_type_enum));
+	LOG_INFO(MEDIUM,"    -> data type %0d (%s)\n",  data_type, data_type_str);
 
+	free(data_type_str);
 	free(magic_number_bytes);
 
 	int * dimensions = NULL;
@@ -105,7 +109,6 @@ void parse_header(FILE * fid, data_t ** data) {
 	set_data_type(data, data_type_enum);
 
 	free(dimensions);
-
 
 }
 
@@ -209,6 +212,8 @@ void parse_body(FILE * fid, data_t ** data) {
 			ASSERT(remainder == 0);
 
 			set_element(data, element, coordinates);
+
+			free(coordinates);
 
 			ASSERT(element_cnt < total_elements);
 

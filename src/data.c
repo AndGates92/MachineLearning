@@ -83,8 +83,11 @@ void set_no_dims (data_t ** data, int no_dims) {
 void set_data_type (data_t ** data, data_type_e data_type) {
 	(*data)->data_type = data_type;
 	(*data)->no_bytes = data_type_bytes(data_type);
+	char * data_type_str = NULL;
+	data_type_str = data_type_to_str(data_type);
 	// Assert that each element is large enough to store a value from the IDX file
-	LOG_INFO(DEBUG,"Set data type to %s (%0hi bytes)\n",  data_type_to_str(data_type), (*data)->no_bytes);
+	LOG_INFO(DEBUG,"Set data type to %s (%0hi bytes)\n", data_type_str, (*data)->no_bytes);
+	free(data_type_str);
 	ASSERT (((*data)->no_bytes) >= 1);
 	ASSERT ((size_t)((*data)->no_bytes) <= sizeof(elementdatatype_t));
 }
@@ -159,13 +162,25 @@ int get_no_dims (data_t * data) {
 }
 
 data_type_e get_data_type (data_t * data) {
-	LOG_INFO(DEBUG,"Data type of elements in data structure data_t: %s\n",  data_type_to_str(data->data_type));
-	return data->data_type;
+	data_type_e data_type = UNKNOWN;
+	data_type = data->data_type;
+	char * data_type_str = NULL;
+	data_type_str = data_type_to_str(data_type);
+	LOG_INFO(DEBUG,"Data type of elements in data structure data_t: %s\n",  data_type_str);
+	free(data_type_str);
+	return data_type;
 }
 
 short get_no_bytes (data_t * data) {
-	LOG_INFO(DEBUG,"Number of bytes of data type %s of data structure data_t: %0hi\n", data_type_to_str(get_data_type(data)), data->no_bytes);
-	return data->no_bytes;
+	data_type_e data_type = UNKNOWN;
+	data_type = get_data_type(data);
+	char * data_type_str = NULL;
+	data_type_str = data_type_to_str(data_type);
+	short no_bytes = 0;
+	no_bytes = data->no_bytes;
+	LOG_INFO(DEBUG,"Number of bytes of data type %s of data structure data_t: %0hi\n", data_type_str, no_bytes);
+	free(data_type_str);
+	return no_bytes;
 }
 
 elementdatatype_t get_element (data_t * data, int * coordinates) {
