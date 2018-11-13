@@ -66,10 +66,13 @@ data_t * add_data (int* dimensions, int no_dims) {
 }
 
 void delete_data (data_t * data) {
-	free(data->elements);
-	LOG_INFO(DEBUG,"Free data elements -> COMPLETED\n");
-	free(data->dimensions);
-	LOG_INFO(DEBUG,"Free data dimensions -> COMPLETED\n");
+	if (data != NULL) {
+		free(data->elements);
+		LOG_INFO(DEBUG,"Free data elements -> COMPLETED\n");
+		free(data->dimensions);
+		LOG_INFO(DEBUG,"Free data dimensions -> COMPLETED\n");
+	}
+
 	free(data);
 	LOG_INFO(DEBUG,"Free data structure -> COMPLETED\n");
 }
