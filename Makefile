@@ -106,7 +106,7 @@ depend :
 all : $(EXE)
 	$(VERBOSE)echo "Compile machine learning C algorithm"
 
-valgrind : $(EXE)
+memleak : $(EXE)
 	valgrind $(MEMCHECKOPTS) $(VALGRINDTOOLOPTS) $(VALGRINDLOGOPTS) $(EXE) $(VALGRINDEXEARGS)
 
 debug :
@@ -140,4 +140,4 @@ doc :
 	$(MKDIR) $(DOX_DOC_DIR)
 	$(DOXYGEN) $(DOX_CFG_FILE)
 
-.PHONY: all,clean,depend,$(EXE),debug,doc,valgrind
+.PHONY: all,clean,depend,$(EXE),debug,doc,memleak

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Shell script settings
-valgrind=0
+memleak=0
 tests=0
 doc=0
 
@@ -17,6 +17,7 @@ DOCLOG=doc.log
 EXELOG=${EXENAME}.log
 VALGRINDTESLOG=valgrind_tes.log
 VALGRINDTELLOG=valgrind_tel.log
+VALGRINDALLLOG=valgrind_all.log
 EXEVALGRINDLOG=${EXENAME}_valgrind.log
 
 DATASET_DIR=dataset/mnist
@@ -44,8 +45,12 @@ do
 			tests=1
 			shift 1
 			;;
-		--valgrind|-v)
-			valgrind=1
+		--memleak|-m)
+			memleak=1
+			shift 1
+			;;
+		--debug|-g)
+			debug=1
 			shift 1
 			;;
 		--help|-h)
@@ -86,9 +91,10 @@ fi
 if [ ${doc} -eq 1 ]; then
 	echo "--> Documentation logfile name: ${DOCLOG}"
 fi
-if [ ${valgrind} -eq 1 ]; then
+if [ ${memleak} -eq 1 ]; then
 	echo "--> Valgrind test set logfile name: ${VALGRINDTESLOG}"
 	echo "--> Valgrind test label logfile name: ${VALGRINDTELLOG}"
+	echo "--> Valgrind all input files logfile name: ${VALGRINDALLLOG}"
 	echo "--> Valgrind executable logfile name: ${EXEVALGRINDLOG}"
 fi
 
@@ -104,11 +110,13 @@ echo "========================================================================="
 (set -x; \
  mkdir -p ${LOGDIR})
 
-echo "\n========================================================================="
-echo "Makefile variables"
-echo "========================================================================="
-(set -x; \
- make debug LOG_DIR=${LOGDIR} LOGFILENAME=${EXELOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} EXTRAFLAGS=${CEXTRAFLAGS} > ${LOGDIR}/${DEBUGLOG})
+if [ ${debug} -eq 1]; then
+	echo "\n========================================================================="
+	echo "Makefile variables"
+	echo "========================================================================="
+	(set -x; \
+	 make debug LOG_DIR=${LOGDIR} LOGFILENAME=${EXELOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} EXTRAFLAGS=${CEXTRAFLAGS} > ${LOGDIR}/${DEBUGLOG})
+fi
 
 if [ ${tests} -eq 1 ]; then
 	echo "\n========================================================================="
@@ -142,16 +150,32 @@ if [ ${doc} -eq 1 ]; then
 	 make doc LOG_DIR=${LOGDIR} LOGFILENAME=${EXELOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} EXTRAFLAGS=${CEXTRAFLAGS} > ${LOGDIR}/${DOCLOG})
 fi
 
-if [ ${valgrind} -eq 1 ]; then
+if [ ${memleak} -eq 1 ]; then
 	echo "\n========================================================================="
-	echo "Run valgrind"
+	echo "Check memory leaks"
 	echo "========================================================================="
-	echo "START:Valgrind parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
+	echo "START:Valgrind with label input file ${DATASET_DIR}/${TEST_LABEL}"
 	(set -x; \
-	 make valgrind LOG_DIR=${LOGDIR} LOGFILENAME=${EXEVALGRINDLOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VALGRINDLOGFILENAME=${VALGRINDTELLOG} VALGRINDEXEARGS="-tel ${DATASET_DIR}/${TEST_LABEL}")
-	echo "COMPLETED:Valgrind parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
-	echo "START:Valgrind parsing test set file ${DATASET_DIR}/${TEST_SET}"
+	 make memleak LOG_DIR=${LOGDIR} LOGFILENAME=${EXEVALGRINDLOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VALGRINDLOGFILENAME=${VALGRINDTELLOG} VALGRINDEXEARGS="-tel ${DATASET_DIR}/${TEST_LABEL}")
+	echo "COMPLETED:Valgrind with label input file ${DATASET_DIR}/${TEST_LABEL}"
+	echo "START:Valgrind with test set input file ${DATASET_DIR}/${TEST_SET}"
 	(set -x; \
-	 make valgrind LOG_DIR=${LOGDIR} LOGFILENAME=${EXEVALGRINDLOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VALGRINDLOGFILENAME=${VALGRINDTESLOG} VALGRINDEXEARGS="-tes ${DATASET_DIR}/${TEST_SET}")
-	echo "COMPLETED:Valgrind parsing test set file ${DATASET_DIR}/${TEST_SET}"
+	 make memleak LOG_DIR=${LOGDIR} LOGFILENAME=${EXEVALGRINDLOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VALGRINDLOGFILENAME=${VALGRINDTESLOG} VALGRINDEXEARGS="-tes ${DATASET_DIR}/${TEST_SET}")
+	echo "COMPLETED:Valgrind with test set input file ${DATASET_DIR}/${TEST_SET}"
+	echo "START:Valgrind with the following input files: test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
+	(set -x; \
+	 make memleak LOG_DIR=${LOGDIR} LOGFILENAME=${EXEVALGRINDLOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VALGRINDLOGFILENAME=${VALGRINDALLLOG} VALGRINDEXEARGS="-tel ${DATASET_DIR}/${TEST_LABEL} -tes ${DATASET_DIR}/${TEST_SET} -trl ${DATASET_DIR}/${TRAIN_LABEL} -trs ${DATASET_DIR}/${TRAIN_SET}")
+	echo "COMPLETED:Valgrind with the following input files: test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
+
 fi
+
+usage () {
+	echo " - Usage:"
+	echo " - >$0 <options>"
+	echo ""
+	echo "      --doc|-d:		generate documentation"
+	echo "      --debug|-g:		dump makefile flags to ${LOGDIR}/${DEBUGLOG}"
+	echo "      --memleak|-m:	compile and check memory leaks using valgrind" 
+	echo "      --test|-t:		compile and run tests"
+	echo "      --help|-h:		print this help"
+}
