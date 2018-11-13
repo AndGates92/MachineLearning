@@ -33,5 +33,16 @@
  */
 void parse_all_idx (char * test_set, char * train_set, char * test_label, char * train_label, data_t ** test_set_struct_t, data_t ** test_label_struct_t, data_t ** train_set_struct_t, data_t ** train_label_struct_t);
 
+/** 
+ * @brief Function: void neural_network (char * test_set, char * train_set, char * test_label, char * train_label)
+ *
+ * \param test_set: filename of the IDX file containing the test set
+ * \param train_set: filename of the IDX file containing the training set
+ * \param test_label: filename of the IDX file containing the test labels
+ * \param train_label: filename of the IDX file containing the training labels
+ *
+ * Neural network top level function
+ */
+void neural_network (char * test_set, char * train_set, char * test_label, char * train_label);
 /** @} */ // End of NeuralNetwork group
 #endif // NEURAL_NETWORK_H

@@ -25,3 +25,21 @@ void parse_all_idx (char * test_set, char * train_set, char * test_label, char *
 	LOG_INFO(LOW,"End parsing all IDX files\n");
 
 }
+
+void neural_network (char * test_set, char * train_set, char * test_label, char * train_label) {
+
+	// Declare data structures
+	data_t * test_set_struct_t = NULL;
+	data_t * test_label_struct_t = NULL;
+	data_t * train_set_struct_t = NULL;
+	data_t * train_label_struct_t = NULL;
+
+	parse_all_idx (test_set, train_set, test_label, train_label, &test_set_struct_t, &test_label_struct_t, &train_set_struct_t, &train_label_struct_t);
+
+//	initialize_neuronetwork();
+
+//	feedfoward_propagation();
+
+//	backwards_propagation();
+
+}
