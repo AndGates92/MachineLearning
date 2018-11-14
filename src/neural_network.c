@@ -103,10 +103,12 @@ void initialize_neuronetwork(elementdatatype_t ** weights, elementdatatype_t ** 
 	// Hidden layers plus input layer
 	num_layers_p1 = (NO_HIDDEN_LAYERS + 1);
 
-	total_num_weights = num_layers_p1*elements_in_unit;
+	// elements in unit contains the number of weights required for the neural network training set but it doesn't account for the bias, hence add 1 
+	total_num_weights = num_layers_p1*(elements_in_unit + 1);
 
 	(*weights) = (elementdatatype_t *) malloc(total_num_weights*sizeof(elementdatatype_t));
 
+	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
 	for (int idx_el = 0; idx_el < total_num_weights; idx_el++) {
 		elementdatatype_t weight = 0;
 		weight = ((rand()/RAND_MAX) * (MAX_WEIGHT - MIN_WEIGHT)) + MIN_WEIGHT;
@@ -116,6 +118,7 @@ void initialize_neuronetwork(elementdatatype_t ** weights, elementdatatype_t ** 
 		ASSERT(weight <= MAX_WEIGHT);
 	}
 
+	// Randomize biases between MIN_BIASES and MAX_BIASES
 	(*biases) = (elementdatatype_t *) malloc(num_layers_p1*sizeof(elementdatatype_t));
 	for (int idx_bias = 0; idx_bias < num_layers_p1; idx_bias++) {
 		elementdatatype_t bias = 0;
