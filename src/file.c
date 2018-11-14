@@ -38,7 +38,7 @@ FILE * file_open (const char * filename, const char * permission) {
 
 	LOG_INFO(DEBUG,"Opened file %s for %s. File descriptor %0d\n",  filename, mode, fileno(fid));
 
-	free(mode);
+	free_memory(mode);
 
 	return fid;
 }

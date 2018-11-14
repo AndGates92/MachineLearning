@@ -32,5 +32,14 @@
  */
 #define STRINGIFY_EXPR(x) STRINGIFY(x)
 
+/**
+ * @brief Function: void free_memory (void * ptr)
+ *
+ * \param ptr: pointer to the memory to free
+ * 
+ * Free memory pointed to the input argument pointer if ti is different from NULL.
+ */
+void free_memory (void * ptr);
+
 /** @} */ // End of UtilityGroup group
 #endif // UTILITY_H

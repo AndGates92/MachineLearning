@@ -37,7 +37,7 @@ void log_info(verb_level_e verbosity, const char * str_format, ...) {
 				LOG_ERROR("Can't open file %s for write", filename);
 			}
 			LOG_INFO(HIGH, "Opened file %s for write. File descriptor %0d\n", filename, fileno(logfile));
-			free(filename);
+			free_memory(filename);
 		}
 		vfprintf (logfile, str_format, arglist);
 
@@ -55,7 +55,7 @@ void close_logfile () {
 
 	LOG_INFO(HIGH,"Closing logfile %s\n",  filename);
 	file_close(logfile);
-	free(filename);
+	free_memory(filename);
 }
 
 char * bool_to_str (bool expr) {

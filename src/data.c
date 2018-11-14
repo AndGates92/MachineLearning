@@ -10,6 +10,7 @@
 #include <string.h>
 #include "log.h"
 #include "data.h"
+#include "utility.h"
 
 data_t * add_data (int* dimensions, int no_dims) {
 	data_t * data = NULL;
@@ -67,13 +68,13 @@ data_t * add_data (int* dimensions, int no_dims) {
 
 void delete_data (data_t * data) {
 	if (data != NULL) {
-		free(data->elements);
+		free_memory(data->elements);
 		LOG_INFO(DEBUG,"Free data elements -> COMPLETED\n");
-		free(data->dimensions);
+		free_memory(data->dimensions);
 		LOG_INFO(DEBUG,"Free data dimensions -> COMPLETED\n");
 	}
 
-	free(data);
+	free_memory(data);
 	LOG_INFO(DEBUG,"Free data structure -> COMPLETED\n");
 }
 
@@ -92,7 +93,7 @@ void set_data_type (data_t ** data, data_type_e data_type) {
 	data_type_str = data_type_to_str(data_type);
 	// Assert that each element is large enough to store a value from the IDX file
 	LOG_INFO(DEBUG,"Set data type to %s (%0hi bytes)\n", data_type_str, (*data)->no_bytes);
-	free(data_type_str);
+	free_memory(data_type_str);
 	ASSERT (((*data)->no_bytes) >= 1);
 	ASSERT ((size_t)((*data)->no_bytes) <= sizeof(elementdatatype_t));
 }
@@ -185,7 +186,7 @@ data_type_e get_data_type (data_t * data) {
 	char * data_type_str = NULL;
 	data_type_str = data_type_to_str(data_type);
 	LOG_INFO(DEBUG,"Data type of elements in data structure data_t: %s\n",  data_type_str);
-	free(data_type_str);
+	free_memory(data_type_str);
 	return data_type;
 }
 
@@ -197,7 +198,7 @@ short get_no_bytes (data_t * data) {
 	short no_bytes = 0;
 	no_bytes = data->no_bytes;
 	LOG_INFO(DEBUG,"Number of bytes of data type %s of data structure data_t: %0hi\n", data_type_str, no_bytes);
-	free(data_type_str);
+	free_memory(data_type_str);
 	return no_bytes;
 }
 
@@ -260,7 +261,7 @@ int compute_element_offset (data_t * data, int * coordinates) {
 	int total_offset;
 	total_offset = data_offset + unit_offset;
 
-	free (dimensions);
+	free_memory (dimensions);
 
 	return total_offset;
 }
@@ -353,7 +354,7 @@ int compute_total_no_elements(data_t * data) {
 		total_elements *= dimensions[dim];
 	}
 
-	free (dimensions);
+	free_memory (dimensions);
 
 	return total_elements;
 }
@@ -373,7 +374,7 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 	element_index = (int *) malloc(no_dims*sizeof(int));
 	memcpy(element_index, start_position, (no_dims*sizeof(int)));
 
-	free(dimensions);
+	free_memory(dimensions);
 
 	for (int position = 0; position < no_elements; position++) {
 		(*(element_array + position)) = get_element (data, element_index);
@@ -391,7 +392,7 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 		}
 	}
 
-	free(element_index);
+	free_memory(element_index);
 
 	return element_array;
 }

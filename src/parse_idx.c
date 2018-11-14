@@ -13,6 +13,7 @@
 #include "log.h"
 #include "file.h"
 #include "parse_idx.h"
+#include "utility.h"
 
 void parse_idx (char * filename, data_t ** data) {
 	FILE * fid = NULL;
@@ -89,8 +90,8 @@ void parse_header(FILE * fid, data_t ** data) {
 	LOG_INFO(MEDIUM,"    -> number of dimensions %0d\n",  no_dims);
 	LOG_INFO(MEDIUM,"    -> data type %0d (%s)\n",  data_type, data_type_str);
 
-	free(data_type_str);
-	free(magic_number_bytes);
+	free_memory(data_type_str);
+	free_memory(magic_number_bytes);
 
 	int * dimensions = NULL;
 	dimensions = (int *) malloc(no_dims*sizeof(int));
@@ -108,7 +109,7 @@ void parse_header(FILE * fid, data_t ** data) {
 	*data = add_data(dimensions, no_dims);
 	set_data_type(data, data_type_enum);
 
-	free(dimensions);
+	free_memory(dimensions);
 
 }
 
@@ -213,18 +214,18 @@ void parse_body(FILE * fid, data_t ** data) {
 
 			set_element(data, element, coordinates);
 
-			free(coordinates);
+			free_memory(coordinates);
 
 			ASSERT(element_cnt < total_elements);
 
 			element_cnt++;
 		}
 
-		free (element_bytes);
+		free_memory (element_bytes);
 
 	} while (eof == false);
 
-	free(dimensions);
+	free_memory(dimensions);
 
 	ASSERT(element_cnt == total_elements);
 

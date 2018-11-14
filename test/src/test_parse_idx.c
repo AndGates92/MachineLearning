@@ -10,6 +10,7 @@
 #include "test_parse_idx.h"
 #include "neural_network.h"
 #include "log.h"
+#include "utility.h"
 
 /** \addtogroup TestParseIDXGroup
  *  @{
@@ -118,8 +119,8 @@ void compare(data_t * data1, data_t * data2) {
 		char * data_type2_str = NULL;
 		data_type2_str = data_type_to_str(data_type2);
 		LOG_INFO(DEBUG,"Data type: %s vs %s\n", data_type1_str, data_type2_str);
-		free(data_type1_str);
-		free(data_type2_str);
+		free_memory(data_type1_str);
+		free_memory(data_type2_str);
 		ASSERT (data_type1 != UNKNOWN);
 		ASSERT (data_type2 != UNKNOWN);
 		ASSERT (data_type1 == data_type2);
@@ -154,9 +155,9 @@ void compare(data_t * data1, data_t * data2) {
 		}
 	}
 
-	free(dimensions1);
-	free(dimensions2);
-	free(elements1);
-	free(elements2);
+	free_memory(dimensions1);
+	free_memory(dimensions2);
+	free_memory(elements1);
+	free_memory(elements2);
 
 }

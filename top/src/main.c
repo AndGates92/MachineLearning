@@ -12,6 +12,7 @@
 #include "test_parse_idx.h"
 #include "test_neural_network.h"
 #include "log.h"
+#include "utility.h"
 #include "main.h"
 
 /** @addtogroup MainGroup
@@ -151,10 +152,10 @@ int main (int argc, char * argv []) {
 
 	test_neural_network(test_set, train_set, test_label, train_label);
 
-	free(test_set);
-	free(train_set);
-	free(test_label);
-	free(train_label);
+	free_memory(test_set);
+	free_memory(train_set);
+	free_memory(test_label);
+	free_memory(train_label);
 
 	LOG_INFO(ZERO,"Tests completed.\n");
 	close_logfile();
