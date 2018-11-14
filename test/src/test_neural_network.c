@@ -1,6 +1,6 @@
 /**
  * @copyright
- * @file test_parse_idx.c
+ * @file test_neural_network.c
  * @author Andrea Gianarda
  * @date 13th of November 2018
  * @brief Function body handling images
