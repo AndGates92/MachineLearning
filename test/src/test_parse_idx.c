@@ -19,7 +19,7 @@
  * @brief Test name
  *
  */
-const char* testname = "test_parse_idx";
+static const char* testname = "test_parse_idx";
 
 /** @} */ // End of addtogroup TestParseIDXGroup
 
