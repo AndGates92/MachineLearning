@@ -121,7 +121,7 @@ void initialize_neuronetwork(elementdatatype_t ** weights, elementdatatype_t ** 
 		elementdatatype_t bias = 0;
 		bias = ((rand()/RAND_MAX) * (MAX_BIAS - MIN_BIAS)) + MIN_BIAS;
 		(*((*biases) + idx_bias)) = bias;
-		LOG_INFO(LOW, "Randomizing bias: Bias[%0d]: %0d\n", idx_bias, (*((*biases) + idx_bias)));
+		LOG_INFO(HIGH, "Randomizing bias: Bias[%0d]: %0d\n", idx_bias, (*((*biases) + idx_bias)));
 		ASSERT(bias >= MIN_BIAS);
 		ASSERT(bias <= MAX_BIAS);
 	}
