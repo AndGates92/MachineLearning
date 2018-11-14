@@ -78,12 +78,14 @@ void delete_data (data_t * data) {
 }
 
 void set_no_dims (data_t ** data, int no_dims) {
+	ASSERT(data != NULL);
 	(*data)->no_dims = no_dims;
 	LOG_INFO(DEBUG,"Set number of dimensions to %0d\n",  no_dims);
 	LOG_INFO(DEBUG,"Number of dimensions: expected %0d actual %0d\n",  no_dims, (*data)->no_dims);
 }
 
 void set_data_type (data_t ** data, data_type_e data_type) {
+	ASSERT((*data) != NULL);
 	(*data)->data_type = data_type;
 	(*data)->no_bytes = data_type_bytes(data_type);
 	char * data_type_str = NULL;
@@ -96,6 +98,8 @@ void set_data_type (data_t ** data, data_type_e data_type) {
 }
 
 void set_dimensions (data_t ** data, int * dimensions) {
+	ASSERT((*data) != NULL);
+	ASSERT((*data)->dimensions != NULL);
 	memcpy((*data)->dimensions, dimensions, (get_no_dims(*data)*sizeof(int)));
 	for (int dim = 0; dim < (*data)->no_dims; dim++) {
 		LOG_INFO(DEBUG,"Set dimension %0d to %0d\n",  dim, dimensions[dim]);
@@ -105,6 +109,10 @@ void set_dimensions (data_t ** data, int * dimensions) {
 
 void set_element (data_t ** data, elementdatatype_t element, int* coordinates) {
 	int total_offset = 0;
+
+	ASSERT((*data) != NULL);
+	ASSERT((*data)->elements != NULL);
+
 	total_offset = compute_element_offset(*data, coordinates);
 
 	(*data)->elements[total_offset] = element;
@@ -114,6 +122,9 @@ void set_element (data_t ** data, elementdatatype_t element, int* coordinates) {
 
 void set_data_elements (data_t ** data, elementdatatype_t * elements) {
 	int total_elements = 0;
+
+	ASSERT((*data) != NULL);
+	ASSERT((*data)->elements != NULL);
 
 	// Compute total dimension of the array of elements
 	total_elements = compute_total_no_elements(*data);
@@ -128,6 +139,7 @@ void set_data_elements (data_t ** data, elementdatatype_t * elements) {
 }
 
 int * get_dimensions (data_t * data) {
+	ASSERT(data != NULL);
 	int no_dims = 0;
 	no_dims = get_no_dims(data);
 
@@ -148,6 +160,7 @@ int * get_dimensions (data_t * data) {
 }
 
 int get_dimension (data_t * data, int idx) {
+	ASSERT(data != NULL);
 	int no_dims = 0;
 	no_dims = get_no_dims(data);
 	ASSERT(idx < no_dims);
@@ -160,11 +173,13 @@ int get_dimension (data_t * data, int idx) {
 }
 
 int get_no_dims (data_t * data) {
+	ASSERT(data != NULL);
 	LOG_INFO(DEBUG,"Number of dimensions of data structure data_t: %0d\n",  data->no_dims);
 	return data->no_dims;
 }
 
 data_type_e get_data_type (data_t * data) {
+	ASSERT(data != NULL);
 	data_type_e data_type = UNKNOWN;
 	data_type = data->data_type;
 	char * data_type_str = NULL;
@@ -251,6 +266,7 @@ int compute_element_offset (data_t * data, int * coordinates) {
 }
 
 void get_data_fields(data_t * data, int * no_dims, int ** dimensions, data_type_e * data_type, short * no_bytes, elementdatatype_t ** elements) {
+
 	*no_dims = get_no_dims(data);
 	*dimensions = get_dimensions(data);
 	*data_type = get_data_type(data);
@@ -340,4 +356,42 @@ int compute_total_no_elements(data_t * data) {
 	free (dimensions);
 
 	return total_elements;
+}
+
+elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position) {
+
+	elementdatatype_t * element_array = NULL;
+	element_array = (elementdatatype_t *) malloc(no_elements*sizeof(elementdatatype_t));
+
+	int no_dims = 0;
+	no_dims = get_no_dims(data);
+
+	int * dimensions = NULL;
+	dimensions = get_dimensions(data);
+
+	int * element_index = NULL;
+	element_index = (int *) malloc(no_dims*sizeof(int));
+	memcpy(element_index, start_position, (no_dims*sizeof(int)));
+
+	free(dimensions);
+
+	for (int position = 0; position < no_elements; position++) {
+		(*(element_array + position)) = get_element (data, element_index);
+		LOG_INFO(LOW, "Element %0d (Index in element array %0d): %0d", position,  compute_element_offset(data, element_index), ((*element_array) + position));
+		for (int dim = (no_dims - 1); dim >= 0; dim--) {
+			int index = 0;
+			index = get_dimension(data, dim);
+			// -1 is because we have to look at the next value of the index we are extracting the data.
+			if (((*element_index) + dim) < (index - 1)) { 
+				((*element_index)++);
+				break;
+			} else {
+				(*(element_index + dim)) = 0;
+			}
+		}
+	}
+
+	free(element_index);
+
+	return element_array;
 }

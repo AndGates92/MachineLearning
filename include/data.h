@@ -251,7 +251,7 @@ char * data_type_to_str (data_type_e data_type);
 short data_type_bytes (data_type_e data_type);
 
  /**
- * @brief Function: int compute_total_no_elements(data_t * data);
+ * @brief Function: int compute_total_no_elements(data_t * data)
  *
  * \param data:    data structure
  * \return the total number of elements in the array of elements
@@ -259,6 +259,18 @@ short data_type_bytes (data_type_e data_type);
  * Compute the total number of elements in the array of elements.
  */
 int compute_total_no_elements(data_t * data);
+
+ /**
+ * @brief Function: elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position)
+ *
+ * \param data:    data structure
+ * \param no_elements:    number of elements to return
+ * \param start_position: index of the first element to return
+ * \return an array of elements that stores elements with indexes between start_position and (start_position + no_elements - 1)
+ *
+ * Extract no_elemens elements from elements array starting with index start_position
+ */
+elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position);
 
 /** @} */ // End of DataGroup group
 #endif // DATA_H

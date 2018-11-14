@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "test_parse_idx.h"
+#include "test_neural_network.h"
 #include "log.h"
 #include "main.h"
 
@@ -147,6 +148,8 @@ int main (int argc, char * argv []) {
 	ASSERT(inputfile_given == true);
 
 	test_parse_idx(test_set, train_set, test_label, train_label);
+
+	test_neural_network(test_set, train_set, test_label, train_label);
 
 	free(test_set);
 	free(train_set);
