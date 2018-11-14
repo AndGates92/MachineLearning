@@ -3,6 +3,7 @@
 # Shell script settings
 memleak=0
 tests=0
+debug=0
 doc=0
 
 
@@ -30,7 +31,18 @@ VERBOSITY=LOW
 
 CEXTRAFLAGS=-DENABLE_ASSERTIONS
 
-if [$# -lt 1]; then
+usage () {
+	echo " - Usage:"
+	echo " - >$0 <options>"
+	echo ""
+	echo "      --doc|-d:		generate documentation"
+	echo "      --debug|-g:		dump makefile flags to ${LOGDIR}/${DEBUGLOG}"
+	echo "      --memleak|-m:	compile and check memory leaks using valgrind" 
+	echo "      --test|-t:		compile and run tests"
+	echo "      --help|-h:		print this help"
+}
+
+if [ $# -lt 1 ]; then
 	usage
 fi
 
@@ -110,7 +122,7 @@ echo "========================================================================="
 (set -x; \
  mkdir -p ${LOGDIR})
 
-if [ ${debug} -eq 1]; then
+if [ ${debug} -eq 1 ]; then
 	echo "\n========================================================================="
 	echo "Makefile variables"
 	echo "========================================================================="
@@ -168,14 +180,3 @@ if [ ${memleak} -eq 1 ]; then
 	echo "COMPLETED:Valgrind with the following input files: test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
 
 fi
-
-usage () {
-	echo " - Usage:"
-	echo " - >$0 <options>"
-	echo ""
-	echo "      --doc|-d:		generate documentation"
-	echo "      --debug|-g:		dump makefile flags to ${LOGDIR}/${DEBUGLOG}"
-	echo "      --memleak|-m:	compile and check memory leaks using valgrind" 
-	echo "      --test|-t:		compile and run tests"
-	echo "      --help|-h:		print this help"
-}
