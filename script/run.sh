@@ -54,7 +54,7 @@ do
 			shift 1
 			;;
 		--doc|-d)
-			tests=1
+			doc=1
 			shift 1
 			;;
 		--memleak|-m)
