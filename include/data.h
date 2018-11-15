@@ -272,5 +272,15 @@ int compute_total_no_elements(data_t * data);
  */
 elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position);
 
+ /**
+ * @brief Function: int element_size(data_t * data)
+ *
+ * \param data:    data structure
+ * \return the size of the elements in the data strcture data_t assuming that the first dimension of array dimensions is the number of elements in the array
+ * 
+ * Compute the total number of elements in the array of elements.
+ */
+int element_size(data_t * data);
+
 /** @} */ // End of DataGroup group
 #endif // DATA_H

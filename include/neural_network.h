@@ -8,7 +8,6 @@
  * @brief Neural network header file
 */
 
-#include <stdbool.h>
 #include "data.h"
 
 
@@ -76,14 +75,16 @@ void parse_all_idx (char * test_set, char * train_set, char * test_label, char *
 void neural_network (char * test_set, char * train_set, char * test_label, char * train_label);
 
 /** 
- * @brief Function: void initialize_neuronetwork(elementdatatype_t ** elements, elementdatatype_t ** bias, data_t * set)
+ * @brief Function: void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label)
  *
  * \param weights: weights of neural network layers
- * \param bias: bias of neural network
- * \param set:  data structure to extract dimensions of each layer of neural network
+ * \param biases: bias of neural network
+ * \param layers_dim: array storing the dimension of the layers of the neural network
+ * \param data_set:  data structure to extract dimensions of the input layer of the neural network
+ * \param data_label:  data structure to extract dimensions of the output layer of the neural network
  *
- * Initialize weight and bias of neural network
+ * Initialize weight and bias of neural network and compute the dimensions of all the layers of the neuronetwork
  */
-void initialize_neuronetwork(elementdatatype_t ** weights, elementdatatype_t ** bias, data_t * set);
+void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label);
 /** @} */ // End of NeuralNetwork group
 #endif // NEURAL_NETWORK_H

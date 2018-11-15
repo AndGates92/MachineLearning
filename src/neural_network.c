@@ -3,7 +3,7 @@
  * @file neural_network.c
  * @author Andrea Gianarda
  * @date 12th of November 2018
- * @brief Function body parsing IDX file
+ * @brief Top level functions of neural network
 */
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,21 +36,27 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 	data_t * train_label_struct_t = NULL;
 
 	// Array of weights of the neural network
-	elementdatatype_t * weights;
-	elementdatatype_t * biases;
+	double * weights = NULL;
+	double * biases = NULL;
+
+	// Layer dimensions
+	int * layers_dim = NULL;
 
 	parse_all_idx (test_set, train_set, test_label, train_label, &test_set_struct_t, &test_label_struct_t, &train_set_struct_t, &train_label_struct_t);
 
-	if (test_set_struct_t != NULL) {
+	if ((test_set_struct_t != NULL) && (test_label_struct_t != NULL) && (train_set_struct_t != NULL) && (train_label_struct_t != NULL)) {
 		// Randomize the weight and the bias of every layer
-		initialize_neuronetwork(&weights, &biases, test_set_struct_t);
+		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t);
 
-//		feedfoward_propagation();
+//		feedfoward_stage();
 
 //		backwards_propagation();
 	} else {
 		LOG_INFO(LOW,"Can't run neural network as input informations are not sufficient\n");
 	}
+
+	LOG_INFO(DEBUG,"Freeing memory allocated for storing layer dimensionk.\n");
+	free_memory(layers_dim);
 
 	LOG_INFO(DEBUG,"Freeing memory allocated for weights and biases of neural network.\n");
 	free_memory(weights);
@@ -64,53 +70,43 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 
 }
 
-void initialize_neuronetwork(elementdatatype_t ** weights, elementdatatype_t ** biases, data_t * set) { 
-
-	int no_dims = 0;
-	int * dimensions = NULL;
-
-	no_dims = get_no_dims(set);
-	ASSERT(no_dims > 0);
-	dimensions = get_dimensions(set);
-
-	int elements_in_unit = 0;
-
-	for (int dim = 0; dim < no_dims; dim++) {
-		switch (dim) {
-			case 0:
-				// Number of sets of data
-				elements_in_unit = 1;
-				break;
-			case 1:
-				// Elements in each set of data
-				elements_in_unit *= dimensions[dim];
-				break;
-			case 2:
-				// Elements in each set of data (2nd dimension)
-				elements_in_unit *= dimensions[dim];
-				break;
-			default:
-				LOG_ERROR("Not supported more than 3 dimensions.\n Failure");
-				break;
-		}
-	}
-
-	free_memory(dimensions);
-
-	int num_layers_p1 = 0;
+void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label) { 
+	int input_layer_size = 0;
+	int output_layer_size = 0;
+	int num_input_hidden_layers = 0;
 	int total_num_weights = 0;
+	int total_num_layers = 0;
+
+	input_layer_size = element_size(data_set);
+	output_layer_size = element_size(data_label);
 
 	// Hidden layers plus input layer
-	num_layers_p1 = (NO_HIDDEN_LAYERS + 1);
+	num_input_hidden_layers = (NO_HIDDEN_LAYERS + 1);
+
+	// Hidden layers plus input layer plus output layer
+	total_num_layers = (num_input_hidden_layers + 1);
 
 	// elements in unit contains the number of weights required for the neural network training set but it doesn't account for the bias, hence add 1 
-	total_num_weights = num_layers_p1*(elements_in_unit + 1);
+	total_num_weights = num_input_hidden_layers*(input_layer_size + 1);
 
-	(*weights) = (elementdatatype_t *) malloc(total_num_weights*sizeof(elementdatatype_t));
+	(*layers_dim) = (int *) malloc(total_num_layers*sizeof(int));
+
+	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
+	for (int idx_layer = 0; idx_layer < total_num_layers; idx_layer++) {
+		double layer_dim = 0;
+		// Constantly move from the size of the input layer to that of the output layer
+		layer_dim = (((input_layer_size-output_layer_size) * (total_num_layers - idx_layer))/total_num_layers) + output_layer_size;
+		(*((*layers_dim) + idx_layer)) = layer_dim;
+		LOG_INFO(HIGH, "Randomizing layer dimensions: Layer[%0d]: %0d\n", idx_layer, (*((*layers_dim) + idx_layer)));
+		ASSERT(layer_dim <= (input_layer_size + 1));
+		ASSERT(layer_dim > 0);
+	}
+
+	(*weights) = (double *) malloc(total_num_weights*sizeof(double));
 
 	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
 	for (int idx_el = 0; idx_el < total_num_weights; idx_el++) {
-		elementdatatype_t weight = 0;
+		double weight = 0;
 		weight = ((rand()/RAND_MAX) * (MAX_WEIGHT - MIN_WEIGHT)) + MIN_WEIGHT;
 		(*((*weights) + idx_el)) = weight;
 		LOG_INFO(HIGH, "Randomizing weights: Weight[%0d]: %0d\n", idx_el, (*((*weights) + idx_el)));
@@ -119,9 +115,9 @@ void initialize_neuronetwork(elementdatatype_t ** weights, elementdatatype_t ** 
 	}
 
 	// Randomize biases between MIN_BIASES and MAX_BIASES
-	(*biases) = (elementdatatype_t *) malloc(num_layers_p1*sizeof(elementdatatype_t));
-	for (int idx_bias = 0; idx_bias < num_layers_p1; idx_bias++) {
-		elementdatatype_t bias = 0;
+	(*biases) = (double *) malloc(num_input_hidden_layers*sizeof(double));
+	for (int idx_bias = 0; idx_bias < num_input_hidden_layers; idx_bias++) {
+		double bias = 0;
 		bias = ((rand()/RAND_MAX) * (MAX_BIAS - MIN_BIAS)) + MIN_BIAS;
 		(*((*biases) + idx_bias)) = bias;
 		LOG_INFO(HIGH, "Randomizing bias: Bias[%0d]: %0d\n", idx_bias, (*((*biases) + idx_bias)));

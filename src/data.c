@@ -228,6 +228,15 @@ elementdatatype_t * get_data_elements (data_t * data) {
 	return elements;
 }
 
+void get_data_fields(data_t * data, int * no_dims, int ** dimensions, data_type_e * data_type, short * no_bytes, elementdatatype_t ** elements) {
+
+	*no_dims = get_no_dims(data);
+	*dimensions = get_dimensions(data);
+	*data_type = get_data_type(data);
+	*no_bytes = get_no_bytes(data);
+	*elements = get_data_elements(data);
+}
+
 int compute_element_offset (data_t * data, int * coordinates) {
 	int data_offset=0;
 	int unit_offset=0;
@@ -253,7 +262,7 @@ int compute_element_offset (data_t * data, int * coordinates) {
 				unit_offset += coordinates[dim];
 				break;
 			default:
-				LOG_ERROR("Not supported more than 3 dimensions.\n Failure");
+				LOG_ERROR("Data structure data_t can't support more than 3 dimensions.\n");
 				break;
 		}
 	}
@@ -266,22 +275,13 @@ int compute_element_offset (data_t * data, int * coordinates) {
 	return total_offset;
 }
 
-void get_data_fields(data_t * data, int * no_dims, int ** dimensions, data_type_e * data_type, short * no_bytes, elementdatatype_t ** elements) {
-
-	*no_dims = get_no_dims(data);
-	*dimensions = get_dimensions(data);
-	*data_type = get_data_type(data);
-	*no_bytes = get_no_bytes(data);
-	*elements = get_data_elements(data);
-}
-
 char * data_type_to_str (data_type_e data_type) {
 	char * data_type_str = NULL;
 
 	data_type_str = (char *) malloc(MAX_DATA_TYPE_LENGTH*sizeof(char));
 
 	if (data_type_str==NULL) {
-		LOG_ERROR("Can't allocate memory for string for data type");
+		LOG_ERROR("Can't allocate memory for string for data type\n");
 	}
 
 	switch (data_type) {
@@ -395,4 +395,40 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 	free_memory(element_index);
 
 	return element_array;
+}
+
+int element_size (data_t * data) {
+
+	int no_dims = 0;
+	int * dimensions = NULL;
+
+	no_dims = get_no_dims(data);
+	ASSERT(no_dims > 0);
+	dimensions = get_dimensions(data);
+
+	int el_size = 0;
+
+	for (int dim = 0; dim < no_dims; dim++) {
+		switch (dim) {
+			case 0:
+				// Number of sets of data
+				el_size = 1;
+				break;
+			case 1:
+				// Elements in each set of data
+				el_size *= dimensions[dim];
+				break;
+			case 2:
+				// Elements in each set of data (2nd dimension)
+				el_size *= dimensions[dim];
+				break;
+			default:
+				LOG_ERROR("Data structure data_t can't support more than 3 dimensions.\n");
+				break;
+		}
+	}
+
+	free_memory(dimensions);
+
+	return el_size;
 }
