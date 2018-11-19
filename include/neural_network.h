@@ -86,5 +86,18 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
  * Initialize weight and bias of neural network and compute the dimensions of all the layers of the neuronetwork
  */
 void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label);
+
+/** 
+ * @brief Function: void initialize_neuronetwork(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label)
+ *
+ * \param weights: weights of neural network layers
+ * \param biases: bias of neural network
+ * \param layers_dim: array storing the dimension of the layers of the neural network
+ * \param data_set:  data structure whose elements are used to train the neural network
+ * \param data_label:  data structure containing the label of each element in data structure data_set
+ *
+ * Train neural network
+ */
+void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label);
 /** @} */ // End of NeuralNetwork group
 #endif // NEURAL_NETWORK_H

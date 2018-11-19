@@ -56,6 +56,8 @@ typedef struct data {
 	data_type_e data_type; /**< data type of the data strcture data_t */
 	short no_bytes; /**< number of bytes of the data structure data_t data type */
 	elementdatatype_t * elements; /**< elements of the data structure data_t */
+	elementdatatype_t max_element; /**< highest numerical value in array elements */
+	elementdatatype_t min_element; /**< lowest numerical value in array elements */
 } data_t;
 
 /**
@@ -131,6 +133,26 @@ void set_element (data_t ** data, elementdatatype_t element, int * coordinates);
  */
 void set_data_elements (data_t ** data, elementdatatype_t * elements);
 
+/**
+ * @brief Function: void set_min_element (data_t ** data, elementdatatype_t min_el_value)
+ *
+ * \param data:    input data strcture data_t
+ * \param min_el_value:   value to set lowest element in array elements to
+ * 
+ * Set the lowest value stored in array elements.
+ */
+void set_min_element (data_t ** data, elementdatatype_t min_el_value);
+
+/**
+ * @brief Function: void set_max_element (data_t ** data, elementdatatype_t max_el_value)
+ *
+ * \param data:    input data strcture data_t
+ * \param max_el_value:   value to set highest element in array elements to
+ * 
+ * Set the highest value stored in array elements.
+ */
+void set_max_element (data_t ** data, elementdatatype_t max_el_value);
+
 // Get fields of data strcture data_t
 
 /**
@@ -185,14 +207,24 @@ data_type_e get_data_type (data_t * data);
 short get_no_bytes (data_t * data);
 
 /**
- * @brief Function: elementdatatype_t * get_data_elements (data_t * data)
+ * @brief Function: elementdatatype_t get_min_element (data_t * data)
  *
  * \param data:    input data strcture data_t
- * \return the elements of the data structure data_t
+ * \return the lowest value stored in array elements of the data structure data_t
  * 
- * Get an array of elements of the data strcture data_t.
+ * Get the lowest value stored in array elements.
  */
-elementdatatype_t * get_data_elements (data_t * data);
+elementdatatype_t get_min_element (data_t * data);
+
+/**
+ * @brief Function: elementdatatype_t get_max_element (data_t * data)
+ *
+ * \param data:    input data strcture data_t
+ * \return the highest value stored in array elements of the data structure data_t
+ * 
+ * Get the highest value stored in array elements.
+ */
+elementdatatype_t get_max_element (data_t * data);
 
 /**
  * @brief Function: elementdatatype_t get_element (data_t * data, int * coordinates)
@@ -204,6 +236,28 @@ elementdatatype_t * get_data_elements (data_t * data);
  * Get an element of the data strcture data_t.
  */
 elementdatatype_t get_element (data_t * data, int * coordinates);
+
+ /**
+ * @brief Function: elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position)
+ *
+ * \param data:    data structure
+ * \param no_elements:    number of elements to return
+ * \param start_position: index of the first element to return
+ * \return an array of elements that stores elements with indexes between start_position and (start_position + no_elements - 1)
+ *
+ * Extract no_elemens elements from elements array starting with index start_position
+ */
+elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position);
+
+/**
+ * @brief Function: elementdatatype_t * get_data_elements (data_t * data)
+ *
+ * \param data:    input data strcture data_t
+ * \return the elements of the data structure data_t
+ * 
+ * Get an array of elements of the data strcture data_t.
+ */
+elementdatatype_t * get_data_elements (data_t * data);
 
 /**
  * @brief Function: void get_data_fields(data_t * data, int * no_dims, int ** dimensions, data_type_e * data_type, short * no_bytes, elementdatatype_t ** elements)
@@ -259,18 +313,6 @@ short data_type_bytes (data_type_e data_type);
  * Compute the total number of elements in the array of elements.
  */
 int compute_total_no_elements(data_t * data);
-
- /**
- * @brief Function: elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position)
- *
- * \param data:    data structure
- * \param no_elements:    number of elements to return
- * \param start_position: index of the first element to return
- * \return an array of elements that stores elements with indexes between start_position and (start_position + no_elements - 1)
- *
- * Extract no_elemens elements from elements array starting with index start_position
- */
-elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position);
 
  /**
  * @brief Function: int element_size(data_t * data)

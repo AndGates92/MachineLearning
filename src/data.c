@@ -51,6 +51,8 @@ data_t * add_data (int* dimensions, int no_dims) {
 	// Total number of units to allocate
 	int total_elements = 0;
 	total_elements = compute_total_no_elements(data);
+	data->min_element = 0;
+	data->max_element = 0;
 	data->elements = NULL;
 	data->elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
 	if (data->elements==NULL) {
@@ -117,6 +119,18 @@ void set_element (data_t ** data, elementdatatype_t element, int* coordinates) {
 	total_offset = compute_element_offset(*data, coordinates);
 
 	(*data)->elements[total_offset] = element;
+
+	elementdatatype_t min_el = 0;
+	min_el = get_min_element(*data);
+	if (element < min_el) {
+		set_min_element(data, element);
+	}
+	elementdatatype_t max_el = 0;
+	max_el = get_max_element(*data);
+	if (element > max_el) {
+		set_max_element(data, element);
+	}
+
 	LOG_INFO(DEBUG,"Set element %0d of data structure data_t : %0lf\n",  total_offset, (double)element);
 	LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf\n",  total_offset, (double)element, (double)((*data)->elements[total_offset]));
 }
@@ -134,9 +148,35 @@ void set_data_elements (data_t ** data, elementdatatype_t * elements) {
 
 
 	for (int idx=0; idx<total_elements; idx++) {
-		LOG_INFO(DEBUG,"Set element(%0d) of data structure data_t : %0lf\n",  idx, (double)(*(elements+idx)));
-		LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf\n",  idx, (double)(*(elements+idx)), (double)((*data)->elements[idx]));
+		elementdatatype_t element = 0;
+		element = (*(elements+idx));
+		LOG_INFO(DEBUG,"Set element(%0d) of data structure data_t : %0lf\n",  idx, (double)(element));
+		LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf\n",  idx, (double)(element), (double)((*data)->elements[idx]));
+		elementdatatype_t min_el = 0;
+		min_el = get_min_element(*data);
+		if (element < min_el) {
+			set_min_element(data, element);
+		}
+		elementdatatype_t max_el = 0;
+		max_el = get_max_element(*data);
+		if (element > max_el) {
+			set_max_element(data, element);
+		}
 	}
+}
+
+void set_min_element (data_t ** data, elementdatatype_t min_el_value) {
+	ASSERT(data != NULL);
+	(*data)->min_element = min_el_value;
+	LOG_INFO(DEBUG,"Set lowest element in array elements to %0d\n",  min_el_value);
+	LOG_INFO(DEBUG,"Lowest element in array elements: expected %0d actual %0d\n",  min_el_value, (*data)->min_element);
+}
+
+void set_max_element (data_t ** data, elementdatatype_t max_el_value) {
+	ASSERT(data != NULL);
+	(*data)->max_element = max_el_value;
+	LOG_INFO(DEBUG,"Set maximum element in array elements to %0d\n",  max_el_value);
+	LOG_INFO(DEBUG,"Highest element in array elements: expected %0d actual %0d\n",  max_el_value, (*data)->max_element);
 }
 
 int * get_dimensions (data_t * data) {
@@ -226,6 +266,18 @@ elementdatatype_t * get_data_elements (data_t * data) {
 	}
 
 	return elements;
+}
+
+elementdatatype_t get_min_element(data_t * data) {
+	ASSERT(data != NULL);
+	LOG_INFO(DEBUG,"Lowest element in array elements: %0d\n",  data->min_element);
+	return data->min_element;
+}
+
+elementdatatype_t get_max_element(data_t * data) {
+	ASSERT(data != NULL);
+	LOG_INFO(DEBUG,"Highest element in array elements: %0d\n",  data->max_element);
+	return data->max_element;
 }
 
 void get_data_fields(data_t * data, int * no_dims, int ** dimensions, data_type_e * data_type, short * no_bytes, elementdatatype_t ** elements) {
@@ -376,9 +428,15 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 
 	free_memory(dimensions);
 
+	int total_elements = 0;
+	total_elements = compute_total_no_elements(data);
+
 	for (int position = 0; position < no_elements; position++) {
+		int el_offset = 0;
+		el_offset = compute_element_offset(data, element_index);
+		ASSERT(el_offset < total_elements);
 		(*(element_array + position)) = get_element (data, element_index);
-		LOG_INFO(LOW, "Element %0d (Index in element array %0d): %0d", position,  compute_element_offset(data, element_index), ((*element_array) + position));
+		LOG_INFO(LOW, "Element %0d (Index in element array %0d): %0d", position,  el_offset, ((*element_array) + position));
 		for (int dim = (no_dims - 1); dim >= 0; dim--) {
 			int index = 0;
 			index = get_dimension(data, dim);
@@ -388,6 +446,9 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 				break;
 			} else {
 				(*(element_index + dim)) = 0;
+				if (dim < (no_dims - 2)) {
+					(*(element_index + dim + 1)) += 1;
+				}
 			}
 		}
 	}

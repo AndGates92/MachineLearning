@@ -12,6 +12,8 @@
 #include "log.h"
 #include "parse_idx.h"
 #include "neural_network.h"
+#include "feedforward_stage.h"
+#include "backward_propagation.h"
 #include "utility.h"
 
 void parse_all_idx (char * test_set, char * train_set, char * test_label, char * train_label, data_t ** test_set_struct_t, data_t ** test_label_struct_t, data_t ** train_set_struct_t, data_t ** train_label_struct_t) {
@@ -48,9 +50,7 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 		// Randomize the weight and the bias of every layer
 		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t);
 
-//		feedfoward_stage();
-
-//		backwards_propagation();
+		train_neural_network(weights, biases, layers_dim, train_set_struct_t, train_label_struct_t); 
 	} else {
 		LOG_INFO(LOW,"Can't run neural network as input informations are not sufficient\n");
 	}
@@ -74,11 +74,10 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 	int input_layer_size = 0;
 	int output_layer_size = 0;
 	int num_input_hidden_layers = 0;
-	int total_num_weights = 0;
 	int total_num_layers = 0;
 
 	input_layer_size = element_size(data_set);
-	output_layer_size = element_size(data_label);
+	output_layer_size = get_max_element(data_label);
 
 	// Hidden layers plus input layer
 	num_input_hidden_layers = (NO_HIDDEN_LAYERS + 1);
@@ -86,20 +85,34 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 	// Hidden layers plus input layer plus output layer
 	total_num_layers = (num_input_hidden_layers + 1);
 
-	// elements in unit contains the number of weights required for the neural network training set but it doesn't account for the bias, hence add 1 
-	total_num_weights = num_input_hidden_layers*(input_layer_size + 1);
-
 	(*layers_dim) = (int *) malloc(total_num_layers*sizeof(int));
 
+	int total_num_weights = 0;
+	total_num_weights = 0;
 	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
 	for (int idx_layer = 0; idx_layer < total_num_layers; idx_layer++) {
 		double layer_dim = 0;
+		double prev_layer_dim = 0;
 		// Constantly move from the size of the input layer to that of the output layer
 		layer_dim = (((input_layer_size-output_layer_size) * (total_num_layers - idx_layer))/total_num_layers) + output_layer_size;
 		(*((*layers_dim) + idx_layer)) = layer_dim;
 		LOG_INFO(HIGH, "Randomizing layer dimensions: Layer[%0d]: %0d\n", idx_layer, (*((*layers_dim) + idx_layer)));
-		ASSERT(layer_dim <= (input_layer_size + 1));
+		if (input_layer_size > output_layer_size) {
+			ASSERT((layer_dim <= (input_layer_size + 1)) && (layer_dim >= (output_layer_size)));
+		} else {
+			ASSERT((layer_dim >= (input_layer_size + 1)) && (layer_dim <= (output_layer_size)));
+		}
 		ASSERT(layer_dim > 0);
+
+		// Weights are between input layer and the first hidden layer and between 2 consecutive hidden layers 
+		if (idx_layer > 0) {
+			// elements in unit contains the number of weights required for the neural network training set but it doesn't account for the bias, hence add 1
+			// Weights are between every node of a layer to each node of the next layer
+			total_num_weights += layer_dim*(prev_layer_dim + 1);
+		}
+
+		prev_layer_dim = layer_dim;
+
 	}
 
 	(*weights) = (double *) malloc(total_num_weights*sizeof(double));
@@ -125,4 +138,30 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		ASSERT(bias <= MAX_BIAS);
 	}
 
+}
+
+void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label) {
+
+		int el_size = 0;
+		el_size = element_size(data_set);
+
+		int num_el = 0;
+		num_el = get_dimension(data_set, 1);
+
+		elementdatatype_t * input_data = NULL;
+		input_data = (elementdatatype_t *) malloc(el_size*sizeof(elementdatatype_t));
+
+		int output_node_size = 0;
+		output_node_size = get_max_element(data_label);
+
+		double * output_node_val = NULL;
+		output_node_val = (double *) malloc(output_node_size*sizeof(double));
+
+		for (int start_el_idx = 0; start_el_idx < num_el; i++) {
+			// Assert that remain an integer number of elements
+			ASSERT(((total_el - start_el_idx) % el_size) == 0);
+			feedforward_stage(weights, biases, layers_dim, input_data, &output_node_val);
+
+			backward_propagation(&weights, biases, layers_dim, output_node_val, label);
+		}
 }
