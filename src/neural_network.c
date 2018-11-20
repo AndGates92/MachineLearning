@@ -80,12 +80,15 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 	output_layer_size = get_max_element(data_label);
 
 	// Hidden layers plus input layer
-	num_input_hidden_layers = (NO_HIDDEN_LAYERS + 1);
+	num_input_hidden_layers = (NUM_HIDDEN_LAYERS + 1);
 
 	// Hidden layers plus input layer plus output layer
 	total_num_layers = (num_input_hidden_layers + 1);
 
 	(*layers_dim) = (int *) malloc(total_num_layers*sizeof(int));
+	if ((*layers_dim)==NULL) {
+		LOG_ERROR("Can't allocate memory for the array of dimensions of each layer of the neural network");
+	}
 
 	int total_num_weights = 0;
 	total_num_weights = 0;
@@ -116,6 +119,9 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 	}
 
 	(*weights) = (double *) malloc(total_num_weights*sizeof(double));
+	if ((*weights)==NULL) {
+		LOG_ERROR("Can't allocate memory for weights of the neural network");
+	}
 
 	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
 	for (int idx_el = 0; idx_el < total_num_weights; idx_el++) {
@@ -129,6 +135,10 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 
 	// Randomize biases between MIN_BIASES and MAX_BIASES
 	(*biases) = (double *) malloc(num_input_hidden_layers*sizeof(double));
+	if ((*biases)==NULL) {
+		LOG_ERROR("Can't allocate memory for biases of the neural network");
+	}
+
 	for (int idx_bias = 0; idx_bias < num_input_hidden_layers; idx_bias++) {
 		double bias = 0;
 		bias = ((rand()/RAND_MAX) * (MAX_BIAS - MIN_BIAS)) + MIN_BIAS;
@@ -142,26 +152,31 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 
 void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label) {
 
-		int el_size = 0;
-		el_size = element_size(data_set);
+	int el_size = 0;
+	el_size = element_size(data_set);
 
-		int num_el = 0;
-		num_el = get_dimension(data_set, 1);
+	int num_el = 0;
+	num_el = get_dimension(data_set, 1);
 
-		elementdatatype_t * input_data = NULL;
-		input_data = (elementdatatype_t *) malloc(el_size*sizeof(elementdatatype_t));
+	elementdatatype_t * input_data = NULL;
+	input_data = (elementdatatype_t *) malloc(el_size*sizeof(elementdatatype_t));
 
-		int output_node_size = 0;
-		output_node_size = get_max_element(data_label);
+	int output_node_size = 0;
+	output_node_size = get_max_element(data_label);
 
-		double * output_node_val = NULL;
-		output_node_val = (double *) malloc(output_node_size*sizeof(double));
+	double * output_node_val = NULL;
+	output_node_val = (double *) malloc(output_node_size*sizeof(double));
 
-		for (int start_el_idx = 0; start_el_idx < num_el; i++) {
-			// Assert that remain an integer number of elements
-			ASSERT(((total_el - start_el_idx) % el_size) == 0);
-			feedforward_stage(weights, biases, layers_dim, input_data, &output_node_val);
+	for (int start_el_idx = 0; start_el_idx < num_el; i++) {
+		// Assert that remain an integer number of elements
+		ASSERT(((total_el - start_el_idx) % el_size) == 0);
+		feedforward_stage(weights, biases, layers_dim, input_data, &output_node_val);
 
-			backward_propagation(&weights, biases, layers_dim, output_node_val, label);
-		}
+		//backward_propagation(&weights, biases, layers_dim, output_node_val, label);
+	}
+
+	free_memory(input_data);
+
+	free_memory(output_node_val);
+
 }

@@ -19,7 +19,7 @@
  * @brief Number of hidden layers
  *
  */
-#define NO_HIDDEN_LAYERS 1
+#define NUM_HIDDEN_LAYERS 1
 
 /**
  * @brief Maximum value of weights
