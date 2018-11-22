@@ -33,7 +33,6 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 		base_weight += ((*(layers_dim + layer_no)) * (*(layers_dim + layer_no + 1)));
 	}
 
-
 	double * phi_arr = NULL;
 
 	for (int layer_no = (total_num_layers - 1); layer_no > 0; layer_no--) {
@@ -46,7 +45,6 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 		int phi_arr_dim = 0;
 		phi_arr_dim = num_neurons_prev * num_neurons;
-
 
 		int num_neurons_nxt = 0;
 
@@ -84,13 +82,15 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 			for (int neuron_prev_idx = 0; neuron_prev_idx < num_neurons_prev; neuron_prev_idx++) {
 
 				double node_val_end = 0.0;
-				node_val_end = *(node_val + (base_node - num_neurons - neuron_prev_idx - 1));
-
-				double sigmoid_der_node_end = 0.0;
-				sigmoid_der_node_end = sigmoid_der(node_val_end);
 
 				double sigmoid_node_end = 0.0;
-				sigmoid_node_end = sigmoid(node_val_end);
+				if (neuron_prev_idx == (num_neurons_prev + 1)) {
+					node_val_end = *(bias + layer_no);
+					sigmoid_node_end = node_val_end;
+				} else {
+					node_val_end = *(node_val + (base_node - num_neurons - neuron_prev_idx - 1));
+					sigmoid_node_end = sigmoid(node_val_end);
+				}
 
 				double phi = 0.0;
 
@@ -139,7 +139,6 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 				*(*weight + (base_weight - neuron_prev_idx - 1)) += delta_weight;
 				LOG_INFO(HIGH, "Backpropoagation stage: [Weight update] Old value %0d Delta = %0d New value = %0d", curr_weight, delta_weight, *(*weight + (base_weight - neuron_prev_idx - 1));
-
 
 			}
 
