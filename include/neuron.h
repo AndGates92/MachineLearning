@@ -15,13 +15,23 @@
  *  @{
  */
 /** 
- * @brief Function: double sigmoid (elementdatatype_t * elements)
+ * @brief Function: double sigmoid (double * elements)
  *
  * \param elements:    elements of the data strcture data_t to use in the sigmoid function
  *
  * Compute the sigmoid function value using input elements
  */
-double sigmoid (elementdatatype_t * elements);
+double sigmoid (double elements);
+
+/** 
+ * @brief Function: double sigmoid_der (double * elements)
+ *
+ * \param elements:    elements of the data strcture data_t to use in the derivative of sigmoid function
+ *
+ * Compute the derivatinve of the sigmoid function value using input elements
+ */
+double sigmoid_der (double elements);
+
 
 /** @} */ // End of NeuronNetworkGroup group
 #endif // NEURON_H

@@ -12,23 +12,23 @@
 #include "neuron.h"
 #include "log.h"
 
-double sigmoid (elementdatatype_t * elements) {
-
-	LOG_INFO(DEBUG,"Number of bytes of all the element %0d\n",  (int)(sizeof(elements)));
-	LOG_INFO(DEBUG,"Number of bytes of each element %0d\n",  (int)(sizeof(elementdatatype_t)));
-	int no_elements = 0;
-	no_elements = sizeof(elements)/sizeof(elementdatatype_t);
-	LOG_INFO(HIGH,"Number of elements -> %0d/%0d = %0d\n", (int)(sizeof(elements)), (int)(sizeof(elementdatatype_t)), no_elements);
-	ASSERT(no_elements > 0);
-
-	double element_sum = 0.0;
-
-	for (int el=0; el < no_elements; el++) {
-		element_sum += *(elements + el);
-	}
+double sigmoid (double elements) {
 
 	double sigmoid_val = 0.0;
-	sigmoid_val = 1/(1 + exp(element_sum));
+	sigmoid_val = 1/(1 + exp(elements));
+
+	LOG_INFO(DEBUG,"Sigmoid function of %0lf: %0lf\n",  elements, sigmoid_val);
+
+	return sigmoid_val;
+
+}
+
+double sigmoid_der (double elements) {
+
+	double sigmoid_val = 0.0;
+	sigmoid_val = sigmoid(elements) * (1 - sigmoid(elements));
+
+	LOG_INFO(DEBUG,"Derivative of sigmoid function of %0lf: %0lf\n",  elements, sigmoid_val);
 
 	return sigmoid_val;
 
