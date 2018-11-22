@@ -419,14 +419,9 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 	int no_dims = 0;
 	no_dims = get_no_dims(data);
 
-	int * dimensions = NULL;
-	dimensions = get_dimensions(data);
-
 	int * element_index = NULL;
 	element_index = (int *) malloc(no_dims*sizeof(int));
 	memcpy(element_index, start_position, (no_dims*sizeof(int)));
-
-	free_memory(dimensions);
 
 	int total_elements = 0;
 	total_elements = compute_total_no_elements(data);

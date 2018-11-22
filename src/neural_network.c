@@ -48,9 +48,9 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 
 	if ((test_set_struct_t != NULL) && (test_label_struct_t != NULL) && (train_set_struct_t != NULL) && (train_label_struct_t != NULL)) {
 		// Randomize the weight and the bias of every layer
-		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t);
+		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t, &learn_rate, &alpha);
 
-		train_neural_network(weights, biases, layers_dim, train_set_struct_t, train_label_struct_t); 
+		train_neural_network(weights, biases, layers_dim, train_set_struct_t, train_label_struct_t, learn_rate, alpha); 
 	} else {
 		LOG_INFO(LOW,"Can't run neural network as input informations are not sufficient\n");
 	}
@@ -70,7 +70,7 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 
 }
 
-void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label) { 
+void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label, double * learn_rate, double * alpha) { 
 	int input_layer_size = 0;
 	int output_layer_size = 0;
 	int num_input_hidden_layers = 0;
@@ -148,9 +148,18 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		ASSERT(bias <= MAX_BIAS);
 	}
 
+	*learn_rate = ((rand()/RAND_MAX) * (MAX_LEARN_RATE - MIN_LEARN_RATE)) + MIN_LEARN_RATE;
+	LOG_INFO(HIGH, "Randomizing learning rate: %0d\n", learn_rate);
+	ASSERT(*learn_rate >= MIN_LEARN_RATE);
+	ASSERT(*learn_rate <= MAX_LEARN_RATE);
+
+	*alpha = ((rand()/RAND_MAX) * (MAX_ALPHA - MIN_ALPHA)) + MIN_ALPHA;
+	LOG_INFO(HIGH, "Randomizing alpha: %0d\n", alpha);
+	ASSERT(*alpha >= MIN_ALPHA);
+	ASSERT(*alpha <= MAX_ALPHA);
 }
 
-void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label) {
+void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label, double learn_rate, double alpha) {
 
 	int el_size = 0;
 	el_size = element_size(data_set);
@@ -161,22 +170,29 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	elementdatatype_t * input_data = NULL;
 	input_data = (elementdatatype_t *) malloc(el_size*sizeof(elementdatatype_t));
 
-	int output_node_size = 0;
-	output_node_size = get_max_element(data_label);
+	int total_num_layers = 0;
+	// Hidden layers plus input layer plus output layer
+	total_num_layers = (NUM_HIDDEN_LAYERS + 2);
 
-	double * output_node_val = NULL;
-	output_node_val = (double *) malloc(output_node_size*sizeof(double));
+	int total_num_nodes = 0;
+
+	for (int layer_no = 0; layer_no < total_num_layers; layer_no++) {
+		total_num_nodes += (*(layers_dim + layer_no));
+	}
+
+	double * node_val = NULL;
+	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
 	for (int start_el_idx = 0; start_el_idx < num_el; i++) {
 		// Assert that remain an integer number of elements
 		ASSERT(((total_el - start_el_idx) % el_size) == 0);
-		feedforward_stage(weights, biases, layers_dim, input_data, &output_node_val);
+		feedforward_stage(weights, biases, layers_dim, input_data, &node_val);
 
-		//backward_propagation(&weights, biases, layers_dim, output_node_val, label);
+		//backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);
 	}
 
 	free_memory(input_data);
 
-	free_memory(output_node_val);
+	free_memory(node_val);
 
 }

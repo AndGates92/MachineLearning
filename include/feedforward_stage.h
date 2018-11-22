@@ -10,17 +10,17 @@
 
 #include "data.h"
 /** 
- * @brief Function: void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype * input_data, elementdatatype ** output_node_val)
+ * @brief Function: void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype * input_data, elementdatatype ** node_val)
  *
  *
  * \param weights: weights of neural network layers
  * \param bias: bias of neural network
  * \param layers_dim:  array storing dimensions of every layer in the neural network
  * \param input_data:  array of one element to process
- * \param output_node_val:  result from the neural network. It is a vector of values between zero and one
+ * \param node_val:  result from the neural network. It is a vector of values between zero and one
  *
  * Initialize weight and bias of neural network
  */
-void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype * input_data, elementdatatype ** output_node_val):
+void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype * input_data, elementdatatype ** node_val):
 
 #endif // FEEDFORWARD_STAGE_H

@@ -15,7 +15,7 @@
 #include "feedforward_stage.h"
 #include "utility.h"
 
-void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype_t * input_data, double ** output_node_val) {
+void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype_t * input_data, double ** node_val) {
 
 	int num_input_hidden_layers = 0;
 	// Hidden layers plus input layer
@@ -23,17 +23,17 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 	int weight_idx = 0;
 
-	// Pointer to the input data of a layer
-	double * data = NULL;
-
 	// Pointer to the output data of a layer
 	double * data_nxt = NULL;
+
+	int data_idx = 0;
 
 	for (int layer_no = 0; layer_no < num_input_hidden_layers; layer_no++) {
 		int num_neurons = 0;
 		num_neurons = (*(layers_dim + layer_no));
 
-		free_memory(data);
+		// Pointer to the input data of a layer
+		double * data = NULL;
 
 		data = (double *) malloc(num_neurons*sizeof(double));
 		if (data==NULL) {
@@ -74,9 +74,18 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 			*(data_nxt + neuron_nxt_idx) = sigmoid(tmp_sum);
 
-			LOG_INFO(DEBUG,"Neuron %0d of stage %0d: %0d\n", neuron_nxt_idx, (layer_no+1), *(data_nxt + neuron_nxt_idx));
+			*(*node_val + data_ptr) = tmp_sum;
+
+			data_ptr++;
+
+			LOG_INFO(DEBUG,"Neuron %0d of stage %0d: %0d\n", neuron_nxt_idx, layer_no, *(data_nxt + neuron_nxt_idx));
 
 		}
 
+		free_memory(data);
+
 	}
+
+	free_memory(data_nxt);
+
 }
