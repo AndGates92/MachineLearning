@@ -431,7 +431,7 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 		el_offset = compute_element_offset(data, element_index);
 		ASSERT(el_offset < total_elements);
 		(*(element_array + position)) = get_element (data, element_index);
-		LOG_INFO(LOW, "Element %0d (Index in element array %0d): %0d", position,  el_offset, ((*element_array) + position));
+		LOG_INFO(LOW, "Element %0d (Index in element array %0d): %0d\n", position,  el_offset, (*(element_array + position)));
 		for (int dim = (no_dims - 1); dim >= 0; dim--) {
 			int index = 0;
 			index = get_dimension(data, dim);

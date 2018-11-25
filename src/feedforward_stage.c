@@ -26,7 +26,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 	// Pointer to the output data of a layer
 	double * data_nxt = NULL;
 
-	int data_idx = 0;
+	int data_ptr = 0;
 
 	for (int layer_no = 0; layer_no < num_input_hidden_layers; layer_no++) {
 		int num_neurons = 0;
@@ -63,7 +63,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 			for (int neuron_idx = 0; neuron_idx < num_neurons; neuron_idx++) {
 
 				if (neuron_idx == 0) {
-					tmp_sum += (*(weights + weight_idx)) * (*(bias + layer_no));
+					tmp_sum += (*(weights + weight_idx)) * (*(biases + layer_no));
 				} else {
 					tmp_sum += (*(weights + weight_idx)) * (*(data + (neuron_idx - 1)));
 				}
@@ -78,7 +78,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 			data_ptr++;
 
-			LOG_INFO(DEBUG,"Neuron %0d of stage %0d: %0d\n", neuron_nxt_idx, layer_no, *(data_nxt + neuron_nxt_idx));
+			LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: %0d\n", neuron_nxt_idx, layer_no, *(data_nxt + neuron_nxt_idx));
 
 		}
 

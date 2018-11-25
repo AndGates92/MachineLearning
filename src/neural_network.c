@@ -40,6 +40,8 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 	// Array of weights of the neural network
 	double * weights = NULL;
 	double * biases = NULL;
+	double learn_rate = 0;
+	double alpha = 0;
 
 	// Layer dimensions
 	int * layers_dim = NULL;
@@ -167,9 +169,6 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	int num_el = 0;
 	num_el = get_dimension(data_set, 1);
 
-	elementdatatype_t * input_data = NULL;
-	input_data = (elementdatatype_t *) malloc(el_size*sizeof(elementdatatype_t));
-
 	int total_num_layers = 0;
 	// Hidden layers plus input layer plus output layer
 	total_num_layers = (NUM_HIDDEN_LAYERS + 2);
@@ -183,15 +182,62 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
-	for (int start_el_idx = 0; start_el_idx < num_el; i++) {
+	int total_el = 0;
+	total_el = compute_total_no_elements(data_set);
+
+	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 		// Assert that remain an integer number of elements
 		ASSERT(((total_el - start_el_idx) % el_size) == 0);
+
+		int set_no_dims = 0;
+		set_no_dims = get_no_dims(data_set);
+		int * set_coord = NULL;
+		set_coord = (int *) malloc(set_no_dims*sizeof(int));
+
+		for (int set_dim = 0; set_dim < set_no_dims; set_dim++) {
+			int coordinate = 0;
+			switch (set_dim) {
+				case 0:
+					coordinate = start_el_idx;
+					break;
+				default:
+					coordinate = 1;
+					break;
+			}
+			set_coord[set_dim] = coordinate;
+		}
+
+		elementdatatype_t * input_data = NULL;
+		input_data = get_elements_subset(data_set, el_size, set_coord);
+
+		int label_no_dims = 0;
+		label_no_dims = get_no_dims(data_label);
+		int * label_coord = NULL;
+		label_coord = (int *) malloc(label_no_dims*sizeof(int));
+
+		for (int lab_dim = 0; lab_dim < label_no_dims; lab_dim++) {
+			int coordinate = 0;
+			switch (lab_dim) {
+				case 0:
+					coordinate = start_el_idx;
+					break;
+				default:
+					coordinate = 1;
+					break;
+			}
+			label_coord[lab_dim] = coordinate;
+		}
+
+		elementdatatype_t label = 0;
+		label = get_element(data_label, label_coord);
+
 		feedforward_stage(weights, biases, layers_dim, input_data, &node_val);
 
-		//backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);
+		backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);
+
+		free_memory(input_data);
 	}
 
-	free_memory(input_data);
 
 	free_memory(node_val);
 
