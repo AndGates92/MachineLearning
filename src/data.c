@@ -298,33 +298,22 @@ int compute_element_offset (data_t * data, int * coordinates) {
 	no_dims = get_no_dims(data);
 	dimensions = get_dimensions(data);
 
-	for (int dim = 0; dim < no_dims; dim++) {
-		ASSERT(coordinates[dim] < dimensions[dim]);
-		switch (dim) {
-			case 0:
-				data_offset = coordinates[dim];
-				break;
-			case 1:
-				data_offset *= dimensions[dim];
-				unit_offset = coordinates[dim];
-				break;
-			case 2:
-				data_offset *= dimensions[dim];
-				unit_offset *= dimensions[dim];
-				unit_offset += coordinates[dim];
-				break;
-			default:
-				LOG_ERROR("Data structure data_t can't support more than 3 dimensions.\n");
-				break;
-		}
-	}
+	// Initialize to 1 as it will multiply the last coordinate requested
+	// It represent the coversion rate betweem=n the current dimension and the last dimension
+	unit_offset = 1;
 
-	int total_offset;
-	total_offset = data_offset + unit_offset;
+	for (int dim = (no_dims - 1); dim >= 0; dim--) {
+		ASSERT(coordinates[dim] < dimensions[dim]);
+		// data_offset multiplies the input coordinates by the unit_offset to convert it in last dimension units
+		data_offset += (coordinates[dim] * unit_offset);
+		unit_offset *= dimensions[dim];
+	}
 
 	free_memory (dimensions);
 
-	return total_offset;
+	LOG_INFO(HIGH,"Element offset: %0d\n", data_offset);
+
+	return data_offset;
 }
 
 char * data_type_to_str (data_type_e data_type) {
@@ -435,14 +424,15 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 		for (int dim = (no_dims - 1); dim >= 0; dim--) {
 			int index = 0;
 			index = get_dimension(data, dim);
+			LOG_INFO(LOW, "Dimension %0d: %0d out of %0d\n", dim, (*(element_index + dim)), index);
 			// -1 is because we have to look at the next value of the index we are extracting the data.
-			if (((*element_index) + dim) < (index - 1)) { 
-				((*element_index)++);
+			if ((*(element_index + dim)) < (index - 1)) {
+				(*(element_index + dim))++;
 				break;
 			} else {
 				(*(element_index + dim)) = 0;
 				if (dim < (no_dims - 2)) {
-					(*(element_index + dim + 1)) += 1;
+					(*(element_index + dim + 1))++;
 				}
 			}
 		}
