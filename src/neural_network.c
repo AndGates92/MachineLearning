@@ -201,10 +201,11 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 					coordinate = start_el_idx;
 					break;
 				default:
-					coordinate = 1;
+					coordinate = 0;
 					break;
 			}
 			set_coord[set_dim] = coordinate;
+			LOG_INFO(LOW, "Start label coordinate %0d: %0d\n", set_dim, set_coord[set_dim]);
 		}
 
 		elementdatatype_t * input_data = NULL;
@@ -222,17 +223,21 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 					coordinate = start_el_idx;
 					break;
 				default:
-					coordinate = 1;
+					coordinate = 0;
 					break;
 			}
 			label_coord[lab_dim] = coordinate;
+			LOG_INFO(LOW, "Start label coordinate %0d: %0d\n", lab_dim, label_coord[lab_dim]);
 		}
 
 		elementdatatype_t label = 0;
 		label = get_element(data_label, label_coord);
+		LOG_INFO(LOW, "Label %0lf\n", (double)label);
 
+		LOG_INFO(LOW, "Feedforward stage: Start iteration %0d out of %0d\n", start_el_idx, num_el);
 		feedforward_stage(weights, biases, layers_dim, input_data, &node_val);
 
+		LOG_INFO(LOW, "Backward propagation stage: Start iteration %0d out of %0d\n", start_el_idx, num_el);
 		backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);
 
 		free_memory(input_data);
