@@ -420,11 +420,11 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 		el_offset = compute_element_offset(data, element_index);
 		ASSERT(el_offset < total_elements);
 		(*(element_array + position)) = get_element (data, element_index);
-		LOG_INFO(LOW, "Element %0d (Index in element array %0d): %0d\n", position,  el_offset, (*(element_array + position)));
+		LOG_INFO(HIGH, "Element %0d (Index in element array %0d): %0d\n", position,  el_offset, (*(element_array + position)));
 		for (int dim = (no_dims - 1); dim >= 0; dim--) {
 			int index = 0;
 			index = get_dimension(data, dim);
-			LOG_INFO(LOW, "Dimension %0d: %0d out of %0d\n", dim, (*(element_index + dim)), index);
+			LOG_INFO(DEBUG, "Dimension %0d: %0d out of %0d\n", dim, (*(element_index + dim)), index);
 			// -1 is because we have to look at the next value of the index we are extracting the data.
 			if ((*(element_index + dim)) < (index - 1)) {
 				(*(element_index + dim))++;
