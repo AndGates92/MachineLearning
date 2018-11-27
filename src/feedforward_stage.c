@@ -60,7 +60,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 			double tmp_sum = 0.0;
 
-			for (int neuron_idx = 0; neuron_idx < num_neurons; neuron_idx++) {
+			for (int neuron_idx = 0; neuron_idx <= num_neurons; neuron_idx++) {
 
 				if (neuron_idx == 0) {
 					tmp_sum += (*(weights + weight_idx)) * (*(biases + layer_no));
