@@ -17,7 +17,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 
 	data = (data_t *) malloc(sizeof(data_t));
 	if (data==NULL) {
-		LOG_ERROR("Can't allocate memory for a new data strcuture data_t");
+		LOG_ERROR("Can't allocate memory for a new data strcuture data_t\n");
 	}
 	// ===========================================================================
 	// Number of dimensions
@@ -38,7 +38,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	data->dimensions = (int *) malloc(no_dims*sizeof(int));
 
 	if (data->dimensions==NULL) {
-		LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data");
+		LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data\n");
 	}
 	memcpy(data->dimensions, dimensions, (no_dims*sizeof(int)));
 	for (int dim = 0; dim < data->no_dims; dim++) {
@@ -56,7 +56,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	data->elements = NULL;
 	data->elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
 	if (data->elements==NULL) {
-		LOG_ERROR("Can't allocate memory for elements of data struct data_t");
+		LOG_ERROR("Can't allocate memory for elements of data struct data_t\n");
 	}
 
 	// ===========================================================================
@@ -186,9 +186,8 @@ int * get_dimensions (data_t * data) {
 
 	int * dimensions = NULL;
 	dimensions = (int *) malloc(no_dims*sizeof(int));
-
 	if (dimensions==NULL) {
-		LOG_ERROR("Can't allocate memory for array of dimensions");
+		LOG_ERROR("Can't allocate memory for array of dimensions\n");
 	}
 
 	memcpy(dimensions, data->dimensions, (no_dims*sizeof(int)));
@@ -322,7 +321,7 @@ char * data_type_to_str (data_type_e data_type) {
 	data_type_str = (char *) malloc(MAX_DATA_TYPE_LENGTH*sizeof(char));
 
 	if (data_type_str==NULL) {
-		LOG_ERROR("Can't allocate memory for string for data type\n");
+		LOG_ERROR("Can't allocate memory for string for data type\n\n");
 	}
 
 	switch (data_type) {
@@ -345,7 +344,7 @@ char * data_type_to_str (data_type_e data_type) {
 			strcpy(data_type_str, "DOUBLE");
 			break;
 		default:
-			LOG_ERROR("Unknown data type. Can't generate string with data type name");
+			LOG_ERROR("Unknown data type. Can't generate string with data type name\n");
 			break;
 	}
 
@@ -375,7 +374,7 @@ short data_type_bytes (data_type_e data_type) {
 			data_type_bytes = 8;
 			break;
 		default:
-			LOG_ERROR("Unknown data type. Can't compute number of bytes");
+			LOG_ERROR("Unknown data type. Can't compute number of bytes\n");
 			break;
 	}
 
@@ -469,7 +468,7 @@ int element_size (data_t * data) {
 				el_size *= dimensions[dim];
 				break;
 			default:
-				LOG_ERROR("Data structure data_t can't support more than 3 dimensions.\n");
+				LOG_ERROR("Data structure data_t can't support more than 3 dimensions.\n\n");
 				break;
 		}
 	}
