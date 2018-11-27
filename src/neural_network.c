@@ -167,7 +167,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	el_size = element_size(data_set);
 
 	int num_el = 0;
-	num_el = get_dimension(data_set, 1);
+	num_el = get_dimension(data_set, 0);
 
 	int total_num_layers = 0;
 	// Hidden layers plus input layer plus output layer
