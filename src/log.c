@@ -36,11 +36,10 @@ void log_info(verb_level_e verbosity, const char * str_format, ...) {
 			if (logfile==NULL) {
 				LOG_ERROR("Can't open file %s for write", filename);
 			}
-			LOG_INFO(HIGH, "Opened file %s for write. File descriptor %0d\n", filename, fileno(logfile));
+			LOG_INFO(HIGH, "Opened file %s for write. File descriptor %0d", filename, fileno(logfile));
 			free_memory(filename);
 		}
 		vfprintf (logfile, str_format, arglist);
-
 		va_end(arglist);
 	}
 }
@@ -53,7 +52,7 @@ void close_logfile () {
 	}
 	strcpy(filename, STRINGIFY_EXPR(LOGFILE));
 
-	LOG_INFO(HIGH,"Closing logfile %s\n",  filename);
+	LOG_INFO(HIGH,"Closing logfile %s",  filename);
 	file_close(logfile);
 	free_memory(filename);
 }

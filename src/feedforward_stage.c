@@ -78,7 +78,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 			data_ptr++;
 
-			LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: %0d\n", neuron_nxt_idx, layer_no, *(data_nxt + neuron_nxt_idx));
+			LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: %0d", neuron_nxt_idx, layer_no, *(data_nxt + neuron_nxt_idx));
 
 		}
 

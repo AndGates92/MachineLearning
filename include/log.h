@@ -73,6 +73,7 @@ extern FILE * logfile;
 #define LOG_ERROR(...)\
 	fprintf (stderr, "File %s at line %0d: ", __FILE__, __LINE__);\
 	fprintf (stderr, __VA_ARGS__);\
+	fprintf (stderr, "\n");\
 	close_logfile ();\
 	exit(EXIT_FAILURE);
 
@@ -86,7 +87,8 @@ extern FILE * logfile;
  */
 #define LOG_INFO(VERBOSITY, ...)\
 	log_info(VERBOSITY, "File %s at line %0d: ", __FILE__, __LINE__);\
-	log_info(VERBOSITY, __VA_ARGS__);
+	log_info(VERBOSITY, __VA_ARGS__);\
+	log_info(VERBOSITY, "\n");
 
 /**
  * @brief ASSERT(EXPR)

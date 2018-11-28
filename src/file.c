@@ -29,14 +29,14 @@ FILE * file_open (const char * filename, const char * permission) {
 		LOG_ERROR("Unknown permission requested: %s", permission);
 	}
 
-	LOG_INFO(HIGH,"Attempting to open file %s for %s\n",  filename, mode);
+	LOG_INFO(HIGH,"Attempting to open file %s for %s",  filename, mode);
 
 	fid = fopen(filename, permission);
 	if (fid==NULL) {
 		LOG_ERROR("Can't open file %s for %s", filename, mode);
 	}
 
-	LOG_INFO(DEBUG,"Opened file %s for %s. File descriptor %0d\n",  filename, mode, fileno(fid));
+	LOG_INFO(DEBUG,"Opened file %s for %s. File descriptor %0d",  filename, mode, fileno(fid));
 
 	free_memory(mode);
 
@@ -45,7 +45,7 @@ FILE * file_open (const char * filename, const char * permission) {
 
 void file_close (FILE * fid) {
 	if (fid!=NULL) {
-		LOG_INFO(HIGH,"Closing file associated with file descriptor %0d\n",  fileno(fid));
+		LOG_INFO(HIGH,"Closing file associated with file descriptor %0d",  fileno(fid));
 		fclose(fid);
 	}
 }

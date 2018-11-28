@@ -17,7 +17,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 
 	data = (data_t *) malloc(sizeof(data_t));
 	if (data==NULL) {
-		LOG_ERROR("Can't allocate memory for a new data strcuture data_t\n");
+		LOG_ERROR("Can't allocate memory for a new data strcuture data_t");
 	}
 	// ===========================================================================
 	// Number of dimensions
@@ -30,7 +30,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	// 3 -> Number of columns
 	ASSERT(no_dims <= 3);
 	data->no_dims = no_dims;
-	LOG_INFO(DEBUG,"Set number of dimensions to %0d\n",  no_dims);
+	LOG_INFO(DEBUG,"Set number of dimensions to %0d",  no_dims);
 
 	// ===========================================================================
 	// Dimensions
@@ -38,11 +38,11 @@ data_t * add_data (int* dimensions, int no_dims) {
 	data->dimensions = (int *) malloc(no_dims*sizeof(int));
 
 	if (data->dimensions==NULL) {
-		LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data\n");
+		LOG_ERROR("Can't allocate memory for array of dimensions of data struct data_t data");
 	}
 	memcpy(data->dimensions, dimensions, (no_dims*sizeof(int)));
 	for (int dim = 0; dim < data->no_dims; dim++) {
-		LOG_INFO(DEBUG,"Set dimension %0d to %0d\n",  dim, dimensions[dim]);
+		LOG_INFO(DEBUG,"Set dimension %0d to %0d",  dim, dimensions[dim]);
 	}
 
 	// ===========================================================================
@@ -56,7 +56,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	data->elements = NULL;
 	data->elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
 	if (data->elements==NULL) {
-		LOG_ERROR("Can't allocate memory for elements of data struct data_t\n");
+		LOG_ERROR("Can't allocate memory for elements of data struct data_t");
 	}
 
 	// ===========================================================================
@@ -71,20 +71,20 @@ data_t * add_data (int* dimensions, int no_dims) {
 void delete_data (data_t * data) {
 	if (data != NULL) {
 		free_memory(data->elements);
-		LOG_INFO(DEBUG,"Free data elements -> COMPLETED\n");
+		LOG_INFO(DEBUG,"Free data elements -> COMPLETED");
 		free_memory(data->dimensions);
-		LOG_INFO(DEBUG,"Free data dimensions -> COMPLETED\n");
+		LOG_INFO(DEBUG,"Free data dimensions -> COMPLETED");
 	}
 
 	free_memory(data);
-	LOG_INFO(DEBUG,"Free data structure -> COMPLETED\n");
+	LOG_INFO(DEBUG,"Free data structure -> COMPLETED");
 }
 
 void set_no_dims (data_t ** data, int no_dims) {
 	ASSERT(data != NULL);
 	(*data)->no_dims = no_dims;
-	LOG_INFO(DEBUG,"Set number of dimensions to %0d\n",  no_dims);
-	LOG_INFO(DEBUG,"Number of dimensions: expected %0d actual %0d\n",  no_dims, (*data)->no_dims);
+	LOG_INFO(DEBUG,"Set number of dimensions to %0d",  no_dims);
+	LOG_INFO(DEBUG,"Number of dimensions: expected %0d actual %0d",  no_dims, (*data)->no_dims);
 }
 
 void set_data_type (data_t ** data, data_type_e data_type) {
@@ -94,7 +94,7 @@ void set_data_type (data_t ** data, data_type_e data_type) {
 	char * data_type_str = NULL;
 	data_type_str = data_type_to_str(data_type);
 	// Assert that each element is large enough to store a value from the IDX file
-	LOG_INFO(DEBUG,"Set data type to %s (%0hi bytes)\n", data_type_str, (*data)->no_bytes);
+	LOG_INFO(DEBUG,"Set data type to %s (%0hi bytes)", data_type_str, (*data)->no_bytes);
 	free_memory(data_type_str);
 	ASSERT (((*data)->no_bytes) >= 1);
 	ASSERT ((size_t)((*data)->no_bytes) <= sizeof(elementdatatype_t));
@@ -105,8 +105,8 @@ void set_dimensions (data_t ** data, int * dimensions) {
 	ASSERT((*data)->dimensions != NULL);
 	memcpy((*data)->dimensions, dimensions, (get_no_dims(*data)*sizeof(int)));
 	for (int dim = 0; dim < (*data)->no_dims; dim++) {
-		LOG_INFO(DEBUG,"Set dimension %0d to %0d\n",  dim, dimensions[dim]);
-		LOG_INFO(DEBUG,"Dimension %0d: expected %0d actual %0d\n",  dim, dimensions[dim], (*data)->dimensions[dim]);
+		LOG_INFO(DEBUG,"Set dimension %0d to %0d",  dim, dimensions[dim]);
+		LOG_INFO(DEBUG,"Dimension %0d: expected %0d actual %0d",  dim, dimensions[dim], (*data)->dimensions[dim]);
 	}
 }
 
@@ -131,8 +131,8 @@ void set_element (data_t ** data, elementdatatype_t element, int* coordinates) {
 		set_max_element(data, element);
 	}
 
-	LOG_INFO(DEBUG,"Set element %0d of data structure data_t : %0lf\n",  total_offset, (double)element);
-	LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf\n",  total_offset, (double)element, (double)((*data)->elements[total_offset]));
+	LOG_INFO(DEBUG,"Set element %0d of data structure data_t : %0lf",  total_offset, (double)element);
+	LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf",  total_offset, (double)element, (double)((*data)->elements[total_offset]));
 }
 
 void set_data_elements (data_t ** data, elementdatatype_t * elements) {
@@ -150,8 +150,8 @@ void set_data_elements (data_t ** data, elementdatatype_t * elements) {
 	for (int idx=0; idx<total_elements; idx++) {
 		elementdatatype_t element = 0;
 		element = (*(elements+idx));
-		LOG_INFO(DEBUG,"Set element(%0d) of data structure data_t : %0lf\n",  idx, (double)(element));
-		LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf\n",  idx, (double)(element), (double)((*data)->elements[idx]));
+		LOG_INFO(DEBUG,"Set element(%0d) of data structure data_t : %0lf",  idx, (double)(element));
+		LOG_INFO(DEBUG,"Element(%0d) of data structure data_t : expected %0lf actual %0lf",  idx, (double)(element), (double)((*data)->elements[idx]));
 		elementdatatype_t min_el = 0;
 		min_el = get_min_element(*data);
 		if (element < min_el) {
@@ -168,15 +168,15 @@ void set_data_elements (data_t ** data, elementdatatype_t * elements) {
 void set_min_element (data_t ** data, elementdatatype_t min_el_value) {
 	ASSERT(data != NULL);
 	(*data)->min_element = min_el_value;
-	LOG_INFO(DEBUG,"Set lowest element in array elements to %0d\n",  min_el_value);
-	LOG_INFO(DEBUG,"Lowest element in array elements: expected %0d actual %0d\n",  min_el_value, (*data)->min_element);
+	LOG_INFO(DEBUG,"Set lowest element in array elements to %0d",  min_el_value);
+	LOG_INFO(DEBUG,"Lowest element in array elements: expected %0d actual %0d",  min_el_value, (*data)->min_element);
 }
 
 void set_max_element (data_t ** data, elementdatatype_t max_el_value) {
 	ASSERT(data != NULL);
 	(*data)->max_element = max_el_value;
-	LOG_INFO(DEBUG,"Set maximum element in array elements to %0d\n",  max_el_value);
-	LOG_INFO(DEBUG,"Highest element in array elements: expected %0d actual %0d\n",  max_el_value, (*data)->max_element);
+	LOG_INFO(DEBUG,"Set maximum element in array elements to %0d",  max_el_value);
+	LOG_INFO(DEBUG,"Highest element in array elements: expected %0d actual %0d",  max_el_value, (*data)->max_element);
 }
 
 int * get_dimensions (data_t * data) {
@@ -184,18 +184,18 @@ int * get_dimensions (data_t * data) {
 	int no_dims = 0;
 	no_dims = get_no_dims(data);
 
-	LOG_INFO(DEBUG,"Number dimensions: %0d\n",  no_dims);
+	LOG_INFO(DEBUG,"Number dimensions: %0d",  no_dims);
 
 	int * dimensions = NULL;
 	dimensions = (int *) malloc(no_dims*sizeof(int));
 	if (dimensions==NULL) {
-		LOG_ERROR("Can't allocate memory for array of dimensions\n");
+		LOG_ERROR("Can't allocate memory for array of dimensions");
 	}
 
 	memcpy(dimensions, data->dimensions, (no_dims*sizeof(int)));
 
 	for (int dim = 0; dim < data->no_dims; dim++) {
-		LOG_INFO(DEBUG,"Dimensions %0d of data structure datat_t is: %0d\n",  dim, dimensions[dim]);
+		LOG_INFO(DEBUG,"Dimensions %0d of data structure datat_t is: %0d",  dim, dimensions[dim]);
 	}
 
 	return dimensions;
@@ -215,7 +215,7 @@ int get_dimension (data_t * data, int idx) {
 
 int get_no_dims (data_t * data) {
 	ASSERT(data != NULL);
-	LOG_INFO(DEBUG,"Number of dimensions of data structure data_t: %0d\n",  data->no_dims);
+	LOG_INFO(DEBUG,"Number of dimensions of data structure data_t: %0d",  data->no_dims);
 	return data->no_dims;
 }
 
@@ -225,7 +225,7 @@ data_type_e get_data_type (data_t * data) {
 	data_type = data->data_type;
 	char * data_type_str = NULL;
 	data_type_str = data_type_to_str(data_type);
-	LOG_INFO(DEBUG,"Data type of elements in data structure data_t: %s\n",  data_type_str);
+	LOG_INFO(DEBUG,"Data type of elements in data structure data_t: %s",  data_type_str);
 	free_memory(data_type_str);
 	return data_type;
 }
@@ -237,7 +237,7 @@ short get_no_bytes (data_t * data) {
 	data_type_str = data_type_to_str(data_type);
 	short no_bytes = 0;
 	no_bytes = data->no_bytes;
-	LOG_INFO(DEBUG,"Number of bytes of data type %s of data structure data_t: %0hi\n", data_type_str, no_bytes);
+	LOG_INFO(DEBUG,"Number of bytes of data type %s of data structure data_t: %0hi", data_type_str, no_bytes);
 	free_memory(data_type_str);
 	return no_bytes;
 }
@@ -247,7 +247,7 @@ elementdatatype_t get_element (data_t * data, int * coordinates) {
 	total_offset = compute_element_offset(data, coordinates);
 
 	elementdatatype_t element = data->elements[total_offset];
-	LOG_INFO(DEBUG,"Get element(%0d) of data structure data_t : %0lf\n",  total_offset, (double)(element));
+	LOG_INFO(DEBUG,"Get element(%0d) of data structure data_t : %0lf",  total_offset, (double)(element));
 	return element;
 }
 
@@ -260,12 +260,12 @@ elementdatatype_t * get_data_elements (data_t * data) {
 
 	elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
 	if (elements==NULL) {
-		LOG_ERROR("Can't allocate memory for elements array\n");
+		LOG_ERROR("Can't allocate memory for elements array");
 	}
 	memcpy(elements, data->elements, (total_elements*sizeof(elementdatatype_t)));
 
 	for (int idx=0; idx<total_elements; idx++) {
-		LOG_INFO(DEBUG,"Get element%0d) of data structure data_t : %0lf\n",  idx, (double)(*(elements+idx)));
+		LOG_INFO(DEBUG,"Get element%0d) of data structure data_t : %0lf",  idx, (double)(*(elements+idx)));
 	}
 
 	return elements;
@@ -273,13 +273,13 @@ elementdatatype_t * get_data_elements (data_t * data) {
 
 elementdatatype_t get_min_element(data_t * data) {
 	ASSERT(data != NULL);
-	LOG_INFO(DEBUG,"Lowest element in array elements: %0d\n",  data->min_element);
+	LOG_INFO(DEBUG,"Lowest element in array elements: %0d",  data->min_element);
 	return data->min_element;
 }
 
 elementdatatype_t get_max_element(data_t * data) {
 	ASSERT(data != NULL);
-	LOG_INFO(DEBUG,"Highest element in array elements: %0d\n",  data->max_element);
+	LOG_INFO(DEBUG,"Highest element in array elements: %0d",  data->max_element);
 	return data->max_element;
 }
 
@@ -314,7 +314,7 @@ int compute_element_offset (data_t * data, int * coordinates) {
 
 	free_memory (dimensions);
 
-	LOG_INFO(HIGH,"Element offset: %0d\n", data_offset);
+	LOG_INFO(HIGH,"Element offset: %0d", data_offset);
 
 	return data_offset;
 }
@@ -324,7 +324,7 @@ char * data_type_to_str (data_type_e data_type) {
 
 	data_type_str = (char *) malloc(MAX_DATA_TYPE_LENGTH*sizeof(char));
 	if (data_type_str==NULL) {
-		LOG_ERROR("Can't allocate memory for string for data type\n");
+		LOG_ERROR("Can't allocate memory for string for data type");
 	}
 
 	switch (data_type) {
@@ -347,7 +347,7 @@ char * data_type_to_str (data_type_e data_type) {
 			strcpy(data_type_str, "DOUBLE");
 			break;
 		default:
-			LOG_ERROR("Unknown data type. Can't generate string with data type name\n");
+			LOG_ERROR("Unknown data type. Can't generate string with data type name");
 			break;
 	}
 
@@ -377,7 +377,7 @@ short data_type_bytes (data_type_e data_type) {
 			data_type_bytes = 8;
 			break;
 		default:
-			LOG_ERROR("Unknown data type. Can't compute number of bytes\n");
+			LOG_ERROR("Unknown data type. Can't compute number of bytes");
 			break;
 	}
 
@@ -408,7 +408,7 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 	elementdatatype_t * element_array = NULL;
 	element_array = (elementdatatype_t *) malloc(no_elements*sizeof(elementdatatype_t));
 	if (element_array==NULL) {
-		LOG_ERROR("Can't allocate memory for a new data array.\n");
+		LOG_ERROR("Can't allocate memory for a new data array.");
 	}
 
 	int no_dims = 0;
@@ -417,7 +417,7 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 	int * element_index = NULL;
 	element_index = (int *) malloc(no_dims*sizeof(int));
 	if (element_index==NULL) {
-		LOG_ERROR("Can't allocate memory for a new element index coordinate array.\n");
+		LOG_ERROR("Can't allocate memory for a new element index coordinate array.");
 	}
 	memcpy(element_index, start_position, (no_dims*sizeof(int)));
 
@@ -429,11 +429,11 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 		el_offset = compute_element_offset(data, element_index);
 		ASSERT(el_offset < total_elements);
 		(*(element_array + position)) = get_element (data, element_index);
-		LOG_INFO(HIGH, "Element %0d (Index in element array %0d): %0d\n", position,  el_offset, (*(element_array + position)));
+		LOG_INFO(HIGH, "Element %0d (Index in element array %0d): %0d", position,  el_offset, (*(element_array + position)));
 		for (int dim = (no_dims - 1); dim >= 0; dim--) {
 			int index = 0;
 			index = get_dimension(data, dim);
-			LOG_INFO(DEBUG, "Dimension %0d: %0d out of %0d\n", dim, (*(element_index + dim)), index);
+			LOG_INFO(DEBUG, "Dimension %0d: %0d out of %0d", dim, (*(element_index + dim)), index);
 			// -1 is because we have to look at the next value of the index we are extracting the data.
 			if ((*(element_index + dim)) < (index - 1)) {
 				(*(element_index + dim))++;
@@ -478,7 +478,7 @@ int element_size (data_t * data) {
 				el_size *= dimensions[dim];
 				break;
 			default:
-				LOG_ERROR("Data structure data_t can't support more than 3 dimensions.\n\n");
+				LOG_ERROR("Data structure data_t can't support more than 3 dimensions.");
 				break;
 		}
 	}

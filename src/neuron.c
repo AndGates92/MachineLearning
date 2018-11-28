@@ -17,7 +17,7 @@ double sigmoid (double elements) {
 	double sigmoid_val = 0.0;
 	sigmoid_val = 1/(1 + exp(elements));
 
-	LOG_INFO(DEBUG,"Sigmoid function of %0lf: %0lf\n",  elements, sigmoid_val);
+	LOG_INFO(DEBUG,"Sigmoid function of %0lf: %0lf",  elements, sigmoid_val);
 
 	return sigmoid_val;
 
@@ -28,7 +28,7 @@ double sigmoid_der (double elements) {
 	double sigmoid_val = 0.0;
 	sigmoid_val = sigmoid(elements) * (1 - sigmoid(elements));
 
-	LOG_INFO(DEBUG,"Derivative of sigmoid function of %0lf: %0lf\n",  elements, sigmoid_val);
+	LOG_INFO(DEBUG,"Derivative of sigmoid function of %0lf: %0lf",  elements, sigmoid_val);
 
 	return sigmoid_val;
 
