@@ -184,6 +184,8 @@ int * get_dimensions (data_t * data) {
 	int no_dims = 0;
 	no_dims = get_no_dims(data);
 
+	LOG_INFO(DEBUG,"Number dimensions: %0d\n",  no_dims);
+
 	int * dimensions = NULL;
 	dimensions = (int *) malloc(no_dims*sizeof(int));
 	if (dimensions==NULL) {
@@ -206,7 +208,6 @@ int get_dimension (data_t * data, int idx) {
 	ASSERT(idx < no_dims);
 
 	int dimension = 0;
-
 	dimension = data->dimensions[idx];
 
 	return dimension;
@@ -258,6 +259,9 @@ elementdatatype_t * get_data_elements (data_t * data) {
 	total_elements = compute_total_no_elements(data);
 
 	elements = (elementdatatype_t *) malloc(total_elements*sizeof(elementdatatype_t));
+	if (elements==NULL) {
+		LOG_ERROR("Can't allocate memory for elements array\n");
+	}
 	memcpy(elements, data->elements, (total_elements*sizeof(elementdatatype_t)));
 
 	for (int idx=0; idx<total_elements; idx++) {
@@ -319,9 +323,8 @@ char * data_type_to_str (data_type_e data_type) {
 	char * data_type_str = NULL;
 
 	data_type_str = (char *) malloc(MAX_DATA_TYPE_LENGTH*sizeof(char));
-
 	if (data_type_str==NULL) {
-		LOG_ERROR("Can't allocate memory for string for data type\n\n");
+		LOG_ERROR("Can't allocate memory for string for data type\n");
 	}
 
 	switch (data_type) {
@@ -382,6 +385,7 @@ short data_type_bytes (data_type_e data_type) {
 }
 
 int compute_total_no_elements(data_t * data) {
+	ASSERT(data != NULL);
 	int no_dims = 0;
 	int * dimensions = NULL;
 
@@ -400,15 +404,21 @@ int compute_total_no_elements(data_t * data) {
 }
 
 elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * start_position) {
-
+	ASSERT(data != NULL);
 	elementdatatype_t * element_array = NULL;
 	element_array = (elementdatatype_t *) malloc(no_elements*sizeof(elementdatatype_t));
+	if (element_array==NULL) {
+		LOG_ERROR("Can't allocate memory for a new data array.\n");
+	}
 
 	int no_dims = 0;
 	no_dims = get_no_dims(data);
 
 	int * element_index = NULL;
 	element_index = (int *) malloc(no_dims*sizeof(int));
+	if (element_index==NULL) {
+		LOG_ERROR("Can't allocate memory for a new element index coordinate array.\n");
+	}
 	memcpy(element_index, start_position, (no_dims*sizeof(int)));
 
 	int total_elements = 0;
@@ -443,7 +453,7 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 }
 
 int element_size (data_t * data) {
-
+	ASSERT(data != NULL);
 	int no_dims = 0;
 	int * dimensions = NULL;
 
