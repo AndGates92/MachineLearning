@@ -46,7 +46,7 @@ CC = gcc
 # Compile-time flags
 CFLAGS = -g -Wall -Werror -Wextra -Wpedantic -std=gnu99 -rdynamic
 EXTRADFLAGS ?=
-DFLAGS = -DLOGFILE="$(LOGFILE)" -DVERBISITY=$(VERBOSITY)
+DFLAGS = -DLOGFILE="$(LOGFILE)" -DVERBOSITY=$(VERBOSITY)
 LIBS= -lm
 
 # Directory containing source and header files
