@@ -182,17 +182,16 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
-	int total_el = 0;
-	total_el = compute_total_no_elements(data_set);
-
 	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
-		// Assert that remain an integer number of elements
-		ASSERT(((total_el - start_el_idx) % el_size) == 0);
 
 		int set_no_dims = 0;
 		set_no_dims = get_no_dims(data_set);
+		LOG_INFO(LOW, "Data set domensions %0d", set_no_dims);
 		int * set_coord = NULL;
 		set_coord = (int *) malloc(set_no_dims*sizeof(int));
+		if (set_coord==NULL) {
+			LOG_ERROR("Can't allocate memory for data set element coordinate");
+		}
 
 		for (int set_dim = 0; set_dim < set_no_dims; set_dim++) {
 			int coordinate = 0;
@@ -205,16 +204,21 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 					break;
 			}
 			set_coord[set_dim] = coordinate;
-			LOG_INFO(LOW, "Start label coordinate %0d: %0d", set_dim, set_coord[set_dim]);
+			LOG_INFO(LOW, "Start data set coordinate %0d out of %0d: %0d", set_dim, set_no_dims, set_coord[set_dim]);
 		}
 
 		elementdatatype_t * input_data = NULL;
 		input_data = get_elements_subset(data_set, el_size, set_coord);
 
+		free_memory(set_coord);
+
 		int label_no_dims = 0;
 		label_no_dims = get_no_dims(data_label);
 		int * label_coord = NULL;
 		label_coord = (int *) malloc(label_no_dims*sizeof(int));
+		if (label_coord==NULL) {
+			LOG_ERROR("Can't allocate memory for label element coordinate");
+		}
 
 		for (int lab_dim = 0; lab_dim < label_no_dims; lab_dim++) {
 			int coordinate = 0;
@@ -227,11 +231,14 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 					break;
 			}
 			label_coord[lab_dim] = coordinate;
-			LOG_INFO(LOW, "Start label coordinate %0d: %0d", lab_dim, label_coord[lab_dim]);
+			LOG_INFO(HIGH, "Start label coordinate %0d: %0d", lab_dim, label_coord[lab_dim]);
 		}
 
 		elementdatatype_t label = 0;
 		label = get_element(data_label, label_coord);
+
+		free_memory(label_coord);
+
 		LOG_INFO(LOW, "Label %0lf", (double)label);
 
 		LOG_INFO(LOW, "Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
@@ -239,6 +246,9 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		LOG_INFO(LOW, "Backward propagation stage: Start iteration %0d out of %0d", start_el_idx, num_el);
 		backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);
+
+		set_no_dims = get_no_dims(data_set);
+		LOG_INFO(LOW, "After backprop Data set domensions %0d", set_no_dims);
 
 		free_memory(input_data);
 	}
