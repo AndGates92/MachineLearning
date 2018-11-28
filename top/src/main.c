@@ -74,6 +74,7 @@ int main (int argc, char * argv []) {
 		LOG_ERROR("Can't allocate memory for training label filename");
 	}
 
+	LOG_INFO(ZERO,"Verbosity level: %0d", VERBOSITY);
 	LOG_INFO(DEBUG,"Command line:");
 	LOG_INFO(DEBUG,"Number of arguments %0d",  argc);
 	for (int i = 0; i < argc; i++) {

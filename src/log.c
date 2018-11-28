@@ -18,7 +18,7 @@ FILE * logfile;
 
 void log_info(verb_level_e verbosity, const char * str_format, ...) {
 
-	if (verbosity < DEFAULT_VERBOSITY) { 
+	if (verbosity <= VERBOSITY) { 
 		va_list arglist;
 
 		// Initialize argptr for number of arguments argnum 

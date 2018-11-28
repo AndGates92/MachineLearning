@@ -29,7 +29,7 @@
  *
  */
 #if !defined(VERBOSITY)
-	#define DEFAULT_VERBOSITY MEDIUM
+	#define VERBOSITY MEDIUM
 #endif
 
 /**
