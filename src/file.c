@@ -18,6 +18,9 @@ FILE * file_open (const char * filename, const char * permission) {
 
 	char * mode;
 	mode = (char *) malloc(MODE_MAX_CHAR*sizeof(char));
+	if (mode==NULL) {
+		LOG_ERROR("Can't allocate memory for mode of opening the file");
+	}
 
 	if (!(strcmp(permission, "r"))) {
 		strcpy(mode, "read");
