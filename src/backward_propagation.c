@@ -45,11 +45,11 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 		int num_neurons = 0;
 		num_neurons = (*(layers_dim + layer_no));
-		LOG_INFO(LOW, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
+		LOG_INFO(DEBUG, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
 
 		int num_neurons_prev = 0;
 		num_neurons_prev = (*(layers_dim + layer_no - 1));
-		LOG_INFO(LOW, "Neighbour layer dimensions: Previous Layer %0d -> Dimension %0d", (layer_no-1), num_neurons_prev);
+		LOG_INFO(DEBUG, "Neighbour layer dimensions: Previous Layer %0d -> Dimension %0d", (layer_no-1), num_neurons_prev);
 
 		int phi_arr_dim = 0;
 		phi_arr_dim = num_neurons_prev * num_neurons;
@@ -62,7 +62,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 		if (layer_no < (total_num_layers - 1)) {
 			num_neurons_nxt = (*(layers_dim + layer_no + 1));
-			LOG_INFO(LOW, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", (layer_no+1), num_neurons_nxt);
+			LOG_INFO(DEBUG, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", (layer_no+1), num_neurons_nxt);
 
 			phi_arr_prev_dim = num_neurons_nxt * num_neurons;
 
@@ -203,6 +203,5 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 	free_memory(phi_arr);
 
 	// base_node here is expected to be equal to the number of node of the input layer
-	LOG_INFO(LOW, "Base Node %0d Input Layer %0d", base_node, *layers_dim);
 	ASSERT(base_node == *layers_dim);
 }
