@@ -31,6 +31,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 	for (int layer_no = 0; layer_no < num_input_hidden_layers; layer_no++) {
 		int num_neurons = 0;
 		num_neurons = (*(layers_dim + layer_no));
+		LOG_INFO(LOW, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
 
 		// Pointer to the input data of a layer
 		double * data = NULL;
@@ -48,6 +49,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 		int num_neurons_nxt = 0;
 		num_neurons_nxt = (*(layers_dim + layer_no + 1));
+		LOG_INFO(LOW, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", layer_no, num_neurons_nxt);
 
 		free_memory(data_nxt);
 
