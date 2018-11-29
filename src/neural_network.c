@@ -73,17 +73,17 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 }
 
 void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label, double * learn_rate, double * alpha) { 
+
 	int input_layer_size = 0;
-	int output_layer_size = 0;
-	int num_input_hidden_layers = 0;
-	int total_num_layers = 0;
-
 	input_layer_size = element_size(data_set);
-	output_layer_size = get_max_element(data_label);
+	int output_layer_size = 0;
+	output_layer_size = (int)get_max_element(data_label);
 
+	int num_input_hidden_layers = 0;
 	// Hidden layers plus input layer
 	num_input_hidden_layers = (NUM_HIDDEN_LAYERS + 1);
 
+	int total_num_layers = 0;
 	// Hidden layers plus input layer plus output layer
 	total_num_layers = (num_input_hidden_layers + 1);
 
@@ -97,9 +97,15 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 	double prev_layer_dim = 0;
 	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
 	for (int idx_layer = 0; idx_layer < total_num_layers; idx_layer++) {
-		double layer_dim = 0;
+		double weight_dim = 0.0;
+		weight_dim = ((double)((total_num_layers - 1) - idx_layer))/((double)(total_num_layers - 1));
+
+		double absolute_dim = 0.0;
+		absolute_dim = ((double)input_layer_size-(double)output_layer_size) * weight_dim;
+
+		int layer_dim = 0;
 		// Constantly move from the size of the input layer to that of the output layer
-		layer_dim = (((input_layer_size-output_layer_size) * (total_num_layers - idx_layer))/total_num_layers) + output_layer_size;
+		layer_dim = (int)(absolute_dim + output_layer_size);
 		int bias = 0;
 		if (idx_layer < (total_num_layers - 1)) {
 			bias = 1;
@@ -107,7 +113,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 			bias = 0;
 		}
 		(*((*layers_dim) + idx_layer)) = layer_dim + bias;
-		LOG_INFO(HIGH, "Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
+		LOG_INFO(LOW, "Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
 		if (input_layer_size > output_layer_size) {
 			ASSERT((layer_dim <= (input_layer_size + 1)) && (layer_dim >= (output_layer_size)));
 		} else {
@@ -192,7 +198,6 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		int set_no_dims = 0;
 		set_no_dims = get_no_dims(data_set);
-		LOG_INFO(LOW, "Data set domensions %0d", set_no_dims);
 		int * set_coord = NULL;
 		set_coord = (int *) malloc(set_no_dims*sizeof(int));
 		if (set_coord==NULL) {
@@ -210,7 +215,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 					break;
 			}
 			set_coord[set_dim] = coordinate;
-			LOG_INFO(LOW, "Start data set coordinate %0d out of %0d: %0d", set_dim, set_no_dims, set_coord[set_dim]);
+			LOG_INFO(HIGH, "Start data set coordinate %0d out of %0d: %0d", set_dim, set_no_dims, set_coord[set_dim]);
 		}
 
 		elementdatatype_t * input_data = NULL;
@@ -245,8 +250,12 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		free_memory(label_coord);
 
+		elementdatatype_t outcome = 0;
+
 		LOG_INFO(LOW, "Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
-		feedforward_stage(weights, biases, layers_dim, input_data, &node_val);
+		feedforward_stage(weights, biases, layers_dim, input_data, &node_val, &outcome);
+
+		LOG_INFO(LOW,"Neural network estimates: %0d Label %0d", outcome, label);
 
 		LOG_INFO(LOW, "Backward propagation stage: Start iteration %0d out of %0d", start_el_idx, num_el);
 		backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);

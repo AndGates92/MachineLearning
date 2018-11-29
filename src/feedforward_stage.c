@@ -15,7 +15,7 @@
 #include "feedforward_stage.h"
 #include "utility.h"
 
-void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype_t * input_data, double ** node_val) {
+void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype_t * input_data, double ** node_val, elementdatatype_t * outcome) {
 
 	int num_input_hidden_layers = 0;
 	// Hidden layers plus input layer
@@ -31,7 +31,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 	for (int layer_no = 0; layer_no < num_input_hidden_layers; layer_no++) {
 		int num_neurons = 0;
 		num_neurons = (*(layers_dim + layer_no));
-		LOG_INFO(LOW, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
+		LOG_INFO(DEBUG, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
 
 		// Pointer to the input data of a layer
 		double * data = NULL;
@@ -49,7 +49,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 		int num_neurons_nxt = 0;
 		num_neurons_nxt = (*(layers_dim + layer_no + 1));
-		LOG_INFO(LOW, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", layer_no, num_neurons_nxt);
+		LOG_INFO(DEBUG, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", layer_no, num_neurons_nxt);
 
 		free_memory(data_nxt);
 
@@ -57,6 +57,9 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 		if (data_nxt==NULL) {
 			LOG_ERROR("Can't allocate memory for data array storing output data of the current processed layer");
 		}
+
+		int max_idx = 0;
+		double max_val = 0;
 
 		for (int neuron_nxt_idx = 0; neuron_nxt_idx < num_neurons_nxt; neuron_nxt_idx++) {
 
@@ -78,10 +81,19 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 			*(*node_val + data_ptr) = tmp_sum;
 
+			if (max_val < tmp_sum) {
+				max_idx = neuron_nxt_idx;
+			}
+
 			data_ptr++;
 
 			LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: %0d", neuron_nxt_idx, layer_no, *(data_nxt + neuron_nxt_idx));
 
+		}
+
+		if (layer_no == (num_input_hidden_layers - 1)) {
+			*outcome = (elementdatatype_t) max_val;
+			LOG_INFO(LOW,"Neural network guess: output index %0d certainty %0lf", max_idx, max_val);
 		}
 
 		free_memory(data);
