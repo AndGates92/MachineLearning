@@ -94,13 +94,19 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 
 	int total_num_weights = 0;
 	total_num_weights = 0;
+	double prev_layer_dim = 0;
 	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
 	for (int idx_layer = 0; idx_layer < total_num_layers; idx_layer++) {
 		double layer_dim = 0;
-		double prev_layer_dim = 0;
 		// Constantly move from the size of the input layer to that of the output layer
 		layer_dim = (((input_layer_size-output_layer_size) * (total_num_layers - idx_layer))/total_num_layers) + output_layer_size;
-		(*((*layers_dim) + idx_layer)) = layer_dim;
+		int bias = 0;
+		if (idx_layer < (total_num_layers - 1)) {
+			bias = 1;
+		} else {
+			bias = 0;
+		}
+		(*((*layers_dim) + idx_layer)) = layer_dim + bias;
 		LOG_INFO(HIGH, "Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
 		if (input_layer_size > output_layer_size) {
 			ASSERT((layer_dim <= (input_layer_size + 1)) && (layer_dim >= (output_layer_size)));
@@ -113,7 +119,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		if (idx_layer > 0) {
 			// elements in unit contains the number of weights required for the neural network training set but it doesn't account for the bias, hence add 1
 			// Weights are between every node of a layer to each node of the next layer
-			total_num_weights += layer_dim*(prev_layer_dim + 1);
+			total_num_weights += layer_dim*prev_layer_dim;
 		}
 
 		prev_layer_dim = layer_dim;
@@ -239,8 +245,6 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		free_memory(label_coord);
 
-		LOG_INFO(LOW, "Label %0lf", (double)label);
-
 		LOG_INFO(LOW, "Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
 		feedforward_stage(weights, biases, layers_dim, input_data, &node_val);
 
@@ -248,7 +252,6 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 		backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);
 
 		set_no_dims = get_no_dims(data_set);
-		LOG_INFO(LOW, "After backprop Data set domensions %0d", set_no_dims);
 
 		free_memory(input_data);
 	}
