@@ -87,7 +87,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 			// base_node points to the first element of the next layer
 			curr_node_offset = (num_neurons - neuron_idx);
 			LOG_INFO(DEBUG, "Nodes: base node %0d Neurons: current %0d out of %0d -> Current node offset: %0d", base_node, neuron_idx, num_neurons, curr_node_offset);
-			ASSERT(curr_node_offset >= 0);
+			ASSERT(curr_node_offset > 0);
 			ASSERT(base_node >= curr_node_offset);
 
 			double node_val_start = 0.0;
@@ -118,12 +118,12 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				} else {
 
 					int prev_node_offset = 0;
-					// Take out 1 as the index of the node fo interest is (neuron_prev_idx - 1)
+					// Take out 1 as the index of the node of interest is (neuron_prev_idx - 1)
 					prev_node_offset = (num_neurons_prev - (neuron_prev_idx - 1));
 					ASSERT(prev_node_offset >= 0);
 					int total_prev_node_offset = 0;
 					total_prev_node_offset = (num_neurons + prev_node_offset);
-					ASSERT(total_prev_node_offset >= 0);
+					ASSERT(total_prev_node_offset > 0);
 					ASSERT(base_node >= total_prev_node_offset);
 					// base_node points to the first element of the next layer
 					// need to take out the number of neurons present on the current layer
@@ -203,5 +203,6 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 	free_memory(phi_arr);
 
 	// base_node here is expected to be equal to the number of node of the input layer
+	LOG_INFO(LOW, "Base Node %0d Input Layer %0d", base_node, *layers_dim);
 	ASSERT(base_node == *layers_dim);
 }
