@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 #include "test_parse_idx.h"
 #include "test_neural_network.h"
 #include "log.h"
@@ -48,6 +49,9 @@ int main (int argc, char * argv []) {
 	char * train_label = NULL;
 
 	bool inputfile_given = false;
+
+	// Initialize seed
+	srand(time(NULL));
 
 	// Needs at list 1 input file
 	ASSERT(argc > 1);
