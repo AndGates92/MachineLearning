@@ -317,11 +317,9 @@ double * normalize_elements (double * element_set, elementdatatype_t max_element
 	double * max_element_double = NULL;
 	max_element_double = cast_element_to_double (&max_element, 1);
 
-	LOG_INFO(LOW,"Max element %0f (Expected %0d)", *max_element_double, max_element);
-
 	for (int idx=0; idx < dimension; idx++) {
 		(*(element_set_norm + idx)) = (*(element_set + idx))/(*max_element_double);
-		LOG_INFO(LOW,"Normalized element %0f (Original value %0f)", (*(element_set_norm + idx)), (*(element_set + idx)));
+		LOG_INFO(HIGH,"Normalized element %0f (Original value %0f Maximum value %0f)", (*(element_set_norm + idx)), (*(element_set + idx)), max_element_double);
 	}
 
 	free_memory(max_element_double);
