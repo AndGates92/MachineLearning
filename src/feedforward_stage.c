@@ -15,7 +15,7 @@
 #include "feedforward_stage.h"
 #include "utility.h"
 
-void feedforward_stage (double * weights, double * biases, int * layers_dim, elementdatatype_t * input_data, double ** node_val, elementdatatype_t * outcome) {
+void feedforward_stage (double * weights, double * biases, int * layers_dim, double * input_data, double ** node_val, elementdatatype_t * outcome) {
 
 	int num_input_hidden_layers = 0;
 	// Hidden layers plus input layer
@@ -42,7 +42,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 		}
 
 		if (layer_no == 0) {
-			memcpy(data, input_data, (num_neurons*sizeof(double)));
+			memcpy(data, (double *)input_data, (num_neurons*sizeof(double)));
 		} else {
 			memcpy(data, data_nxt, (num_neurons*sizeof(double)));
 		}
@@ -69,8 +69,10 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 				if (neuron_idx == 0) {
 					tmp_sum += (*(weights + weight_idx)) * (*(biases + layer_no));
+					LOG_INFO(HIGH,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight %0f and bias %0f: %0f", neuron_nxt_idx, layer_no, (*(weights + weight_idx)), (*(biases + layer_no)), tmp_sum);
 				} else {
-					tmp_sum += (*(weights + weight_idx)) * (*(data + (neuron_idx - 1)));
+					tmp_sum += (*(weights + weight_idx)) * (double)(*(data + (neuron_idx - 1)));
+					LOG_INFO(HIGH,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight %0f and neron %0f: %0f", neuron_nxt_idx, layer_no, (*(weights + weight_idx)), (*(data + (neuron_idx - 1))), tmp_sum);
 				}
 
 				weight_idx++;
@@ -80,6 +82,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 			*(data_nxt + neuron_nxt_idx) = sigmoid(tmp_sum);
 
 			*(*node_val + data_ptr) = tmp_sum;
+			LOG_INFO(LOW,"Feedfoward stage: Neuron %0d of stage %0d: Sum of all weights by all nuerons %0f", neuron_nxt_idx, layer_no, tmp_sum);
 
 			if (max_val < tmp_sum) {
 				max_idx = neuron_nxt_idx;
@@ -87,13 +90,13 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, ele
 
 			data_ptr++;
 
-			LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: %0d", neuron_nxt_idx, layer_no, *(data_nxt + neuron_nxt_idx));
+			LOG_INFO(LOW,"Feedfoward stage: Neuron %0d of stage %0d: %0f", neuron_nxt_idx, layer_no, *(data_nxt + neuron_nxt_idx));
 
 		}
 
 		if (layer_no == (num_input_hidden_layers - 1)) {
 			*outcome = (elementdatatype_t) max_val;
-			LOG_INFO(LOW,"Neural network guess: output index %0d certainty %0lf", max_idx, max_val);
+			LOG_INFO(LOW,"Neural network guess: output index %0d certainty %0f", max_idx, max_val);
 		}
 
 		free_memory(data);
