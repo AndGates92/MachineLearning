@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 #include "log.h"
 #include "parse_idx.h"
 #include "neural_network.h"
@@ -140,9 +141,9 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
 	for (int idx_el = 0; idx_el < total_num_weights; idx_el++) {
 		double weight = 0;
-		weight = ((rand()/RAND_MAX) * (MAX_WEIGHT - MIN_WEIGHT)) + MIN_WEIGHT;
+		weight = (((double)rand()/RAND_MAX) * (double)(MAX_WEIGHT - MIN_WEIGHT)) + (double)MIN_WEIGHT;
 		(*((*weights) + idx_el)) = weight;
-		LOG_INFO(HIGH, "Randomizing weights: Weight[%0d]: %0d", idx_el, (*((*weights) + idx_el)));
+		LOG_INFO(HIGH, "Randomizing weights: Weight[%0d]: %0f (expected %0f)", idx_el, (*((*weights) + idx_el)), weight);
 		ASSERT(weight >= MIN_WEIGHT);
 		ASSERT(weight <= MAX_WEIGHT);
 	}
@@ -155,20 +156,20 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 
 	for (int idx_bias = 0; idx_bias < num_input_hidden_layers; idx_bias++) {
 		double bias = 0;
-		bias = ((rand()/RAND_MAX) * (MAX_BIAS - MIN_BIAS)) + MIN_BIAS;
+		bias = (((double)rand()/RAND_MAX) * (double)(MAX_BIAS - MIN_BIAS)) + (double)MIN_BIAS;
 		(*((*biases) + idx_bias)) = bias;
-		LOG_INFO(HIGH, "Randomizing bias: Bias[%0d]: %0d", idx_bias, (*((*biases) + idx_bias)));
+		LOG_INFO(HIGH, "Randomizing bias: Bias[%0d]: %0f (expected %0f)", idx_bias, (*((*biases) + idx_bias)), bias);
 		ASSERT(bias >= MIN_BIAS);
 		ASSERT(bias <= MAX_BIAS);
 	}
 
-	*learn_rate = ((rand()/RAND_MAX) * (MAX_LEARN_RATE - MIN_LEARN_RATE)) + MIN_LEARN_RATE;
-	LOG_INFO(HIGH, "Randomizing learning rate: %0d", learn_rate);
+	*learn_rate = (((double)rand()/RAND_MAX) * (double)(MAX_LEARN_RATE - MIN_LEARN_RATE)) + (double)MIN_LEARN_RATE;
+	LOG_INFO(HIGH, "Randomizing learning rate: %0f", *learn_rate);
 	ASSERT(*learn_rate >= MIN_LEARN_RATE);
 	ASSERT(*learn_rate <= MAX_LEARN_RATE);
 
-	*alpha = ((rand()/RAND_MAX) * (MAX_ALPHA - MIN_ALPHA)) + MIN_ALPHA;
-	LOG_INFO(HIGH, "Randomizing alpha: %0d", alpha);
+	*alpha = (((double)rand()/RAND_MAX) * (double)(MAX_ALPHA - MIN_ALPHA)) + (double)MIN_ALPHA;
+	LOG_INFO(HIGH, "Randomizing alpha: %0f", *alpha);
 	ASSERT(*alpha >= MIN_ALPHA);
 	ASSERT(*alpha <= MAX_ALPHA);
 }
@@ -223,6 +224,19 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		free_memory(set_coord);
 
+		double * input_data_double = NULL;
+		input_data_double = cast_element_to_double (input_data, el_size);
+
+		free_memory(input_data);
+
+		elementdatatype_t max_el = 0;
+		max_el =  get_max_element (data_set);
+
+		double * input_data_double_norm = NULL;
+		input_data_double_norm = normalize_elements (input_data_double, max_el, el_size);
+
+		free_memory(input_data_double);
+
 		int label_no_dims = 0;
 		label_no_dims = get_no_dims(data_label);
 		int * label_coord = NULL;
@@ -253,7 +267,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 		elementdatatype_t outcome = 0;
 
 		LOG_INFO(LOW, "Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
-		feedforward_stage(weights, biases, layers_dim, input_data, &node_val, &outcome);
+		feedforward_stage(weights, biases, layers_dim, input_data_double_norm, &node_val, &outcome);
 
 		LOG_INFO(LOW,"Neural network estimates: %0d Label %0d", outcome, label);
 
@@ -262,10 +276,55 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		set_no_dims = get_no_dims(data_set);
 
-		free_memory(input_data);
+		free_memory(input_data_double_norm);
 	}
-
 
 	free_memory(node_val);
 
+}
+
+double * cast_element_to_double (elementdatatype_t * element_set, int dimension) {
+
+	// Pointer to the elements after casting
+	double * element_set_double = NULL;
+
+	element_set_double = (double *) malloc(dimension*sizeof(double));
+	if (element_set_double==NULL) {
+		LOG_ERROR("Can't allocate memory for element_set_double array");
+	}
+
+	if (sizeof(elementdatatype_t) == sizeof(double)) {
+		memcpy(element_set_double, element_set, (dimension*sizeof(double)));
+	} else {
+		for (int idx=0; idx < dimension; idx++) {
+			(*(element_set_double + idx)) = (double)(*(element_set + idx));
+		}
+	}
+
+	return element_set_double;
+}
+
+double * normalize_elements (double * element_set, elementdatatype_t max_element, int dimension) {
+
+	// Pointer to the elements after casting
+	double * element_set_norm = NULL;
+
+	element_set_norm = (double *) malloc(dimension*sizeof(double));
+	if (element_set_norm==NULL) {
+		LOG_ERROR("Can't allocate memory for element_set_norm array");
+	}
+
+	double * max_element_double = NULL;
+	max_element_double = cast_element_to_double (&max_element, 1);
+
+	LOG_INFO(LOW,"Max element %0f (Expected %0d)", *max_element_double, max_element);
+
+	for (int idx=0; idx < dimension; idx++) {
+		(*(element_set_norm + idx)) = (*(element_set + idx))/(*max_element_double);
+		LOG_INFO(LOW,"Normalized element %0f (Original value %0f)", (*(element_set_norm + idx)), (*(element_set + idx)));
+	}
+
+	free_memory(max_element_double);
+
+	return element_set_norm;
 }

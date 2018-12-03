@@ -98,6 +98,27 @@ void parse_all_idx (char * test_set, char * train_set, char * test_label, char *
 void neural_network (char * test_set, char * train_set, char * test_label, char * train_label);
 
 /** 
+ * @brief Function: double * cast_element_to_double (elementdatatype_t * element_set, int dimension)
+ *
+ * \param element_set: array fo elements to cast to double
+ * \param dimension: dimension of the array to cast
+ *
+ * Cast elements of array element_set to double.
+ */
+double * cast_element_to_double (elementdatatype_t * element_set, int dimension);
+
+/** 
+ * @brief Function: double * normalize_elements (double * element_set, elementdatatype_t max_element, int dimension)
+ *
+ * \param element_set: array fo elements to cast to double
+ * \param max_element: maximum element in the dataset
+ * \param dimension: dimension of the array to cast
+ *
+ * Normalize elements of the input array.
+ */
+double * normalize_elements (double * element_set, elementdatatype_t max_element, int dimension);
+
+/** 
  * @brief Function: void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label, double * learn_rate, double * alpha)
  *
  * \param weights: weights of neural network layers
