@@ -37,8 +37,8 @@ typedef short elementdatatype_t;
  *
  */
 typedef enum data_type_list {
-	SBYTE,
 	UBYTE,
+	SBYTE,
 	SHORT,
 	INTEGER,
 	FLOAT,

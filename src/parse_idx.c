@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <math.h>
 #include "log.h"
 #include "file.h"
 #include "parse_idx.h"
@@ -117,7 +118,7 @@ void parse_header(FILE * fid, data_t ** data) {
 bool read_body(FILE * fid, elementdatatype_t* value) {
 	elementdatatype_t value_le = 0;
 	size_t no_el_read = 0;
-        no_el_read = fread(&value_le, sizeof(value_le), 1, fid);
+	no_el_read = fread(&value_le, sizeof(value_le), 1, fid);
 
 	bool eof = false;
 	if (no_el_read == 1) {
@@ -146,6 +147,9 @@ void parse_body(FILE * fid, data_t ** data) {
 
 	no_bytes = get_no_bytes(*data);
 	ASSERT(no_bytes > 0);
+
+	data_type_e data_type_enum = UNKNOWN;
+	data_type_enum = get_data_type(*data);
 
 	int datatype_element_ratio = 0;
 	datatype_element_ratio = sizeof(elementdatatype_t)/no_bytes;
@@ -212,6 +216,13 @@ void parse_body(FILE * fid, data_t ** data) {
 
 			ASSERT(remainder == 0);
 
+			if (data_type_enum == UBYTE) {
+				elementdatatype_t mask = 0;
+				mask = ((elementdatatype_t)pow(2,(BIT_IN_BYTE*no_bytes))) - 1;
+				// Tie to 0 MSBs 
+				element = (element & mask);
+			}
+
 			set_element(data, element, coordinates);
 
 			free_memory(coordinates);
@@ -236,10 +247,10 @@ data_type_e IDX_data_type_to_enum (byte data_type) {
 
 	switch (data_type) {
 		case 0x8:
-			data_type_enum = SBYTE;
+			data_type_enum = UBYTE;
 			break;
 		case 0x9:
-			data_type_enum = UBYTE;
+			data_type_enum = SBYTE;
 			break;
 		case 0xB:
 			data_type_enum = SHORT;
