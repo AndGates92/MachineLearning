@@ -111,9 +111,10 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				LOG_INFO(DEBUG, "Weights: base weight %0d Neurons: current %0d out of %0d, previous %0d out of %0d -> Weight offset: %0d", base_weight, neuron_idx, num_neurons, neuron_prev_idx, num_neurons_prev, curr_weight_offset);
 				ASSERT(curr_weight_offset >= 0);
 
-				if (neuron_prev_idx == 0) {
+				if (neuron_prev_idx == num_neurons_prev) {
 					// Adjust weight of bias
-					node_val_end = *(biases + layer_no);
+					// Select bias of the previous layer
+					node_val_end = *(biases + layer_no - 1);
 					sigmoid_node_end = node_val_end;
 				} else {
 
