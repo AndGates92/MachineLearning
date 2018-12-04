@@ -96,7 +96,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 	int total_num_weights = 0;
 	total_num_weights = 0;
 	double prev_layer_dim = 0;
-	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
+	// Randomize weights between MIN_WEIGTH and MAX_WEIGHT
 	for (int idx_layer = 0; idx_layer < total_num_layers; idx_layer++) {
 		double weight_dim = 0.0;
 		weight_dim = ((double)((total_num_layers - 1) - idx_layer))/((double)(total_num_layers - 1));
@@ -113,12 +113,12 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		} else {
 			bias = 0;
 		}
-		(*((*layers_dim) + idx_layer)) = layer_dim + bias;
+		(*((*layers_dim) + idx_layer)) = layer_dim;
 		LOG_INFO(LOW, "Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
 		if (input_layer_size > output_layer_size) {
-			ASSERT((layer_dim <= (input_layer_size + 1)) && (layer_dim >= (output_layer_size)));
+			ASSERT((layer_dim <= input_layer_size) && (layer_dim >= (output_layer_size)));
 		} else {
-			ASSERT((layer_dim >= (input_layer_size + 1)) && (layer_dim <= (output_layer_size)));
+			ASSERT((layer_dim >= input_layer_size) && (layer_dim <= (output_layer_size)));
 		}
 		ASSERT(layer_dim > 0);
 
@@ -126,7 +126,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		if (idx_layer > 0) {
 			// elements in unit contains the number of weights required for the neural network training set but it doesn't account for the bias, hence add 1
 			// Weights are between every node of a layer to each node of the next layer
-			total_num_weights += layer_dim*prev_layer_dim;
+			total_num_weights += (layer_dim + bias)*(prev_layer_dim + 1);
 		}
 
 		prev_layer_dim = layer_dim;
@@ -140,12 +140,18 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 
 	// Randomize weights between MIN_WEIDTH and MAX_WEIGHT
 	for (int idx_el = 0; idx_el < total_num_weights; idx_el++) {
+		double variance = 0.0;
+		variance = pow((double)WEIGHT_STD_DEV,2);
+		double max_size = 0.0;
+		if (input_layer_size > output_layer_size) {
+			max_size = (double)input_layer_size;
+		} else {
+			max_size = (double)output_layer_size;
+		}
 		double weight = 0;
-		weight = (((double)rand()/RAND_MAX) * (double)(MAX_WEIGHT - MIN_WEIGHT)) + (double)MIN_WEIGHT;
-		(*((*weights) + idx_el)) = weight;
+		weight = (1.0/sqrt(2.0*M_PI*variance))*(exp((pow((((double)rand()/RAND_MAX) - (double)WEIGHT_MEAN),2))/(2.0*(variance))));
+		(*((*weights) + idx_el)) = weight/max_size;
 		LOG_INFO(HIGH, "Randomizing weights: Weight[%0d]: %0f (expected %0f)", idx_el, (*((*weights) + idx_el)), weight);
-		ASSERT(weight >= MIN_WEIGHT);
-		ASSERT(weight <= MAX_WEIGHT);
 	}
 
 	// Randomize biases between MIN_BIASES and MAX_BIASES
@@ -315,11 +321,11 @@ double * normalize_elements (double * element_set, elementdatatype_t max_element
 	}
 
 	double * max_element_double = NULL;
-	max_element_double = cast_element_to_double (&max_element, 1);
+	max_element_double = cast_element_to_double(&max_element, 1);
 
 	for (int idx=0; idx < dimension; idx++) {
 		(*(element_set_norm + idx)) = (*(element_set + idx))/(*max_element_double);
-		LOG_INFO(HIGH,"Normalized element %0f (Original value %0f Maximum value %0f)", (*(element_set_norm + idx)), (*(element_set + idx)), max_element_double);
+		LOG_INFO(HIGH,"Normalized element %0f (Original value %0f Maximum value %0f)", (*(element_set_norm + idx)), (*(element_set + idx)), *max_element_double);
 	}
 
 	free_memory(max_element_double);

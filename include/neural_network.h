@@ -22,16 +22,16 @@
 #define NUM_HIDDEN_LAYERS 1
 
 /**
- * @brief Maximum value of weights
+ * @brief Mean value of weights
  *
  */
-#define MAX_WEIGHT 1
+#define WEIGHT_MEAN 0
 
 /**
- * @brief Minimum value of weights
+ * @brief Standard deviation of weights
  *
  */
-#define MIN_WEIGHT 0
+#define WEIGHT_STD_DEV 1
 
 /**
  * @brief Maximum value of bias
