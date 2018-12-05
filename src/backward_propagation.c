@@ -39,42 +39,32 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 		base_weight += ((curr_layer_dim + 1) * (nxt_layer_dim));
 	}
 
-	double * phi_arr = NULL;
+	double * phi_arr_prev = NULL;
 
 	for (int layer_no = (total_num_layers - 1); layer_no > 0; layer_no--) {
 
-		int num_neurons = 0;
-		num_neurons = (*(layers_dim + layer_no));
-		LOG_INFO(DEBUG, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
-
-		int num_neurons_prev = 0;
-		num_neurons_prev = (*(layers_dim + layer_no - 1));
-		LOG_INFO(DEBUG, "Neighbour layer dimensions: Previous Layer %0d -> Dimension %0d", (layer_no-1), num_neurons_prev);
-
-		int phi_arr_dim = 0;
-		phi_arr_dim = num_neurons_prev * num_neurons;
-
 		int num_neurons_nxt = 0;
 
-		int phi_arr_prev_dim = 0;
-
-		double * phi_arr_prev = NULL;
+//		int phi_arr_prev_dim = 0;
 
 		if (layer_no < (total_num_layers - 1)) {
 			num_neurons_nxt = (*(layers_dim + layer_no + 1));
 			LOG_INFO(DEBUG, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", (layer_no+1), num_neurons_nxt);
-
-			phi_arr_prev_dim = num_neurons_nxt * num_neurons;
-
-			phi_arr_prev = (double *) malloc(phi_arr_prev_dim*sizeof(double));
-			if (phi_arr_prev==NULL) {
-				LOG_ERROR("Can't allocate memory for array storing values of phi collected in the previous iteration");
-			}
-
-			memcpy(phi_arr_prev, phi_arr, (phi_arr_prev_dim*sizeof(double)));
 		}
 
-		free_memory(phi_arr);
+		int num_neurons = 0;
+		num_neurons = (*(layers_dim + layer_no));
+		LOG_INFO(LOW, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
+
+		int num_neurons_prev = 0;
+		// Add 1 for the bias
+		num_neurons_prev = (*(layers_dim + layer_no - 1)) + 1;
+		LOG_INFO(LOW, "Neighbour layer dimensions: Previous Layer %0d -> Dimension %0d", (layer_no-1), num_neurons_prev);
+
+		int phi_arr_dim = 0;
+		phi_arr_dim = num_neurons_prev * num_neurons;
+
+		double * phi_arr = NULL;
 
 		phi_arr = (double *) malloc(phi_arr_dim*sizeof(double));
 		if (phi_arr==NULL) {
@@ -196,12 +186,25 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 		free_memory(phi_arr_prev);
 
+//		phi_arr_prev = (double *) malloc(phi_arr_dim*sizeof(double));
+//		if (phi_arr_prev==NULL) {
+//			LOG_ERROR("Can't allocate memory for array storing values of phi collected in the previous iteration");
+//		}
+
+//		memcpy(phi_arr_prev, phi_arr, (phi_arr_dim*sizeof(double)));
+
+		free_memory(phi_arr);
+
+		// Make phi_arr_prev point to the location phi_arr is pointing to
+		phi_arr_prev = phi_arr;
+		phi_arr = NULL;
+
 		base_node -= num_neurons;
 
 		ASSERT(base_node >= num_neurons_prev);
 	}
 
-	free_memory(phi_arr);
+	free_memory(phi_arr_prev);
 
 	// base_node here is expected to be equal to the number of node of the input layer
 	ASSERT(base_node == *layers_dim);

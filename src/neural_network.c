@@ -107,12 +107,6 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		int layer_dim = 0;
 		// Constantly move from the size of the input layer to that of the output layer
 		layer_dim = (int)(absolute_dim + output_layer_size);
-		int bias = 0;
-		if (idx_layer < (total_num_layers - 1)) {
-			bias = 1;
-		} else {
-			bias = 0;
-		}
 		(*((*layers_dim) + idx_layer)) = layer_dim;
 		LOG_INFO(LOW, "Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
 		if (input_layer_size > output_layer_size) {
@@ -126,7 +120,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		if (idx_layer > 0) {
 			// elements in unit contains the number of weights required for the neural network training set but it doesn't account for the bias, hence add 1
 			// Weights are between every node of a layer to each node of the next layer
-			total_num_weights += (layer_dim + bias)*(prev_layer_dim + 1);
+			total_num_weights += layer_dim*(prev_layer_dim + 1);
 		}
 
 		prev_layer_dim = layer_dim;
@@ -150,8 +144,9 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		}
 		double weight = 0;
 		weight = (1.0/sqrt(2.0*M_PI*variance))*(exp((pow((((double)rand()/RAND_MAX) - (double)WEIGHT_MEAN),2))/(2.0*(variance))));
-		(*((*weights) + idx_el)) = weight/max_size;
-		LOG_INFO(HIGH, "Randomizing weights: Weight[%0d]: %0f (expected %0f)", idx_el, (*((*weights) + idx_el)), weight);
+		weight /= max_size;
+		(*((*weights) + idx_el)) = weight;
+		LOG_INFO(LOW, "Randomizing weights: Weight[%0d]: %0f (expected %0f)", idx_el, (*((*weights) + idx_el)), weight);
 	}
 
 	// Randomize biases between MIN_BIASES and MAX_BIASES
@@ -201,7 +196,8 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
-	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
+	//for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
+	for (int start_el_idx = 0; start_el_idx < 2; start_el_idx++) {
 
 		int set_no_dims = 0;
 		set_no_dims = get_no_dims(data_set);
