@@ -1,5 +1,8 @@
 # Makefile for machine learning C implementation
 
+DATE_FORMAT = %a %d %b %Y
+TIME_FORMAT = %H:%M:%S
+
 # Doxygen variables
 DOXYGEN = doxygen
 DOX_DIR = doxygen
@@ -92,49 +95,49 @@ EXE = $(BIN_DIR)/$(EXE_NAME)
 $(EXE) : $(OBJS)
 	$(MKDIR) $(LOG_DIR)
 	$(MKDIR) $(@D)
-	$(VERBOSE)echo "Compiling $(@F). Object files are: $^"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compiling $(@F). Object files are: $^"
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(DFLAGS) $^ $(LIBS)
 
 $(OBJ_DIR)/%.o : %.c
 	$(MKDIR) $(@D)
-	$(VERBOSE)echo "Compiling $(<F) and creating object $@"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compiling $(<F) and creating object $@"
 	$(CC) $(CFLAGS) $(INCLUDES)  -c $< $(DFLAGS) -o $@ $(LIBS)
 
 depend :
 	makedepend $(INCLUDES) $^
 
 all : $(EXE)
-	$(VERBOSE)echo "Compile machine learning C algorithm"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compile machine learning C algorithm"
 
 memleak : $(EXE)
 	valgrind $(MEMCHECKOPTS) $(VALGRINDTOOLOPTS) $(VALGRINDLOGOPTS) $(EXE) $(VALGRINDEXEARGS)
 
 debug :
-	$(VERBOSE)echo "Compiler: $(CC)"
-	$(VERBOSE)echo "Compiler options:"
-	$(VERBOSE)echo "--> C flags: $(CFLAGS)"
-	$(VERBOSE)echo "--> defines: $(DFLAGS)"
-	$(VERBOSE)echo "--> libs: $(LIBS)"
-	$(VERBOSE)echo "Files lists:"
-	$(VERBOSE)echo "--> Source files: $(SRCS)"
-	$(VERBOSE)echo "--> Object files: $(notdir $(OBJS))"
-	$(VERBOSE)echo "--> Executable file: $(notdir $(EXE_NAME))"
-	$(VERBOSE)echo "Directories lists:"
-	$(VERBOSE)echo "--> Source directories: $(VPATH)"
-	$(VERBOSE)echo "--> Include directories: $(INCLUDE_PATH)"
-	$(VERBOSE)echo "--> Exeutable directory: $(BIN_DIR)"
-	$(VERBOSE)echo "--> Log directory: $(LOG_DIR)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compiler: $(CC)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compiler options:"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> C flags: $(CFLAGS)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> defines: $(DFLAGS)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> libs: $(LIBS)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Files lists:"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> Source files: $(SRCS)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> Object files: $(notdir $(OBJS))"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> Executable file: $(notdir $(EXE_NAME))"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Directories lists:"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> Source directories: $(VPATH)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> Include directories: $(INCLUDE_PATH)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> Exeutable directory: $(BIN_DIR)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> Log directory: $(LOG_DIR)"
 
 clean :
-	$(VERBOSE)echo "Remove object files: $(OBJS)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove object files: $(OBJS)"
 	rm -rf $(OBJ_DIR)
-	$(VERBOSE)echo "Remove doxygen documentation directory: $(DOX_DOC_DIR)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove doxygen documentation directory: $(DOX_DOC_DIR)"
 	rm -rf $(DOX_DOC_DIR)
-	$(VERBOSE)echo "Remove binary file: $(EXE)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove binary file: $(EXE)"
 	rm -rf $(BIN_DIR)
-	$(VERBOSE)echo "Remove log file: $(LOGFILE)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove log file: $(LOGFILE)"
 	rm -rf $(LOG_DIR)
-	$(VERBOSE)echo "Clean completed"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Clean completed"
 
 doc :
 	$(MKDIR) $(DOX_DOC_DIR)
