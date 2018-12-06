@@ -43,7 +43,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 		}
 
 		if (layer_no == 0) {
-			memcpy(data, (double *)input_data, (num_neurons*sizeof(double)));
+			memcpy(data, input_data, (num_neurons*sizeof(double)));
 		} else {
 			memcpy(data, data_nxt, (num_neurons*sizeof(double)));
 		}

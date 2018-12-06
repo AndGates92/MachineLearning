@@ -70,6 +70,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 		if (phi_arr==NULL) {
 			LOG_ERROR("Can't allocate memory for array storing values of phi collected in the current iteration");
 		}
+		free_memory(phi_arr);
 
 		for (int neuron_idx = 0; neuron_idx < num_neurons; neuron_idx++) {
 
@@ -185,18 +186,22 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 		ASSERT(base_weight >= 0);
 
 		free_memory(phi_arr_prev);
+		phi_arr_prev = NULL;
+		phi_arr_prev = (double *) malloc(phi_arr_dim*sizeof(double));
+		if (phi_arr_prev==NULL) {
+			LOG_ERROR("Can't allocate memory for array storing values of phi collected in the current iteration");
+		}
 
 //		phi_arr_prev = (double *) malloc(phi_arr_dim*sizeof(double));
 //		if (phi_arr_prev==NULL) {
 //			LOG_ERROR("Can't allocate memory for array storing values of phi collected in the previous iteration");
 //		}
 
-//		memcpy(phi_arr_prev, phi_arr, (phi_arr_dim*sizeof(double)));
-
+		memcpy(phi_arr_prev, phi_arr, (phi_arr_dim*sizeof(double)));
 		free_memory(phi_arr);
 
 		// Make phi_arr_prev point to the location phi_arr is pointing to
-		phi_arr_prev = phi_arr;
+//		phi_arr_prev = phi_arr;
 		phi_arr = NULL;
 
 		base_node -= num_neurons;

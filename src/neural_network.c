@@ -271,14 +271,13 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 		LOG_INFO(LOW, "Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
 		feedforward_stage(weights, biases, layers_dim, input_data_double_norm, &node_val, &outcome);
 
+		free_memory(input_data_double_norm);
+
 		LOG_INFO(LOW,"Neural network estimates: %0d Label %0d", outcome, label);
 
 		LOG_INFO(LOW, "Backward propagation stage: Start iteration %0d out of %0d", start_el_idx, num_el);
 		backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);
 
-		set_no_dims = get_no_dims(data_set);
-
-		free_memory(input_data_double_norm);
 	}
 
 	free_memory(node_val);
