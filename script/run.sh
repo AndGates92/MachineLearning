@@ -80,32 +80,43 @@ do
 	esac
 done
 
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Run script variables"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] DATASET"
+if [ ${tests} -eq 1 ] || [ ${doc} -eq 1 ] || [ ${memleak} -eq 1 ]; then
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Run script variables"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] DATASET"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Dataset directory ${DATASET_DIR}"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Training set filename ${TRAIN_SET}"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Training label filename ${TRAIN_LABEL}"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Test set filename ${TEST_SET}"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Test label filename ${TEST_LABEL}"
+	echo "\n"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] EXECUTABLE"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Directory of the executable: ${EXEDIR}"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Executable filename: ${EXENAME}"
+	echo "\n"
+fi
+
 echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Dataset directory ${DATASET_DIR}"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Training set filename ${TRAIN_SET}"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Training label filename ${TRAIN_LABEL}"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Test set filename ${TEST_SET}"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Test label filename ${TEST_LABEL}"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] EXECUTABLE"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Directory of the executable: ${EXEDIR}"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Executable filename: ${EXENAME}"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
 echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] LOGS"
 echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Logfile directory: ${LOGDIRR}"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Debug logfile name: ${DEBUGLOG}"
+
+if [ ${debug} -eq 1 ]; then
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Debug logfile name: ${DEBUGLOG}"
+fi
+
 if [ ${tests} -eq 1 ]; then
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Compile logfile name: ${COMPLOG}"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Executable logfile name: ${EXELOG}"
 fi
+
 if [ ${doc} -eq 1 ]; then
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Documentation logfile name: ${DOCLOG}"
 fi
+
 if [ ${memleak} -eq 1 ]; then
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Valgrind test set logfile name: ${VALGRINDTESLOG}"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Valgrind test label logfile name: ${VALGRINDTELLOG}"
@@ -113,34 +124,42 @@ if [ ${memleak} -eq 1 ]; then
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] --> Valgrind executable logfile name: ${EXEVALGRINDLOG}"
 fi
 
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Clean workspace"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
-(set -x; \
- make clean LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR})
+echo "\n"
 
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Create log directory"
-echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
-(set -x; \
- mkdir -p ${LOGDIR})
+if [ ${tests} -eq 1 ] || [ ${doc} -eq 1 ] || [ ${memleak} -eq 1 ]; then
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Clean workspace"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
+	(set -x; \
+	 make clean LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR})
+
+	echo "\n"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Create log directory"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
+	(set -x; \
+	 mkdir -p ${LOGDIR})
+	echo "\n"
+fi
 
 if [ ${debug} -eq 1 ]; then
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Makefile variables"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	(set -x; \
 	 make debug LOG_DIR=${LOGDIR} LOGFILENAME=${EXELOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} EXTRAFLAGS=${CEXTRAFLAGS} > ${LOGDIR}/${DEBUGLOG})
+	echo "\n"
 fi
 
 if [ ${tests} -eq 1 ]; then
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Compile sources"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	(set -x; \
 	 make all LOG_DIR=${LOGDIR} LOGFILENAME=${EXELOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VERBOSITY=${VERBOSITY} EXTRAFLAGS=${CEXTRAFLAGS} > ${LOGDIR}/${COMPLOG})
 
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
+	echo "\n"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Run program"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] START:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
@@ -155,18 +174,20 @@ if [ ${tests} -eq 1 ]; then
 	(set -x; \
 	 ./bin/ml -tel ${DATASET_DIR}/${TEST_LABEL} -tes ${DATASET_DIR}/${TEST_SET} -trl ${DATASET_DIR}/${TRAIN_LABEL} -trs ${DATASET_DIR}/${TRAIN_SET})
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] COMPLETED:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
+	echo "\n"
 fi
 
 if [ ${doc} -eq 1 ]; then
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Compile documetation"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	(set -x; \
 	 make doc LOG_DIR=${LOGDIR} LOGFILENAME=${EXELOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} EXTRAFLAGS=${CEXTRAFLAGS} > ${LOGDIR}/${DOCLOG})
+	echo "\n"
 fi
 
 if [ ${memleak} -eq 1 ]; then
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] \n========================================================================="
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Check memory leaks"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] START:Valgrind with label input file ${DATASET_DIR}/${TEST_LABEL}"
@@ -181,5 +202,6 @@ if [ ${memleak} -eq 1 ]; then
 	(set -x; \
 	 make memleak LOG_DIR=${LOGDIR} LOGFILENAME=${EXEVALGRINDLOG} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR} VALGRINDLOGFILENAME=${VALGRINDALLLOG} VALGRINDEXEARGS="-tel ${DATASET_DIR}/${TEST_LABEL} -tes ${DATASET_DIR}/${TEST_SET} -trl ${DATASET_DIR}/${TRAIN_LABEL} -trs ${DATASET_DIR}/${TRAIN_SET}")
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] COMPLETED:Valgrind with the following input files: test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
+	echo "\n"
 
 fi
