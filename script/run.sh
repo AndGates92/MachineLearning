@@ -3,6 +3,7 @@
 # Shell script settings
 memleak=0
 tests=0
+clean=0
 debug=0
 doc=0
 
@@ -38,11 +39,12 @@ usage () {
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]  - Usage:"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]  - >$0 <options>"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] "
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --clean|-c:	delete generated files"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --doc|-d:		generate documentation"
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --debug|-g:		dump makefile flags to ${LOGDIR}/${DEBUGLOG}"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --debug|-g:	dump makefile flags to ${LOGDIR}/${DEBUGLOG}"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --memleak|-m:	compile and check memory leaks using valgrind" 
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --test|-t:		compile and run tests"
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --help|-h:		print this help"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --test|-t:	compile and run tests"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --help|-h:	print this help"
 }
 
 if [ $# -lt 1 ]; then
@@ -66,6 +68,10 @@ do
 			;;
 		--debug|-g)
 			debug=1
+			shift 1
+			;;
+		--clean|-c)
+			clean=1
 			shift 1
 			;;
 		--help|-h)
@@ -126,14 +132,16 @@ fi
 
 echo "\n"
 
-if [ ${tests} -eq 1 ] || [ ${doc} -eq 1 ] || [ ${memleak} -eq 1 ]; then
+if [ ${clean} -eq 1 ]; then
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Clean workspace"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	(set -x; \
 	 make clean LOG_DIR=${LOGDIR} EXE_NAME=${EXENAME} BIN_DIR=${EXEDIR})
-
 	echo "\n"
+fi
+
+if [ ${tests} -eq 1 ] || [ ${doc} -eq 1 ] || [ ${memleak} -eq 1 ]; then
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] Create log directory"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
