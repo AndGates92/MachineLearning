@@ -9,7 +9,7 @@ doc=0
 
 
 # Make file settings
-EXENAME=ml
+EXENAME=ml2
 EXEDIR=bin
 
 LOGDIR=log
@@ -172,15 +172,15 @@ if [ ${tests} -eq 1 ]; then
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] ========================================================================="
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] START:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
 	(set -x; \
-	 ./bin/ml -tel ${DATASET_DIR}/${TEST_LABEL})
+	 ./${EXEDIR}/${EXENAME} -tel ${DATASET_DIR}/${TEST_LABEL})
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] COMPLETED:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] START:Test parsing test set file ${DATASET_DIR}/${TEST_SET}"
 	(set -x; \
-	 ./bin/ml -tes ${DATASET_DIR}/${TEST_SET})
+	 ./${EXEDIR}/${EXENAME} -tes ${DATASET_DIR}/${TEST_SET})
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] COMPLETED:Test parsing test set file ${DATASET_DIR}/${TEST_SET}"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] START:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
 	(set -x; \
-	 ./bin/ml -tel ${DATASET_DIR}/${TEST_LABEL} -tes ${DATASET_DIR}/${TEST_SET} -trl ${DATASET_DIR}/${TRAIN_LABEL} -trs ${DATASET_DIR}/${TRAIN_SET})
+	 ./${EXEDIR}/${EXENAME} -tel ${DATASET_DIR}/${TEST_LABEL} -tes ${DATASET_DIR}/${TEST_SET} -trl ${DATASET_DIR}/${TRAIN_LABEL} -trs ${DATASET_DIR}/${TRAIN_SET})
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] COMPLETED:Test parsing test label file ${DATASET_DIR}/${TEST_LABEL}, test set file ${DATASET_DIR}/${TEST_SET}, training label file ${DATASET_DIR}/${TRAIN_LABEL}, training set file ${DATASET_DIR}/${TRAIN_SET}"
 	echo "\n"
 fi
