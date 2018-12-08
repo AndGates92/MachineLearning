@@ -9,7 +9,7 @@ doc=0
 
 
 # Make file settings
-EXENAME=ml2
+EXENAME=ml
 EXEDIR=bin
 
 LOGDIR=log
