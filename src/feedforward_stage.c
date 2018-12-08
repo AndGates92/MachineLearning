@@ -44,6 +44,8 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 
 		if (layer_no == 0) {
 			memcpy(data, input_data, (num_neurons*sizeof(double)));
+			memcpy(*node_val, input_data, (num_neurons*sizeof(double)));
+			data_ptr += num_neurons;
 		} else {
 			memcpy(data, data_nxt, (num_neurons*sizeof(double)));
 		}
@@ -73,7 +75,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 					LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight %0f and bias %0f: %0f", neuron_nxt_idx, (layer_no + 1), (*(weights + weight_idx)), (*(biases + layer_no)), tmp_sum);
 				} else {
 					tmp_sum += (*(weights + weight_idx)) * (double)(*(data + (neuron_idx - 1)));
-					LOG_INFO(LOW,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight %0f and neron %0f: %0f", neuron_nxt_idx, (layer_no + 1), (*(weights + weight_idx)), (*(data + (neuron_idx - 1))), tmp_sum);
+					LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight %0f and neron %0f: %0f", neuron_nxt_idx, (layer_no + 1), (*(weights + weight_idx)), (*(data + (neuron_idx - 1))), tmp_sum);
 				}
 
 				weight_idx++;
@@ -83,15 +85,14 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 			*(data_nxt + neuron_nxt_idx) = sigmoid(tmp_sum);
 
 			*(*node_val + data_ptr) = tmp_sum;
-			LOG_INFO(LOW,"Feedfoward stage: Neuron %0d of stage %0d: Sum of all weights by all nuerons %0f", neuron_nxt_idx, (layer_no + 1), tmp_sum);
+			LOG_INFO(MEDIUM,"Feedfoward stage: Neuron %0d of stage %0d: Sum of all weights by all nuerons %0f -> Sigmoid S(%0f) = %0f", neuron_nxt_idx, (layer_no + 1), tmp_sum, tmp_sum, *(data_nxt + neuron_nxt_idx));
 
 			if (max_val < tmp_sum) {
 				max_idx = neuron_nxt_idx;
 			}
 
 			data_ptr++;
-
-			LOG_INFO(LOW,"Feedfoward stage: Neuron %0d of stage %0d: data next %0f", neuron_nxt_idx, (layer_no + 1), *(data_nxt + neuron_nxt_idx));
+			LOG_INFO(LOW,"Data pointer %0d", data_ptr);
 
 		}
 

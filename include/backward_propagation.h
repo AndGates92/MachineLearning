@@ -9,7 +9,7 @@
 */
 
 /** 
- * @brief Function: void backward_propagation (double ** weights, double * biases, int * layers_dim, double * node_val, double label, double learn_rate, double alpha)
+ * @brief Function: void backward_propagation (double ** weights, double * biases, int * layers_dim, double * node_val, int label, double learn_rate, double alpha)
  *
  * \param weights: weights of neural network layers
  * \param bias: bias of neural network
@@ -21,6 +21,6 @@
  *
  * Compute backward propagation algorithm to adjust weights
  */
-void backward_propagation (double ** weights, double * biases, int * layers_dim, double * node_val, double label, double learn_rate, double alpha);
+void backward_propagation (double ** weights, double * biases, int * layers_dim, double * node_val, int label, double learn_rate, double alpha);
 
 #endif // BACKWARD_PROPAGATION_H

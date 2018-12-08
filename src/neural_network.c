@@ -195,6 +195,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
+	printf("Nodes: node_val size %0d\n", total_num_nodes);
 
 	//for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 	for (int start_el_idx = 0; start_el_idx < 2; start_el_idx++) {
@@ -264,6 +265,10 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 		elementdatatype_t label = 0;
 		label = get_element(data_label, label_coord);
 
+		// Cast label to integer
+		int label_int = 0;
+		label_int = label;
+
 		free_memory(label_coord);
 
 		elementdatatype_t outcome = 0;
@@ -273,10 +278,10 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		free_memory(input_data_double_norm);
 
-		LOG_INFO(LOW,"Neural network estimates: %0d Label %0d", outcome, label);
+		LOG_INFO(LOW,"Neural network estimates: %0d Label %0d", outcome, label_int);
 
 		LOG_INFO(LOW, "Backward propagation stage: Start iteration %0d out of %0d", start_el_idx, num_el);
-		backward_propagation(&weights, biases, layers_dim, node_val, label, learn_rate, alpha);
+		backward_propagation(&weights, biases, layers_dim, node_val, label_int, learn_rate, alpha);
 
 	}
 
