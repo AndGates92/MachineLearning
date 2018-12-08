@@ -114,10 +114,15 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 					total_prev_node_offset = (num_neurons + prev_node_offset);
 					ASSERT(total_prev_node_offset >= 0);
 					printf("Base Node %0d Total_prev_node %0d (num neurosn %0d + num_neurons_prev %0d + neuron_prev_idx %0d)  \n",base_node, total_prev_node_offset, num_neurons, num_neurons_prev, neuron_prev_idx);
-					ASSERT(base_node >= total_prev_node_offset);
+
+					int node_offset = 0;
+					// Take out 1 to curr_weight_offset to account that index starts at 0
+					node_offset = (base_node -  total_prev_node_offset);
+					ASSERT(node_offset >= 0);
+
 					// base_node points to the first element of the next layer
 					// need to take out the number of neurons present on the current layer
-					node_val_end = *(node_val + (base_node -  total_prev_node_offset));
+					node_val_end = *(node_val + node_offset);
 					LOG_INFO(DEBUG, "Nodes: base node %0d Neurons: total number current layer %0d, previous layer index %0d out of %0d -> Previous node offset: %0d", base_node, num_neurons, neuron_prev_idx, num_neurons_prev, total_prev_node_offset);
 					sigmoid_node_end = sigmoid(node_val_end);
 				}
@@ -172,6 +177,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 				int weight_offset = 0;
 				// Take out 1 to curr_weight_offset to account that index starts at 0
+				printf("Base Weight %0d curr_weight_offset %0d (num neurosn %0d * (num_neurons_prev %0d + 1) - (neuron_prev_idx %0d * num neurosn %0d - neurosn_idx %0d ))  \n",base_weight, curr_weight_offset, num_neurons, num_neurons_prev, neuron_prev_idx, num_neurons, neuron_idx);
 				weight_offset = (base_weight - curr_weight_offset);
 				ASSERT(weight_offset >= 0);
 
