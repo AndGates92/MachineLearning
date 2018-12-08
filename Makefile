@@ -48,7 +48,7 @@ CC = gcc
 
 # Compile-time flags
 CFLAGS = -g -Wall -Werror -Wextra -Wpedantic -std=gnu99 -rdynamic
-EXTRADFLAGS ?=
+CEXTRAFLAGS ?=
 DFLAGS = -DLOGFILE="$(LOGFILE)" -DVERBOSITY=$(VERBOSITY)
 LIBS= -lm
 
@@ -96,12 +96,12 @@ $(EXE) : $(OBJS)
 	$(MKDIR) $(LOG_DIR)
 	$(MKDIR) $(@D)
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compiling $(@F). Object files are: $^"
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(DFLAGS) $^ $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(DFLAGS) $(CEXTRAFLAGS) $^ $(LIBS)
 
 $(OBJ_DIR)/%.o : %.c
 	$(MKDIR) $(@D)
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compiling $(<F) and creating object $@"
-	$(CC) $(CFLAGS) $(INCLUDES)  -c $< $(DFLAGS) -o $@ $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES)  -c $< $(DFLAGS) $(CEXTRAFLAGS) -o $@ $(LIBS)
 
 depend :
 	makedepend $(INCLUDES) $^
@@ -116,6 +116,7 @@ debug :
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compiler: $(CC)"
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Compiler options:"
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> C flags: $(CFLAGS)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> C extra flags: $(CEXTRAFLAGS)"
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> defines: $(DFLAGS)"
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] --> libs: $(LIBS)"
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Files lists:"
