@@ -39,7 +39,7 @@ LOGFILENAME ?= $(EXE_NAME).log
 # Log file
 LOGFILE=$(LOG_DIR)/$(LOGFILENAME)
 
-VERBOSITY ?= MEDIUM
+VERBOSITY ?= LOW
 
 # Select compiler:
 # - gcc for C files
@@ -133,9 +133,9 @@ clean :
 	rm -rf $(OBJ_DIR)
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove doxygen documentation directory: $(DOX_DOC_DIR)"
 	rm -rf $(DOX_DOC_DIR)
-	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove binary file: $(EXE)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove binary directory: $(BIN_DIR)"
 	rm -rf $(BIN_DIR)
-	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove log file: $(LOGFILE)"
+	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Remove log directory: $(LOG_DIR)"
 	rm -rf $(LOG_DIR)
 	$(VERBOSE)echo "[${shell date "+${DATE_FORMAT} ${TIME_FORMAT}"}] Clean completed"
 
