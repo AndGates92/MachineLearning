@@ -25,13 +25,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 	int base_node = 0;
 
 	for (int layer_no = 0; layer_no < total_num_layers; layer_no++) {
-		int bias = 0;
-		if (layer_no == (total_num_layers - 1)) {
-			bias = 0;
-		} else {
-			bias = 1;
-		}
-		base_node += (*(layers_dim + layer_no)) + bias;
+		base_node += (*(layers_dim + layer_no));
 	}
 
 	// base weight used as reference to access weights.
@@ -77,7 +71,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 			ASSERT(curr_node_offset > 0);
 
 			int node_start_offset = 0;
-			node_start_offset = (base_node -  curr_node_offset);
+			node_start_offset = (base_node - curr_node_offset);
 			ASSERT(node_start_offset >= 0);
 
 			double node_val_start = 0.0;
@@ -101,7 +95,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				}
 
 				// output layer
-				sum_phi_weight = (exp_val - sigmoid_node_start); 
+				sum_phi_weight = (exp_val - sigmoid_node_start);
 
 			} else {
 
@@ -153,8 +147,10 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				} else {
 
 					int prev_node_offset = 0;
-					// Take out 1 as the index of the node of interest is (neuron_prev_idx - 1) because the 1st node is the bias 
-					prev_node_offset = (num_neurons_prev - (neuron_prev_idx - 1));
+					// No need to take out 1 as:
+					// num_neurons_prev: the total number of neurons in the previous layer (num_neurons_prev) accounts lso for the bias
+					// neuron_prev_idx: the actual index of the node of interest is (neuron_prev_idx - 1) because the 1st node is the bias
+					prev_node_offset = (num_neurons_prev - neuron_prev_idx);
 					ASSERT(prev_node_offset >= 0);
 					int total_prev_node_offset = 0;
 					total_prev_node_offset = (num_neurons + prev_node_offset);
@@ -217,19 +213,14 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 //		phi_arr_prev = phi_arr;
 		phi_arr = NULL;
 
-		int bias = 0;
-		if (layer_no == (total_num_layers - 1)) {
-			bias = 0;
-		} else {
-			bias = 1;
-		}
-		base_node -= (num_neurons + bias);
+		base_node -= num_neurons;
 
-		ASSERT(base_node >= num_neurons_prev);
+		// (num_neurons_prev - 1): Take out 1 as the total number of neurons in the previous layer (num_neurons_prev) accounts lso for the bias
+		ASSERT(base_node >= (num_neurons_prev - 1));
 	}
 
 	free_memory(phi_arr_prev);
 
 	// base_node here is expected to be equal to the number of node of the input layer
-	ASSERT(base_node == (*layers_dim + 1));
+	ASSERT(base_node == *layers_dim);
 }
