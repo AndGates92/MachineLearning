@@ -195,7 +195,6 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
-	printf("Nodes: node_val size %0d\n", total_num_nodes);
 
 	//for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 	for (int start_el_idx = 0; start_el_idx < 2; start_el_idx++) {

@@ -75,57 +75,58 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 			LOG_ERROR("Can't allocate memory for array storing values of phi collected in the current iteration");
 		}
 
-		for (int neuron_idx = 0; neuron_idx < num_neurons; neuron_idx++) {
+		for (int neuron_prev_idx = 0; neuron_prev_idx < num_neurons_prev; neuron_prev_idx++) {
 
-			int curr_node_offset = 0;
-			// base_node points to the first element of the next layer
-			curr_node_offset = (num_neurons - neuron_idx);
-			LOG_INFO(DEBUG, "Nodes: base node %0d Neurons: current %0d out of %0d -> Current node offset: %0d", base_node, neuron_idx, num_neurons, curr_node_offset);
-			printf("Nodes: base node %0d Neurons: current %0d out of %0d -> Current node offset: %0d\n", base_node, neuron_idx, num_neurons, curr_node_offset);
-			ASSERT(curr_node_offset > 0);
-			ASSERT(base_node >= curr_node_offset);
+			double node_val_end = 0.0;
+			double sigmoid_node_end = 0.0;
 
-			double node_val_start = 0.0;
-			node_val_start = *(node_val + (base_node - curr_node_offset));
+			if (neuron_prev_idx == 0) {
+				// Adjust weight of bias
+				// Select bias of the previous layer
+				node_val_end = *(biases + layer_no - 1);
+				sigmoid_node_end = node_val_end;
+			} else {
 
-			double sigmoid_node_start = 0.0;
-			sigmoid_node_start = sigmoid(node_val_start);
+				int prev_node_offset = 0;
+				// Take out 1 as the index of the node of interest is (neuron_prev_idx - 1) because the 1st node is the bias 
+				prev_node_offset = (num_neurons_prev - (neuron_prev_idx - 1));
+				ASSERT(prev_node_offset >= 0);
+				int total_prev_node_offset = 0;
+				total_prev_node_offset = (num_neurons + prev_node_offset);
+				ASSERT(total_prev_node_offset >= 0);
 
-			double sigmoid_der_node_start = 0.0;
-			sigmoid_der_node_start = sigmoid_der(node_val_start);
+				int node_end_offset = 0;
+				// Take out 1 to curr_weight_offset to account that index starts at 0
+				node_end_offset = (base_node -  total_prev_node_offset);
+				ASSERT(node_end_offset >= 0);
 
-			for (int neuron_prev_idx = 0; neuron_prev_idx < num_neurons_prev; neuron_prev_idx++) {
+				// base_node points to the first element of the next layer
+				// need to take out the number of neurons present on the current layer
+				node_val_end = *(node_val + node_end_offset);
+				LOG_INFO(DEBUG, "Nodes: base node %0d Neurons: total number current layer %0d, previous layer index %0d out of %0d -> Previous node offset: %0d", base_node, num_neurons, neuron_prev_idx, num_neurons_prev, total_prev_node_offset);
+				sigmoid_node_end = sigmoid(node_val_end);
+			}
 
-				double node_val_end = 0.0;
-				double sigmoid_node_end = 0.0;
+			for (int neuron_idx = 0; neuron_idx < num_neurons; neuron_idx++) {
 
-				if (neuron_prev_idx == (num_neurons_prev - 1)) {
-					// Adjust weight of bias
-					// Select bias of the previous layer
-					node_val_end = *(biases + layer_no - 1);
-					sigmoid_node_end = node_val_end;
-				} else {
+				int curr_node_offset = 0;
+				// base_node points to the first element of the next layer
+				curr_node_offset = (num_neurons - neuron_idx);
+				LOG_INFO(DEBUG, "Nodes: base node %0d Neurons: current %0d out of %0d -> Current node offset: %0d", base_node, neuron_idx, num_neurons, curr_node_offset);
+				ASSERT(curr_node_offset > 0);
 
-					int prev_node_offset = 0;
-					// Take out 1 as the index of the node of interest is (neuron_prev_idx - 1)
-					prev_node_offset = (num_neurons_prev - neuron_prev_idx);
-					ASSERT(prev_node_offset >= 0);
-					int total_prev_node_offset = 0;
-					total_prev_node_offset = (num_neurons + prev_node_offset);
-					ASSERT(total_prev_node_offset >= 0);
-					printf("Base Node %0d Total_prev_node %0d (num neurosn %0d + num_neurons_prev %0d + neuron_prev_idx %0d)  \n",base_node, total_prev_node_offset, num_neurons, num_neurons_prev, neuron_prev_idx);
+				int node_start_offset = 0;
+				node_start_offset = (base_node -  curr_node_offset);
+				ASSERT(node_start_offset >= 0);
 
-					int node_offset = 0;
-					// Take out 1 to curr_weight_offset to account that index starts at 0
-					node_offset = (base_node -  total_prev_node_offset);
-					ASSERT(node_offset >= 0);
+				double node_val_start = 0.0;
+				node_val_start = *(node_val - node_start_offset);
 
-					// base_node points to the first element of the next layer
-					// need to take out the number of neurons present on the current layer
-					node_val_end = *(node_val + node_offset);
-					LOG_INFO(DEBUG, "Nodes: base node %0d Neurons: total number current layer %0d, previous layer index %0d out of %0d -> Previous node offset: %0d", base_node, num_neurons, neuron_prev_idx, num_neurons_prev, total_prev_node_offset);
-					sigmoid_node_end = sigmoid(node_val_end);
-				}
+				double sigmoid_node_start = 0.0;
+				sigmoid_node_start = sigmoid(node_val_start);
+
+				double sigmoid_der_node_start = 0.0;
+				sigmoid_der_node_start = sigmoid_der(node_val_start);
 
 				double phi = 0.0;
 
@@ -149,14 +150,14 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 						int offset = 0;
 						// compute offset with respect to 1st weight/phi of the current layer
-						offset = ((neuron_idx * num_neurons_nxt) + neuron_nxt_idx);
+						offset = ((neuron_nxt_idx * (num_neurons + 1)) + neuron_idx + 1);
 						ASSERT(offset >= 0);
 
 						double weight_el = 0.0;
-						weight_el = *(*weights + (base_weight + offset - 1));
+						weight_el = *(*weights + (base_weight + offset));
 
 						double phi_el = 0.0;
-						phi_el = *(phi_arr_prev + (offset - 1));
+						phi_el = *(phi_arr_prev + offset);
 
 						sum_phi_weight += (weight_el * phi_el);
 
@@ -172,12 +173,10 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				int curr_weight_offset = 0;
 				// Weight pointer points at the first weight if the next layer, therefore we need to compute the the offset to access the weight of interest
 				// No correction for bias at it has been processed at loop variable equal 0
-				curr_weight_offset = ((num_neurons_prev + 1)*num_neurons) - neuron_prev_idx*num_neurons - neuron_idx;
+				curr_weight_offset = (num_neurons_prev*num_neurons) - neuron_idx*num_neurons_prev - neuron_prev_idx;
 				ASSERT(curr_weight_offset > 0);
 
 				int weight_offset = 0;
-				// Take out 1 to curr_weight_offset to account that index starts at 0
-				printf("Base Weight %0d curr_weight_offset %0d (num neurosn %0d * (num_neurons_prev %0d + 1) - (neuron_prev_idx %0d * num neurosn %0d - neurosn_idx %0d ))  \n",base_weight, curr_weight_offset, num_neurons, num_neurons_prev, neuron_prev_idx, num_neurons, neuron_idx);
 				weight_offset = (base_weight - curr_weight_offset);
 				ASSERT(weight_offset >= 0);
 
@@ -216,7 +215,13 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 //		phi_arr_prev = phi_arr;
 		phi_arr = NULL;
 
-		base_node -= num_neurons;
+		int bias = 0;
+		if (layer_no == (total_num_layers - 1)) {
+			bias = 0;
+		} else {
+			bias = 1;
+		}
+		base_node -= (num_neurons + bias);
 
 		ASSERT(base_node >= num_neurons_prev);
 	}
@@ -224,5 +229,5 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 	free_memory(phi_arr_prev);
 
 	// base_node here is expected to be equal to the number of node of the input layer
-	ASSERT(base_node == *layers_dim);
+	ASSERT(base_node == (*layers_dim + 1));
 }
