@@ -270,7 +270,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		free_memory(label_coord);
 
-		elementdatatype_t outcome = 0;
+		int outcome = 0;
 
 		LOG_INFO(LOW, "Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
 		feedforward_stage(weights, biases, layers_dim, input_data_double_norm, &node_val, &outcome);
