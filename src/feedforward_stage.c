@@ -15,7 +15,7 @@
 #include "feedforward_stage.h"
 #include "utility.h"
 
-void feedforward_stage (double * weights, double * biases, int * layers_dim, double * input_data, double ** node_val, elementdatatype_t * outcome) {
+void feedforward_stage (double * weights, double * biases, int * layers_dim, double * input_data, double ** node_val, int * outcome) {
 
 	int num_input_hidden_layers = 0;
 	// Hidden layers plus input layer
@@ -32,7 +32,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 		int num_neurons = 0;
 		// Add 1 for the bias
 		num_neurons = (*(layers_dim + layer_no));
-		LOG_INFO(LOW, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
+		LOG_INFO(HIGH, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
 
 		// Pointer to the input data of a layer
 		double * data = NULL;
@@ -52,7 +52,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 
 		int num_neurons_nxt = 0;
 		num_neurons_nxt = (*(layers_dim + layer_no + 1));
-		LOG_INFO(LOW, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", layer_no, num_neurons_nxt);
+		LOG_INFO(HIGH, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", layer_no, num_neurons_nxt);
 
 		free_memory(data_nxt);
 
@@ -92,12 +92,11 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 			}
 
 			data_ptr++;
-			LOG_INFO(LOW,"Data pointer %0d", data_ptr);
 
 		}
 
 		if (layer_no == (num_input_hidden_layers - 1)) {
-			*outcome = (elementdatatype_t) max_val;
+			*outcome = max_idx;
 			LOG_INFO(LOW,"Neural network guess: output index %0d certainty %0f", max_idx, max_val);
 		}
 

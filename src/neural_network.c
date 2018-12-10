@@ -146,7 +146,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		weight = (1.0/sqrt(2.0*M_PI*variance))*(exp((pow((((double)rand()/RAND_MAX) - (double)WEIGHT_MEAN),2))/(2.0*(variance))));
 		weight /= max_size;
 		(*((*weights) + idx_el)) = weight;
-		LOG_INFO(LOW, "Randomizing weights: Weight[%0d]: %0f (expected %0f)", idx_el, (*((*weights) + idx_el)), weight);
+		LOG_INFO(MEDIUM, "Randomizing weights: Weight[%0d]: %0f (expected %0f)", idx_el, (*((*weights) + idx_el)), weight);
 	}
 
 	// Randomize biases between MIN_BIASES and MAX_BIASES
@@ -159,18 +159,18 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		double bias = 0;
 		bias = (((double)rand()/RAND_MAX) * (double)(MAX_BIAS - MIN_BIAS)) + (double)MIN_BIAS;
 		(*((*biases) + idx_bias)) = bias;
-		LOG_INFO(HIGH, "Randomizing bias: Bias[%0d]: %0f (expected %0f)", idx_bias, (*((*biases) + idx_bias)), bias);
+		LOG_INFO(MEDIUM, "Randomizing bias: Bias[%0d]: %0f (expected %0f)", idx_bias, (*((*biases) + idx_bias)), bias);
 		ASSERT(bias >= MIN_BIAS);
 		ASSERT(bias <= MAX_BIAS);
 	}
 
 	*learn_rate = (((double)rand()/RAND_MAX) * (double)(MAX_LEARN_RATE - MIN_LEARN_RATE)) + (double)MIN_LEARN_RATE;
-	LOG_INFO(HIGH, "Randomizing learning rate: %0f", *learn_rate);
+	LOG_INFO(MEDIUM, "Randomizing learning rate: %0f", *learn_rate);
 	ASSERT(*learn_rate >= MIN_LEARN_RATE);
 	ASSERT(*learn_rate <= MAX_LEARN_RATE);
 
 	*alpha = (((double)rand()/RAND_MAX) * (double)(MAX_ALPHA - MIN_ALPHA)) + (double)MIN_ALPHA;
-	LOG_INFO(HIGH, "Randomizing alpha: %0f", *alpha);
+	LOG_INFO(MEDIUM, "Randomizing alpha: %0f", *alpha);
 	ASSERT(*alpha >= MIN_ALPHA);
 	ASSERT(*alpha <= MAX_ALPHA);
 }
