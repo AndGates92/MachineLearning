@@ -104,7 +104,6 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				num_neurons_nxt = (*(layers_dim + layer_no + 1));
 				LOG_INFO(DEBUG, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", (layer_no+1), num_neurons_nxt);
 
-
 				for (int neuron_nxt_idx = 0; neuron_nxt_idx < num_neurons_nxt; neuron_nxt_idx++) {
 
 					int offset = 0;
@@ -124,7 +123,6 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 					LOG_INFO(HIGH, "Backpropoagation stage: [Hidden layer of Input layer] phi (offset %0d): %0d", neuron_nxt_idx, phi_el);
 
 				}
-
 
 			}
 
