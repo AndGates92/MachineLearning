@@ -94,12 +94,12 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 			double sigmoid_der_node_start = 0.0;
 			sigmoid_der_node_start = sigmoid_der(node_val_start);
 
-			for (int neuron_prev_idx = 0; neuron_prev_idx <= num_neurons_prev; neuron_prev_idx++) {
+			for (int neuron_prev_idx = 0; neuron_prev_idx < num_neurons_prev; neuron_prev_idx++) {
 
 				double node_val_end = 0.0;
 				double sigmoid_node_end = 0.0;
 
-				if (neuron_prev_idx == num_neurons_prev) {
+				if (neuron_prev_idx == (num_neurons_prev - 1)) {
 					// Adjust weight of bias
 					// Select bias of the previous layer
 					node_val_end = *(biases + layer_no - 1);
@@ -187,7 +187,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				curr_weight = *(*weights + weight_offset);
 
 				double delta_weight = 0.0;
-				delta_weight = learn_rate * (phi * sigmoid_node_end + alpha * curr_weight);
+				delta_weight = - learn_rate * (phi * sigmoid_node_end + alpha * curr_weight);
 				LOG_INFO(DEBUG, "Backpropoagation stage: [Weight update] phi = %0d learning rate = %0d delta weight %0d", phi, learn_rate, delta_weight);
 
 				*(*weights + weight_offset) += delta_weight;
