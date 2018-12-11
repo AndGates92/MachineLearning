@@ -62,7 +62,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 		}
 
 		int max_idx = 0;
-		double max_val = 0;
+		double max_certainty = 0;
 
 		for (int neuron_nxt_idx = 0; neuron_nxt_idx < num_neurons_nxt; neuron_nxt_idx++) {
 
@@ -72,23 +72,28 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 
 				if (neuron_idx == 0) {
 					tmp_sum += (*(weights + weight_idx)) * (*(biases + layer_no));
-					LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight %0f and bias %0f: %0f", neuron_nxt_idx, (layer_no + 1), (*(weights + weight_idx)), (*(biases + layer_no)), tmp_sum);
+					LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight[weight_idx = %0d] %0f and bias[layer = %0d] %0f: %0f", neuron_nxt_idx, (layer_no + 1), weight_idx, (*(weights + weight_idx)), layer_no, (*(biases + layer_no)), tmp_sum);
 				} else {
 					tmp_sum += (*(weights + weight_idx)) * (double)(*(data + (neuron_idx - 1)));
-					LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight %0f and neron %0f: %0f", neuron_nxt_idx, (layer_no + 1), (*(weights + weight_idx)), (*(data + (neuron_idx - 1))), tmp_sum);
+					LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight[weight_idx = %0d] %0f and neuron[neuron_num = %0d] %0f: %0f", neuron_nxt_idx, (layer_no + 1), weight_idx, (*(weights + weight_idx)), (neuron_idx - 1), (*(data + (neuron_idx - 1))), tmp_sum);
 				}
 
 				weight_idx++;
 
 			}
 
-			*(data_nxt + neuron_nxt_idx) = sigmoid(tmp_sum);
+			double certainty = 0.0;
+			certainty = sigmoid(tmp_sum);
+			*(data_nxt + neuron_nxt_idx) = certainty;
 
 			*(*node_val + data_ptr) = tmp_sum;
-			LOG_INFO(MEDIUM,"Feedfoward stage: Neuron %0d of stage %0d: Sum of all weights by all nuerons %0f -> Sigmoid S(%0f) = %0f", neuron_nxt_idx, (layer_no + 1), tmp_sum, tmp_sum, *(data_nxt + neuron_nxt_idx));
+			LOG_INFO(MEDIUM,"Feedfoward stage: Neuron %0d of stage %0d: Sum of all weights by all neurons %0f -> Sigmoid S(%0f) = %0f", neuron_nxt_idx, (layer_no + 1), tmp_sum, tmp_sum, *(data_nxt + neuron_nxt_idx));
 
-			if (max_val < tmp_sum) {
+			ASSERT(certainty >= 0.0);
+
+			if (max_certainty < certainty) {
 				max_idx = neuron_nxt_idx;
+				max_certainty = certainty;
 			}
 
 			data_ptr++;
@@ -97,7 +102,7 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 
 		if (layer_no == (num_input_hidden_layers - 1)) {
 			*outcome = max_idx;
-			LOG_INFO(LOW,"Neural network guess: output index %0d certainty %0f", max_idx, max_val);
+			LOG_INFO(LOW,"Neural network guess: output index %0d certainty %0f", max_idx, max_certainty);
 		}
 
 		free_memory(data);

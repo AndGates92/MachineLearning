@@ -196,8 +196,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
-	//for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
-	for (int start_el_idx = 0; start_el_idx < 2; start_el_idx++) {
+	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 
 		int set_no_dims = 0;
 		set_no_dims = get_no_dims(data_set);
@@ -218,7 +217,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 					break;
 			}
 			set_coord[set_dim] = coordinate;
-			LOG_INFO(HIGH, "Start data set coordinate %0d out of %0d: %0d", set_dim, set_no_dims, set_coord[set_dim]);
+			LOG_INFO(HIGH, "[Neural network training] Start data set coordinate %0d out of %0d: %0d", set_dim, set_no_dims, set_coord[set_dim]);
 		}
 
 		elementdatatype_t * input_data = NULL;
@@ -258,7 +257,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 					break;
 			}
 			label_coord[lab_dim] = coordinate;
-			LOG_INFO(HIGH, "Start label coordinate %0d: %0d", lab_dim, label_coord[lab_dim]);
+			LOG_INFO(HIGH, "[Neural network training] Start label coordinate %0d: %0d", lab_dim, label_coord[lab_dim]);
 		}
 
 		elementdatatype_t label = 0;
@@ -266,20 +265,25 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		// Cast label to integer
 		int label_int = 0;
-		label_int = label;
+		label_int = (int) label;
 
 		free_memory(label_coord);
 
 		int outcome = 0;
 
-		LOG_INFO(LOW, "Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
+		LOG_INFO(LOW, "[Neural network training] Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
 		feedforward_stage(weights, biases, layers_dim, input_data_double_norm, &node_val, &outcome);
 
 		free_memory(input_data_double_norm);
 
 		LOG_INFO(LOW,"Neural network estimates: %0d Label %0d", outcome, label_int);
+		if (outcome == label_int) {
+			LOG_INFO(LOW,"[Neural network training] PASS: label matches neural network prediction");
+		} else {
+			LOG_INFO(LOW,"[Neural network training] FAIL: label doesn't match neural network prediction");
+		}
 
-		LOG_INFO(LOW, "Backward propagation stage: Start iteration %0d out of %0d", start_el_idx, num_el);
+		LOG_INFO(LOW, "[Neural network training] Backward propagation stage: Start iteration %0d out of %0d", start_el_idx, num_el);
 		backward_propagation(&weights, biases, layers_dim, node_val, label_int, learn_rate, alpha);
 
 	}
