@@ -30,7 +30,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	// 3 -> Number of columns
 	ASSERT(no_dims <= 3);
 	data->no_dims = no_dims;
-	LOG_INFO(DEBUG,"Set number of dimensions to %0d",  no_dims);
+	LOG_INFO(MEDIUM,"[New data structure] Set number of dimensions to %0d",  no_dims);
 
 	// ===========================================================================
 	// Dimensions
@@ -42,7 +42,7 @@ data_t * add_data (int* dimensions, int no_dims) {
 	}
 	memcpy(data->dimensions, dimensions, (no_dims*sizeof(int)));
 	for (int dim = 0; dim < data->no_dims; dim++) {
-		LOG_INFO(DEBUG,"Set dimension %0d to %0d",  dim, dimensions[dim]);
+		LOG_INFO(MEDIUM,"[New data structure] Set dimension %0d to %0d",  dim, dimensions[dim]);
 	}
 
 	// ===========================================================================
@@ -314,7 +314,7 @@ int compute_element_offset (data_t * data, int * coordinates) {
 
 	free_memory (dimensions);
 
-	LOG_INFO(HIGH,"Element offset: %0d", data_offset);
+	LOG_INFO(DEBUG,"Element offset: %0d", data_offset);
 
 	return data_offset;
 }
@@ -429,7 +429,7 @@ elementdatatype_t * get_elements_subset (data_t * data, int no_elements, int * s
 		el_offset = compute_element_offset(data, element_index);
 		ASSERT(el_offset < total_elements);
 		(*(element_array + position)) = get_element (data, element_index);
-		LOG_INFO(HIGH, "Element %0d (Index in element array %0d): %0d", position,  el_offset, (*(element_array + position)));
+		LOG_INFO(DEBUG, "Element %0d (Index in element array %0d): %0d", position,  el_offset, (*(element_array + position)));
 		for (int dim = (no_dims - 1); dim >= 0; dim--) {
 			int index = 0;
 			index = get_dimension(data, dim);

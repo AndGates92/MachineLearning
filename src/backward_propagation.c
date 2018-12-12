@@ -112,15 +112,19 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 					offset = ((neuron_nxt_idx * (num_neurons + 1)) + neuron_idx + 1);
 					ASSERT(offset >= 0);
 
+					int total_weight_offset = 0;
+					total_weight_offset = (base_weight + offset);
+					ASSERT(total_weight_offset >= 0);
+
 					double weight_el = 0.0;
-					weight_el = *(*weights + (base_weight + offset));
+					weight_el = *(*weights + total_weight_offset);
 
 					double phi_el = 0.0;
 					phi_el = *(phi_arr_prev + neuron_nxt_idx);
 
 					sum_phi_weight += (weight_el * phi_el);
 
-					LOG_INFO(HIGH, "Backpropoagation stage: [Hidden layer of Input layer] Weight (base %0d offset %0d): %0f", base_weight, offset, weight_el);
+					LOG_INFO(HIGH, "Backpropoagation stage: [Hidden layer of Input layer] Weight (base %0d offset %0d: index %0d): %0f", base_weight, offset, total_weight_offset, weight_el);
 					LOG_INFO(HIGH, "Backpropoagation stage: [Hidden layer of Input layer] phi (offset %0d): %0f", neuron_nxt_idx, phi_el);
 					LOG_INFO(HIGH, "Backpropoagation stage: [Hidden layer of Input layer] sum_phi_weight: %0f", sum_phi_weight);
 
@@ -187,10 +191,10 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 				double delta_weight = 0.0;
 				delta_weight = - learn_rate * (phi * sigmoid_node_end + alpha * curr_weight);
-				LOG_INFO(MEDIUM, "Backpropoagation stage: [Weight update %0d] phi = %0f learning rate = %0f delta weight %0f", weight_offset, phi, learn_rate, delta_weight);
+				LOG_INFO(MEDIUM, "Backpropoagation stage: [Weight update %0d] phi %0f sigmoid_node_end %0d learning rate %0f alpha %0f curr_weight %0d -> delta weight %0f", weight_offset, phi, sigmoid_node_end, learn_rate, alpha, curr_weight, delta_weight);
 
 				*(*weights + weight_offset) += delta_weight;
-				LOG_INFO(MEDIUM, "Backpropoagation stage: [Weight update %0d] Old value %0f Delta = %0f New value = %0f", weight_offset, curr_weight, delta_weight, *(*weights  + weight_offset));
+				LOG_INFO(MEDIUM, "Backpropoagation stage: [Weight update %0d] Old value %0f Delta %0f -> New value %0f", weight_offset, curr_weight, delta_weight, *(*weights  + weight_offset));
 
 			}
 

@@ -197,7 +197,7 @@ void parse_body(FILE * fid, data_t ** data) {
 				idx = (el*no_bytes)+byte;
 				element += (element_bytes[idx] << (BIT_IN_BYTE*byte));
 			}
-			LOG_INFO(HIGH,"Element %0d out of %0d: %0d", element_cnt, total_elements, element);
+			LOG_INFO(DEBUG,"Element %0d out of %0d: %0d", element_cnt, total_elements, element);
 
 			int * coordinates = NULL;
 			coordinates = (int *) malloc(no_dims*sizeof(int));

@@ -72,10 +72,10 @@ void feedforward_stage (double * weights, double * biases, int * layers_dim, dou
 
 				if (neuron_idx == 0) {
 					tmp_sum += (*(weights + weight_idx)) * (*(biases + layer_no));
-					LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight[weight_idx = %0d] %0f and bias[layer = %0d] %0f: %0f", neuron_nxt_idx, (layer_no + 1), weight_idx, (*(weights + weight_idx)), layer_no, (*(biases + layer_no)), tmp_sum);
+					LOG_INFO(HIGH,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight[weight_idx = %0d] %0f and bias[layer = %0d] %0f: %0f", neuron_nxt_idx, (layer_no + 1), weight_idx, (*(weights + weight_idx)), layer_no, (*(biases + layer_no)), tmp_sum);
 				} else {
 					tmp_sum += (*(weights + weight_idx)) * (double)(*(data + (neuron_idx - 1)));
-					LOG_INFO(DEBUG,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight[weight_idx = %0d] %0f and neuron[neuron_num = %0d] %0f: %0f", neuron_nxt_idx, (layer_no + 1), weight_idx, (*(weights + weight_idx)), (neuron_idx - 1), (*(data + (neuron_idx - 1))), tmp_sum);
+					LOG_INFO(HIGH,"Feedfoward stage: Neuron %0d of stage %0d: Partial Sum of weight[weight_idx = %0d] %0f and neuron[neuron_num = %0d] %0f: %0f", neuron_nxt_idx, (layer_no + 1), weight_idx, (*(weights + weight_idx)), (neuron_idx - 1), (*(data + (neuron_idx - 1))), tmp_sum);
 				}
 
 				weight_idx++;

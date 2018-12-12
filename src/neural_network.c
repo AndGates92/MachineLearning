@@ -77,8 +77,10 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 
 	int input_layer_size = 0;
 	input_layer_size = element_size(data_set);
+	input_layer_size = 4;
 	int output_layer_size = 0;
 	output_layer_size = (int)get_max_element(data_label);
+	output_layer_size = 2;
 
 	int num_input_hidden_layers = 0;
 	// Hidden layers plus input layer
@@ -108,7 +110,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		// Constantly move from the size of the input layer to that of the output layer
 		layer_dim = (int)(absolute_dim + output_layer_size);
 		(*((*layers_dim) + idx_layer)) = layer_dim;
-		LOG_INFO(LOW, "Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
+		LOG_INFO(MEDIUM, "Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
 		if (input_layer_size > output_layer_size) {
 			ASSERT((layer_dim <= input_layer_size) && (layer_dim >= (output_layer_size)));
 		} else {
@@ -196,7 +198,8 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
-	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
+//	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
+	for (int start_el_idx = 0; start_el_idx < 3; start_el_idx++) {
 
 		int set_no_dims = 0;
 		set_no_dims = get_no_dims(data_set);
@@ -276,7 +279,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 		free_memory(input_data_double_norm);
 
-		LOG_INFO(LOW,"Neural network estimates: %0d Label %0d", outcome, label_int);
+		LOG_INFO(LOW,"[Neural network training] Neural network estimates: %0d Label %0d", outcome, label_int);
 		if (outcome == label_int) {
 			LOG_INFO(LOW,"[Neural network training] PASS: label matches neural network prediction");
 		} else {
