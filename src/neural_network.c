@@ -19,14 +19,14 @@
 
 void parse_all_idx (char * test_set, char * train_set, char * test_label, char * train_label, data_t ** test_set_struct_t, data_t ** test_label_struct_t, data_t ** train_set_struct_t, data_t ** train_label_struct_t) {
 
-	LOG_INFO(LOW,"Start parsing all IDX files");
+	LOG_INFO(LOW,"[Parse All IDX Files] Start parsing all IDX files");
 
 	parse_idx(test_set, test_set_struct_t);
 	parse_idx(test_label, test_label_struct_t);
 	parse_idx(train_set, train_set_struct_t);
 	parse_idx(train_label, train_label_struct_t);
 
-	LOG_INFO(LOW,"End parsing all IDX files");
+	LOG_INFO(LOW,"[Parse All IDX Files] End parsing all IDX files");
 
 }
 
@@ -55,17 +55,17 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 
 		train_neural_network(weights, biases, layers_dim, train_set_struct_t, train_label_struct_t, learn_rate, alpha); 
 	} else {
-		LOG_INFO(LOW,"Can't run neural network as input informations are not sufficient");
+		LOG_INFO(LOW,"[Neural Network] Can't run neural network as input informations are not sufficient");
 	}
 
-	LOG_INFO(DEBUG,"Freeing memory allocated for storing layer dimensionk.");
+	LOG_INFO(DEBUG,"[Neural Network] Freeing memory allocated for storing layer dimensionk.");
 	free_memory(layers_dim);
 
-	LOG_INFO(DEBUG,"Freeing memory allocated for weights and biases of neural network.");
+	LOG_INFO(DEBUG,"[Neural Network] Freeing memory allocated for weights and biases of neural network.");
 	free_memory(weights);
 	free_memory(biases);
 
-	LOG_INFO(DEBUG,"Freeing memory allocated for data strctures data_t.");
+	LOG_INFO(DEBUG,"[Neural Network] Freeing memory allocated for data strctures data_t.");
 	delete_data(test_set_struct_t);
 	delete_data(test_label_struct_t);
 	delete_data(train_set_struct_t);
@@ -110,7 +110,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		// Constantly move from the size of the input layer to that of the output layer
 		layer_dim = (int)(absolute_dim + output_layer_size);
 		(*((*layers_dim) + idx_layer)) = layer_dim;
-		LOG_INFO(MEDIUM, "Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
+		LOG_INFO(MEDIUM, "[Initialize Neural Network] Randomizing layer dimensions: Layer[%0d]: %0d", idx_layer, (*((*layers_dim) + idx_layer)));
 		if (input_layer_size > output_layer_size) {
 			ASSERT((layer_dim <= input_layer_size) && (layer_dim >= (output_layer_size)));
 		} else {
@@ -148,7 +148,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		weight = (1.0/sqrt(2.0*M_PI*variance))*(exp((pow((((double)rand()/RAND_MAX) - (double)WEIGHT_MEAN),2))/(2.0*(variance))));
 		weight /= max_size;
 		(*((*weights) + idx_el)) = weight;
-		LOG_INFO(MEDIUM, "Randomizing weights: Weight[%0d]: %0f (expected %0f)", idx_el, (*((*weights) + idx_el)), weight);
+		LOG_INFO(MEDIUM, "[Initialize Neural Network] Randomizing weights: Weight[%0d]: %0f (expected %0f)", idx_el, (*((*weights) + idx_el)), weight);
 	}
 
 	// Randomize biases between MIN_BIASES and MAX_BIASES
@@ -161,18 +161,18 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 		double bias = 0;
 		bias = (((double)rand()/RAND_MAX) * (double)(MAX_BIAS - MIN_BIAS)) + (double)MIN_BIAS;
 		(*((*biases) + idx_bias)) = bias;
-		LOG_INFO(MEDIUM, "Randomizing bias: Bias[%0d]: %0f (expected %0f)", idx_bias, (*((*biases) + idx_bias)), bias);
+		LOG_INFO(MEDIUM, "[Initialize Neural Network] Randomizing bias: Bias[%0d]: %0f (expected %0f)", idx_bias, (*((*biases) + idx_bias)), bias);
 		ASSERT(bias >= MIN_BIAS);
 		ASSERT(bias <= MAX_BIAS);
 	}
 
 	*learn_rate = (((double)rand()/RAND_MAX) * (double)(MAX_LEARN_RATE - MIN_LEARN_RATE)) + (double)MIN_LEARN_RATE;
-	LOG_INFO(MEDIUM, "Randomizing learning rate: %0f", *learn_rate);
+	LOG_INFO(MEDIUM, "[Initialize Neural Network] Randomizing learning rate: %0f", *learn_rate);
 	ASSERT(*learn_rate >= MIN_LEARN_RATE);
 	ASSERT(*learn_rate <= MAX_LEARN_RATE);
 
 	*alpha = (((double)rand()/RAND_MAX) * (double)(MAX_ALPHA - MIN_ALPHA)) + (double)MIN_ALPHA;
-	LOG_INFO(MEDIUM, "Randomizing alpha: %0f", *alpha);
+	LOG_INFO(MEDIUM, "[Initialize Neural Network] Randomizing alpha: %0f", *alpha);
 	ASSERT(*alpha >= MIN_ALPHA);
 	ASSERT(*alpha <= MAX_ALPHA);
 }
@@ -331,7 +331,7 @@ double * normalize_elements (double * element_set, elementdatatype_t max_element
 
 	for (int idx=0; idx < dimension; idx++) {
 		(*(element_set_norm + idx)) = (*(element_set + idx))/(*max_element_double);
-		LOG_INFO(HIGH,"Normalized element %0f (Original value %0f Maximum value %0f)", (*(element_set_norm + idx)), (*(element_set + idx)), *max_element_double);
+		LOG_INFO(HIGH,"[Normalize Element] Normalized element %0f (Original value %0f Maximum value %0f)", (*(element_set_norm + idx)), (*(element_set + idx)), *max_element_double);
 	}
 
 	free_memory(max_element_double);

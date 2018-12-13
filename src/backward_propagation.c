@@ -45,12 +45,12 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 		int num_neurons = 0;
 		num_neurons = (*(layers_dim + layer_no));
-		LOG_INFO(DEBUG, "Neighbour layer dimensions: Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
+		LOG_INFO(DEBUG, "[Backpropoagation stage] [Neighbour layer dimensions] Current Layer %0d -> Dimension %0d", layer_no, num_neurons);
 
 		int num_neurons_prev = 0;
 		// Add 1 for the bias
 		num_neurons_prev = (*(layers_dim + layer_no - 1)) + 1;
-		LOG_INFO(DEBUG, "Neighbour layer dimensions: Previous Layer %0d -> Dimension %0d", (layer_no-1), num_neurons_prev);
+		LOG_INFO(DEBUG, "[Backpropoagation stage] [Neighbour layer dimensions] Previous Layer %0d -> Dimension %0d", (layer_no-1), num_neurons_prev);
 
 		int phi_arr_dim = 0;
 		phi_arr_dim = num_neurons;
@@ -67,7 +67,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 			int curr_node_offset = 0;
 			// base_node points to the first element of the next layer
 			curr_node_offset = (num_neurons - neuron_idx);
-			LOG_INFO(DEBUG, "Nodes: base node %0d Neurons: current %0d out of %0d -> Current node offset: %0d", base_node, neuron_idx, num_neurons, curr_node_offset);
+			LOG_INFO(DEBUG, "[Backpropoagation stage] [Nodes] base node %0d Neurons: current %0d out of %0d -> Current node offset: %0d", base_node, neuron_idx, num_neurons, curr_node_offset);
 			ASSERT(curr_node_offset > 0);
 
 			int node_start_offset = 0;
@@ -82,7 +82,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 			double sigmoid_der_node_start = 0.0;
 			sigmoid_der_node_start = sigmoid_der(node_val_start);
-			LOG_INFO(MEDIUM, "Backpropoagation stage: [Node start %0d] value %0f sigmoid %0f derivative %0f", node_start_offset, node_val_start, sigmoid_node_start, sigmoid_der_node_start);
+			LOG_INFO(MEDIUM, "[Backpropoagation stage] [Backpropoagation stage] [Node start %0d] value %0f sigmoid %0f derivative %0f", node_start_offset, node_val_start, sigmoid_node_start, sigmoid_der_node_start);
 
 			double sum_phi_weight = 0.0;
 
@@ -103,7 +103,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				int num_neurons_nxt = 0;
 
 				num_neurons_nxt = (*(layers_dim + layer_no + 1));
-				LOG_INFO(DEBUG, "Neighbour layer dimensions: Next Layer %0d -> Dimension %0d", (layer_no+1), num_neurons_nxt);
+				LOG_INFO(DEBUG, "[Backpropoagation stage] [Neighbour layer dimensions] Next Layer %0d -> Dimension %0d", (layer_no+1), num_neurons_nxt);
 
 				for (int neuron_nxt_idx = 0; neuron_nxt_idx < num_neurons_nxt; neuron_nxt_idx++) {
 
@@ -124,9 +124,9 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 					sum_phi_weight += (weight_el * phi_el);
 
-					LOG_INFO(HIGH, "Backpropoagation stage: [Hidden layer of Input layer] Weight (base %0d offset %0d: index %0d): %0f", base_weight, offset, total_weight_offset, weight_el);
-					LOG_INFO(HIGH, "Backpropoagation stage: [Hidden layer of Input layer] phi (offset %0d): %0f", neuron_nxt_idx, phi_el);
-					LOG_INFO(HIGH, "Backpropoagation stage: [Hidden layer of Input layer] sum_phi_weight: %0f", sum_phi_weight);
+					LOG_INFO(HIGH, "[Backpropoagation stage] [Hidden layer or Input layer] Weight (base %0d offset %0d: index %0d): %0f", base_weight, offset, total_weight_offset, weight_el);
+					LOG_INFO(HIGH, "[Backpropoagation stage] [Hidden layer or Input layer] phi (offset %0d): %0f", neuron_nxt_idx, phi_el);
+					LOG_INFO(HIGH, "[Backpropoagation stage] [Hidden layer or Input layer] sum_phi_weight: %0f", sum_phi_weight);
 
 				}
 
@@ -134,7 +134,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 
 			double phi = 0.0;
 			phi = sigmoid_der_node_start * sum_phi_weight;
-			LOG_INFO(HIGH, "Backpropoagation stage: [phi layer %0d Neuron %0d] phi %0f (sigmoid_der_node_start %0f sum_phi_weight %0f)", layer_no, neuron_idx, phi, sigmoid_der_node_start, sum_phi_weight);
+			LOG_INFO(HIGH, "[Backpropoagation stage] [phi layer %0d Neuron %0d] phi %0f (sigmoid_der_node_start %0f sum_phi_weight %0f)", layer_no, neuron_idx, phi, sigmoid_der_node_start, sum_phi_weight);
 
 			*(phi_arr + neuron_idx) = phi;
 
@@ -148,7 +148,7 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 					// Select bias of the previous layer
 					node_val_end = *(biases + layer_no - 1);
 					sigmoid_node_end = node_val_end;
-					LOG_INFO(MEDIUM, "Backpropoagation stage: [Bias %0d] value %0f sigmoid %0f", (layer_no - 1), node_val_end, sigmoid_node_end);
+					LOG_INFO(MEDIUM, "[Backpropoagation stage] [Bias %0d] value %0f sigmoid %0f", (layer_no - 1), node_val_end, sigmoid_node_end);
 				} else {
 
 					int prev_node_offset = 0;
@@ -169,9 +169,9 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 					// base_node points to the first element of the next layer
 					// need to take out the number of neurons present on the current layer
 					node_val_end = *(node_val + node_end_offset);
-					LOG_INFO(DEBUG, "Nodes: base node %0d Neurons: total number current layer %0d, previous layer index %0d out of %0d -> Previous node offset: %0d", base_node, num_neurons, neuron_prev_idx, num_neurons_prev, total_prev_node_offset);
+					LOG_INFO(DEBUG, "[Backpropoagation stage] [Nodes] base node %0d Neurons: total number current layer %0d, previous layer index %0d out of %0d -> Previous node offset: %0d", base_node, num_neurons, neuron_prev_idx, num_neurons_prev, total_prev_node_offset);
 					sigmoid_node_end = sigmoid(node_val_end);
-					LOG_INFO(MEDIUM, "Backpropoagation stage: [Node end %0d] value %0f sigmoid %0f", node_end_offset, node_val_end, sigmoid_node_end);
+					LOG_INFO(MEDIUM, "[Backpropoagation stage] [Node end %0d] value %0f sigmoid %0f", node_end_offset, node_val_end, sigmoid_node_end);
 				}
 
 				int curr_weight_offset = 0;
@@ -184,17 +184,17 @@ void backward_propagation (double ** weights, double * biases, int * layers_dim,
 				weight_offset = (base_weight - curr_weight_offset);
 				ASSERT(weight_offset >= 0);
 
-				LOG_INFO(DEBUG, "Weights: base weight %0d Neurons: current %0d out of %0d, previous %0d out of %0d -> Weight offset: %0d", base_weight, neuron_idx, num_neurons, neuron_prev_idx, num_neurons_prev, weight_offset);
+				LOG_INFO(DEBUG, "[Backpropoagation stage] [Weights] base weight %0d Neurons: current %0d out of %0d, previous %0d out of %0d -> Weight offset: %0d", base_weight, neuron_idx, num_neurons, neuron_prev_idx, num_neurons_prev, weight_offset);
 
 				double curr_weight = 0.0;
 				curr_weight = *(*weights + weight_offset);
 
 				double delta_weight = 0.0;
 				delta_weight = - learn_rate * (phi * sigmoid_node_end + alpha * curr_weight);
-				LOG_INFO(MEDIUM, "Backpropoagation stage: [Weight update %0d] phi %0f sigmoid_node_end %0d learning rate %0f alpha %0f curr_weight %0d -> delta weight %0f", weight_offset, phi, sigmoid_node_end, learn_rate, alpha, curr_weight, delta_weight);
+				LOG_INFO(MEDIUM, "[Backpropoagation stage] [Weight update %0d] phi %0f sigmoid_node_end %0d learning rate %0f alpha %0f curr_weight %0d -> delta weight %0f", weight_offset, phi, sigmoid_node_end, learn_rate, alpha, curr_weight, delta_weight);
 
 				*(*weights + weight_offset) += delta_weight;
-				LOG_INFO(MEDIUM, "Backpropoagation stage: [Weight update %0d] Old value %0f Delta %0f -> New value %0f", weight_offset, curr_weight, delta_weight, *(*weights  + weight_offset));
+				LOG_INFO(MEDIUM, "[Backpropoagation stage] [Weight update %0d] Old value %0f Delta %0f -> New value %0f", weight_offset, curr_weight, delta_weight, *(*weights  + weight_offset));
 
 			}
 

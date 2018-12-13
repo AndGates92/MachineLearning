@@ -26,10 +26,10 @@ static const char* testname = "test_neural_network";
 
 void test_neural_network (char * test_set, char * train_set, char * test_label, char * train_label) {
 
-	LOG_INFO(LOW,"Start test: %s", testname);
+	LOG_INFO(LOW,"[Test Neural Network] Start test: %s", testname);
 
 	neural_network (test_set, train_set, test_label, train_label);
 
-	LOG_INFO(LOW,"Test %s: PASSED", testname);
+	LOG_INFO(LOW,"[Test Neural Network] Test %s: PASSED", testname);
 }
 /** @} */ // End of TestNeuralNetworkGroup group

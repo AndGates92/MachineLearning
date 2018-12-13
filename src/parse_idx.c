@@ -28,12 +28,12 @@ void parse_idx (char * filename, data_t ** data) {
 		log_info(ZERO, "================================================================\n", filename);
 		log_info(ZERO, "Parsing file %s\n", filename);
 		log_info(ZERO, "================================================================\n", filename);
-		LOG_INFO(MEDIUM,"Parse header of file %s",  filename);
+		LOG_INFO(MEDIUM,"[Parse IDX File] Parse header of file %s",  filename);
 		parse_header(fid, data);
-		LOG_INFO(MEDIUM,"Parse body of file %s",  filename);
+		LOG_INFO(MEDIUM,"[Parse IDX File] Parse body of file %s",  filename);
 		parse_body(fid, data);
-		LOG_INFO(ZERO,"Parsing complete.");
-		LOG_INFO(DEBUG,"Closing file %s",  filename);
+		LOG_INFO(ZERO,"[Parse IDX File] Parsing complete.");
+		LOG_INFO(DEBUG,"[Parse IDX File] Closing file %s",  filename);
 
 	}
 
@@ -87,9 +87,9 @@ void parse_header(FILE * fid, data_t ** data) {
 	char * data_type_str = NULL;
 	data_type_str = data_type_to_str(data_type_enum);
 
-	LOG_INFO(MEDIUM,"Magic number %0d",  magic_number);
-	LOG_INFO(MEDIUM,"    -> number of dimensions %0d",  no_dims);
-	LOG_INFO(MEDIUM,"    -> data type %0d (%s)",  data_type, data_type_str);
+	LOG_INFO(MEDIUM,"[Parse Header] Magic number %0d",  magic_number);
+	LOG_INFO(MEDIUM,"[Parse Header]     -> number of dimensions %0d",  no_dims);
+	LOG_INFO(MEDIUM,"[Parse Header]     -> data type %0d (%s)",  data_type, data_type_str);
 
 	free_memory(data_type_str);
 	free_memory(magic_number_bytes);
@@ -103,10 +103,10 @@ void parse_header(FILE * fid, data_t ** data) {
 	// Loop through dimensions
 	for (int dim = 0; dim < no_dims; dim++) {
 		dimensions[dim] = read_header(fid);
-		LOG_INFO(MEDIUM,"Dimension %0d: %0d",  dim, dimensions[dim]);
+		LOG_INFO(MEDIUM,"[Parse Header] Dimension %0d: %0d",  dim, dimensions[dim]);
 	}
 
-	LOG_INFO(MEDIUM,"Creating data structure data_t");
+	LOG_INFO(MEDIUM,"[Parse Header] Creating data structure data_t");
 	*data = add_data(dimensions, no_dims);
 	set_data_type(data, data_type_enum);
 
@@ -171,7 +171,7 @@ void parse_body(FILE * fid, data_t ** data) {
 		elementdatatype_t data_read = 0;
 		eof = read_body(fid, &data_read);
 
-		LOG_INFO(DEBUG,"Data read %0d, End of file %s", data_read, bool_to_str(eof));
+		LOG_INFO(DEBUG,"[Parse Body] Data read %0d, End of file %s", data_read, bool_to_str(eof));
 
 		// Variable storing the 32 bits of the magic number grouped as bytes (8 bits)
 		byte * element_bytes = NULL;
@@ -197,7 +197,7 @@ void parse_body(FILE * fid, data_t ** data) {
 				idx = (el*no_bytes)+byte;
 				element += (element_bytes[idx] << (BIT_IN_BYTE*byte));
 			}
-			LOG_INFO(DEBUG,"Element %0d out of %0d: %0d", element_cnt, total_elements, element);
+			LOG_INFO(DEBUG,"[Parse Body] Element %0d out of %0d: %0d", element_cnt, total_elements, element);
 
 			int * coordinates = NULL;
 			coordinates = (int *) malloc(no_dims*sizeof(int));
