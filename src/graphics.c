@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include "graphics.h"
+#include "window.h"
 
 // Shared variables 
 int num_windows;
