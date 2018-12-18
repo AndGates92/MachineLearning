@@ -23,36 +23,33 @@
 #include "graphics.h"
 
 // Shared variables 
-int current_window;
 int num_windows;
-int * win_id_array;
 
 void init_gl(int argc, char** argv) {
 	glutInit( &argc, argv );
 
-	current_window = 0;
 	num_window = 0;
-	win_id_array = (int *) malloc(MAX_NUM_WINDOW*sizeof(int));
-
-	cb_wrapper ();
+	wrapper_cb();
 };
 
-void add_window (char * title) {
+void create_window (char * title, int width, int height, double * pixels) {
 
-	glutInitWindowSize( WIN_WIDTH, WIN_HEIGHT );
-	glutInitWindowPosition( WIN_POS_X, WIN_POS_Y );
+	glutInitWindowSize(width, height);
+	glutInitWindowPosition(WIN_POS_X, WIN_POS_Y);
 
-	glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE );
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 
 //	char * win_name = NULL;
 //	win_name = (char *) malloc(WIN_NAME_MAX_LENGTH*sizeof(char));
 //	win_name_length = sprintf(win_name, "Element number %0d (Expected %0d)", element_no, label);
 	int win_id = 0;
-	win_id = glutCreateWindow( title );
+	win_id = glutCreateWindow(title);
 
-	*(win_id_array + num_window) = win_id;
+	window_t * window = NULL;
+	window = (window_t *) malloc(sizeof(window_t));
+	window = add_window(win_id, width, height, pixels);
+
 	num_window++;
-	ASSERT(num_window <= MAX_NUM_WINDOW);
 };
 
 

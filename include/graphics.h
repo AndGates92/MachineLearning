@@ -13,24 +13,6 @@
  *  @{
  */
 /**
- * @brief Maximum number of windows allowed
- *
- */
-#define MAX_NUM_WINDOW 1
-
-/**
- * @brief Window width
- *
- */
-#define WIN_WIDTH 680
-
-/**
- * @brief Window height
- *
- */
-#define WIN_HEIGHT 680
-
-/**
  * @brief Window position on the x coordinate
  *
  */
@@ -43,7 +25,7 @@
 #define WIN_POS_Y 50
 
 /**
- * @brief void init_gl (int argc, char ** argv)
+ * @brief Function: void init_gl (int argc, char ** argv)
  *
  * \param argc: argument count. Number of arguments including the executable itself.
  * \param argv: argument vector. The first argument is the executable name. Last element of the array is NULL.
@@ -53,31 +35,33 @@
 void init_gl (int argc, char** argv);
 
 /**
- * @brief void add_window (char * title)
+ * @brief Function: void create_window (char * title)
  *
- * \param element_no: element number displayed in the window.
- * \param label: label of the element displayed on the window.
+ * \param title: title of the window.
+ * \param width: width of the window.
+ * \param height: height of the window.
+ * \param pixels: pixels to be displayed (it can involve multiple sets of pixels).
  *
  * Add window to display elements
  */
-void add_window (int element_no, int label);
+void create_window (char * title, int width, int height, double * pixels);
 
 /**
- * @brief void wrapper_cb ()
+ * @brief Function: void wrapper_cb ()
  *
  * Callback wrapper
  */
 void cb_wrapper ();
 
 /**
- * @brief void display_cb (void)
+ * @brief Function: void display_cb (void)
  *
  * This function is called by the GLUT to display the graphics
  */
 void display_cb ();
 
 /**
- * @brief void reshape_cb (int width, int height)
+ * @brief Function: void reshape_cb (int width, int height)
  *
  * \param width: width of the reshaped window
  * \param height: height of the reshaped window
@@ -87,14 +71,14 @@ void display_cb ();
 void reshape_cb (int width, int height);
 
 /**
- * @brief void idle_cb (void)
+ * @brief Function: void idle_cb (void)
  *
  * This function call idle of the program
  */
 void idle_cb ();
 
 /**
- * @brief void mouse_cb(int button, int state, int x, int y);
+ * @brief Function: void mouse_cb(int button, int state, int x, int y);
  *
  * \param button: mouse button pressed
  * \param state: state of mouse button pressed
@@ -106,7 +90,7 @@ void idle_cb ();
 void mouse_cb (int button, int state, int x, int y);
 
 /**
- * @brief void specialkey_cb(int key, int x, int y);
+ * @brief Function: void specialkey_cb(int key, int x, int y);
  *
  * \param key: key pressed
  * \param x: x coordinate of the key pressed
@@ -117,7 +101,7 @@ void mouse_cb (int button, int state, int x, int y);
 void specialkey_cb (int key, int x, int y);
 
 /**
- * @brief void keyboard_cb(int key, int x, int y);
+ * @brief Function: void keyboard_cb(int key, int x, int y);
  *
  * \param key: key pressed
  * \param x: x coordinate of the key pressed
