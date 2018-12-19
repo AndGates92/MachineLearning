@@ -41,5 +41,19 @@ const char* tes_opt = "-tes";
  *
  */
 const char* tel_opt = "-tel";
+
+/** 
+ * @brief Function: void parse_command_line (int argc, char * argv [], char ** test_set, char ** train_set, char ** test_label, char ** train_label)
+ *
+ * \param argc: argument count. Number of arguments including the executable itself.
+ * \param argv: argument vector. The first argument is the executable name. Last element of the array is NULL.
+ * \param test_set: test set filename
+ * \param train_set: training set filename
+ * \param test_label: test label filename
+ * \param train_label: training label filename
+ *
+ * Parse and process command line (argc and argv)
+ */
+void parse_command_line (int argc, char * argv [], char ** test_set, char ** train_set, char ** test_label, char ** train_label);
 /** @} */ // End of MainGroup group
 #endif // MAIN_H

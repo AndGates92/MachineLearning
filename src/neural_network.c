@@ -12,6 +12,7 @@
 #include <math.h>
 #include "log.h"
 #include "parse_idx.h"
+#include "graphics.h"
 #include "neural_network.h"
 #include "feedforward_stage.h"
 #include "backward_propagation.h"
@@ -198,18 +199,56 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
+	int no_dims = 0;
+	no_dims = get_no_dims(data_set);
+
+	int img_width = 0;
+	if (no_dims > 1) {
+		img_width = get_dimension(data_set, 1);
+	} else {
+		LOG_ERROR("Can't get image width as number of dimensions is 1");
+	}
+
+	int img_height = 0;
+	if (no_dims > 2) {
+		img_height = get_dimension(data_set, 2);
+	} else {
+		LOG_ERROR("Can't get image width as number of dimensions less than or equal to 2");
+	}
+
+	elementdatatype_t * pixels = NULL;
+	pixels = get_data_elements(data_set);
+
+	int no_pixels = 0;
+	no_pixels = compute_total_no_elements(data_set);
+
+	double * pixels_double = NULL;
+	pixels_double = cast_array_to_double(pixels, no_pixels);
+
+	free_memory(pixels);
+
+
+	elementdatatype_t * labels = NULL;
+	labels = get_data_elements(data_label);
+
+	int no_labels = 0;
+	no_labels = compute_total_no_elements(data_label);
+
+	int * labels_int = NULL;
+	labels_int = cast_array_to_int(labels, no_labels);
+
+	create_window (num_el, img_width, img_height, pixels_double, labels_int, DATASET);
+
 //	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 	for (int start_el_idx = 0; start_el_idx < 3; start_el_idx++) {
 
-		int set_no_dims = 0;
-		set_no_dims = get_no_dims(data_set);
 		int * set_coord = NULL;
-		set_coord = (int *) malloc(set_no_dims*sizeof(int));
+		set_coord = (int *) malloc(no_dims*sizeof(int));
 		if (set_coord==NULL) {
 			LOG_ERROR("Can't allocate memory for data set element coordinate");
 		}
 
-		for (int set_dim = 0; set_dim < set_no_dims; set_dim++) {
+		for (int set_dim = 0; set_dim < no_dims; set_dim++) {
 			int coordinate = 0;
 			switch (set_dim) {
 				case 0:
@@ -220,7 +259,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 					break;
 			}
 			set_coord[set_dim] = coordinate;
-			LOG_INFO(HIGH, "[Neural network training] Start data set coordinate %0d out of %0d: %0d", set_dim, set_no_dims, set_coord[set_dim]);
+			LOG_INFO(HIGH, "[Neural network training] Start data set coordinate %0d out of %0d: %0d", set_dim, no_dims, set_coord[set_dim]);
 		}
 
 		elementdatatype_t * input_data = NULL;
@@ -229,7 +268,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 		free_memory(set_coord);
 
 		double * input_data_double = NULL;
-		input_data_double = cast_element_to_double (input_data, el_size);
+		input_data_double = cast_array_to_double (input_data, el_size);
 
 		free_memory(input_data);
 
@@ -293,48 +332,4 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 	free_memory(node_val);
 
-}
-
-double * cast_element_to_double (elementdatatype_t * element_set, int dimension) {
-
-	// Pointer to the elements after casting
-	double * element_set_double = NULL;
-
-	element_set_double = (double *) malloc(dimension*sizeof(double));
-	if (element_set_double==NULL) {
-		LOG_ERROR("Can't allocate memory for element_set_double array");
-	}
-
-	if (sizeof(elementdatatype_t) == sizeof(double)) {
-		memcpy(element_set_double, element_set, (dimension*sizeof(double)));
-	} else {
-		for (int idx=0; idx < dimension; idx++) {
-			(*(element_set_double + idx)) = (double)(*(element_set + idx));
-		}
-	}
-
-	return element_set_double;
-}
-
-double * normalize_elements (double * element_set, elementdatatype_t max_element, int dimension) {
-
-	// Pointer to the elements after casting
-	double * element_set_norm = NULL;
-
-	element_set_norm = (double *) malloc(dimension*sizeof(double));
-	if (element_set_norm==NULL) {
-		LOG_ERROR("Can't allocate memory for element_set_norm array");
-	}
-
-	double * max_element_double = NULL;
-	max_element_double = cast_element_to_double(&max_element, 1);
-
-	for (int idx=0; idx < dimension; idx++) {
-		(*(element_set_norm + idx)) = (*(element_set + idx))/(*max_element_double);
-		LOG_INFO(HIGH,"[Normalize Element] Normalized element %0f (Original value %0f Maximum value %0f)", (*(element_set_norm + idx)), (*(element_set + idx)), *max_element_double);
-	}
-
-	free_memory(max_element_double);
-
-	return element_set_norm;
 }

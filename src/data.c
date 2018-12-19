@@ -65,6 +65,8 @@ data_t * add_data (int* dimensions, int no_dims) {
 	data->data_type = UNKNOWN;
 	data->no_bytes = 0;
 
+	LOG_INFO(ZERO,"[New data structure] Created data structure: Number of dimensions %0d", no_dims);
+
 	return data;
 }
 

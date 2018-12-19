@@ -20,38 +20,78 @@
 // math library
 #include <math.h>
 
+#include "log.h"
 #include "graphics.h"
 #include "window.h"
 
+/** @addtogroup GraphicsGroup
+ *  @{
+ */
+/**
+ * @brief FIeld of view
+ *
+ */
+static GLfloat zoom = 50.0;
+
+/**
+ * @brief Near clip
+ *
+ */
+static GLfloat zNear = 1.0;
+
+/**
+ * @brief Far clip
+ *
+ */
+static GLfloat zFar = 1.0e2;
+/** @} */ // End of addtogroup Graphics group
+
 // Shared variables 
-int num_windows;
+int no_windows;
+window_t * dataset_window;
 
 void init_gl(int argc, char** argv) {
 	glutInit( &argc, argv );
 
-	num_window = 0;
+	no_windows = 0;
+	dataset_window = NULL;
 	wrapper_cb();
-};
+}
 
-void create_window (char * title, int width, int height, double * pixels) {
+void create_window (int no_img, int width, int height, double * pixels, int * labels, win_label_e window_label) {
 
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(WIN_POS_X, WIN_POS_Y);
 
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 
-//	char * win_name = NULL;
-//	win_name = (char *) malloc(WIN_NAME_MAX_LENGTH*sizeof(char));
-//	win_name_length = sprintf(win_name, "Element number %0d (Expected %0d)", element_no, label);
+	char * win_name = NULL;
+	win_name = (char *) malloc(WIN_NAME_MAX_LENGTH*sizeof(char));
+	if (win_name==NULL) {
+		LOG_ERROR("Can't allocate memory for window title");
+	}
+	int win_name_length = 0;
+	win_name_length = sprintf(win_name, "Element number 0 (Expected %0d)", (int)*labels);
+	ASSERT(win_name_length <= WIN_NAME_MAX_LENGTH);
+	ASSERT(win_name_length > 0);
 	int win_id = 0;
-	win_id = glutCreateWindow(title);
+	win_id = glutCreateWindow(win_name);
+	free_memory(win_name);
 
 	window_t * window = NULL;
 	window = (window_t *) malloc(sizeof(window_t));
-	window = add_window(win_id, width, height, pixels);
+	window = add_window(win_id, no_img, width, height, pixels, labels);
 
-	num_window++;
-};
+	switch (window_label) {
+		case DATASET:
+			dataset_window = window;
+			break;
+		default:
+			break;
+	}
+
+	no_windows++;
+}
 
 
 void display_cb () {
@@ -78,9 +118,11 @@ void reshape_cb (int width, int height) {
 	/* 
 	* perspective parameters: field of view, aspect, near clip, far clip 
 	*/
-	gluPerspective( 50.0*zoom, (GLdouble)width/(GLdouble)height, zNear, zFar );
+	gluPerspective( zoom, (GLdouble)width/(GLdouble)height, zNear, zFar );
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void keyboard_cb (unsigned char key, int x, int y) {
 	switch (key) {
 		default:
@@ -91,7 +133,10 @@ void keyboard_cb (unsigned char key, int x, int y) {
 	glutPostRedisplay();
 
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void specialkeys_cb (int key, int x, int y) {
 	switch (key) {
 		default:
@@ -101,17 +146,17 @@ void specialkeys_cb (int key, int x, int y) {
 	/* force glut to call the display functin */
 	glutPostRedisplay();
 }
+#pragma GCC diagnostic pop
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void mouse_cb (int button, int state, int x, int y) {
-    switch( button )
-    {
-        case GLUT_LEFT_BUTTON:
-            if ( state != GLUT_DOWN )
-                return;
-            mouse_test( x, y );
-            break;
-    }
+	switch (button) {
+		default:
+			break;
+	}
 }
+#pragma GCC diagnostic pop
 
 void idle_cb () {
 

@@ -8,8 +8,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "log.h"
+#include "window.h"
 
-window_t * add_window (int id, int width, int height, GLfloat * pixels) {
+window_t * add_window (int id, int no_img, int width, int height, double * pixels, int * labels) {
 	window_t * window = NULL;
 
 	window = (window_t *) malloc(sizeof(window_t));
@@ -37,10 +39,30 @@ window_t * add_window (int id, int width, int height, GLfloat * pixels) {
 	// Pixels
 	// ===========================================================================
 	// Total number of units to allocate
+	ASSERT (no_img>0);
+	window->no_img = no_img;
+	LOG_INFO(MEDIUM,"[New window structure] Set number of images in pixels of window data struct to %0d",  no_img);
+
 	ASSERT(pixels!=NULL);
 	window->pixels = pixels;
 
+	// ===========================================================================
+	// Labels
+	// ===========================================================================
+	// If labels is NULL, it will be ignored
+	if (labels == NULL) {
+		LOG_INFO(ZERO,"[New window structure] Array of labels is NULL. It will be ignored.");
+	}
+	window->labels = labels;
+	LOG_INFO(ZERO,"[New window structure] Created window data structure: ID ->  %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d ", id, width, height, no_img);
+
 	return window;
+}
+
+int get_no_img (window_t * window) {
+	ASSERT(window != NULL);
+	LOG_INFO(DEBUG,"[Get number of images] Number of images in pixels array of window data structure window_t: %0d",  window->no_img);
+	return window->no_img;
 }
 
 int get_id (window_t * window) {
@@ -61,11 +83,24 @@ int get_height (window_t * window) {
 	return window->height;
 }
 
-GLfloat get_pixels (window_t * window) {
+double * get_pixels (window_t * window) {
 	ASSERT(window != NULL);
 	LOG_INFO(DEBUG,"[Get window pixels] Pixels of window data structure window_t");
 	ASSERT((window->pixels) != NULL);
 	return window->pixels;
+}
+
+int * get_labels (window_t * window) {
+	ASSERT(window != NULL);
+	LOG_INFO(DEBUG,"[Get window labels] Labels of window data structure window_t");
+	ASSERT((window->labels) != NULL);
+	return window->labels;
+}
+
+void set_no_img (window_t ** window, int no_img) {
+	ASSERT((*window) != NULL);
+	(*window)->no_img = no_img;
+	LOG_INFO(DEBUG,"[Set number of images] Set number of images in pixels array of window data structure window_t: %0d",  (*window)->no_img);
 }
 
 void set_id (window_t ** window, int id) {
@@ -86,13 +121,26 @@ void set_height (window_t ** window, int height) {
 	LOG_INFO(DEBUG,"[Set window height] Set height of window data structure window_t: %0d",  (*window)->height);
 }
 
-void set_pixels (window_t ** window, GLfloat * pixels) {
+void set_pixels (window_t ** window, double * pixels) {
 	ASSERT((*window) != NULL);
 	(*window)->pixels = pixels;
 	LOG_INFO(DEBUG,"[Set window pixels] Set pixels of window data structure window_t");
 }
 
+void set_labels (window_t ** window, int * labels) {
+	ASSERT((*window) != NULL);
+	(*window)->labels = labels;
+	LOG_INFO(DEBUG,"[Set window labels] Set labels of window data structure window_t");
+}
+
 void delete_window (window_t * window) {
+	if (window != NULL) {
+		free_memory(window->pixels);
+		LOG_INFO(DEBUG,"[Delete window] Free window pixels -> COMPLETED");
+		free_memory(window->labels);
+		LOG_INFO(DEBUG,"[Delete data] Free labels -> COMPLETED");
+	}
+
 	free_memory(window);
 	LOG_INFO(DEBUG,"[Delete window] Free window data structure -> COMPLETED");
 }

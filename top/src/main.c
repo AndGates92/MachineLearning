@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
+#include "graphics.h"
 #include "test_parse_idx.h"
 #include "test_neural_network.h"
 #include "log.h"
@@ -22,7 +23,7 @@
 /** 
  * @brief Function: int main (int argc, char * argv[])
  *
- * \param argc: argument count. Number of arguments including the executable itself. 
+ * \param argc: argument count. Number of arguments including the executable itself.
  * \param argv: argument vector. The first argument is the executable name. Last element of the array is NULL.
  * \return an integer corresponging to the exit status
  *
@@ -35,20 +36,12 @@
  * --> -tel <filename> : test label file
  *
  */
-
 int main (int argc, char * argv []) {
-
-	int test_set_no = -1;
-	int train_set_no = -1;
-	int test_label_no = -1;
-	int train_label_no = -1;
 
 	char * test_set = NULL;
 	char * train_set = NULL;
 	char * test_label = NULL;
 	char * train_label = NULL;
-
-	bool inputfile_given = false;
 
 	// Initialize seed
 	srand(time(NULL));
@@ -57,6 +50,9 @@ int main (int argc, char * argv []) {
 	ASSERT(argc > 1);
 	// Program needs to know what the input file represents
 	ASSERT((argc-1)%2 == 0 );
+
+	// Initialize GLUT libraries
+	init_gl(argc, argv);
 
 	test_set = (char *) malloc(FILENAME_MAX_LENGTH*sizeof(char));
 	if (test_set==NULL) {
@@ -84,6 +80,35 @@ int main (int argc, char * argv []) {
 	for (int i = 0; i < argc; i++) {
 		LOG_INFO(DEBUG,"[Main] \targument %0d: %s",  i, argv[i]);
 	}
+
+	parse_command_line(argc, argv, &test_set, &train_set, &test_label, &train_label);
+
+	test_parse_idx(test_set, train_set, test_label, train_label);
+
+	test_neural_network(test_set, train_set, test_label, train_label);
+
+	free_memory(test_set);
+	free_memory(train_set);
+	free_memory(test_label);
+	free_memory(train_label);
+
+	LOG_INFO(ZERO,"[Main] Tests completed.");
+	close_logfile();
+
+	return EXIT_SUCCESS;
+
+}
+
+/** @} */ // End of addtogroup Main group
+
+void parse_command_line (int argc, char * argv [], char ** test_set, char ** train_set, char ** test_label, char ** train_label) {
+
+	int test_set_no = -1;
+	int train_set_no = -1;
+	int test_label_no = -1;
+	int train_label_no = -1;
+
+	bool inputfile_given = false;
 
 	for (int i = 1; i < argc; i++) {
 		// Assert that input file is shorter than estimation of input file length
@@ -130,42 +155,26 @@ int main (int argc, char * argv []) {
 
 	LOG_INFO(LOW, "[Main] Input files:");
 	if (test_set_no > 0) {
-		strcpy(test_set, argv[test_set_no]);
-		LOG_INFO(LOW,"[Main] \ttest set file: %s", test_set);
+		strcpy(*test_set, argv[test_set_no]);
+		LOG_INFO(LOW,"[Main] \ttest set file: %s", *test_set);
 		inputfile_given = true;
 	}
 	if (train_set_no > 0) {
-		strcpy(train_set, argv[train_set_no]);
-		LOG_INFO(LOW,"[Main] \ttraining set file: %s",  train_set);
+		strcpy(*train_set, argv[train_set_no]);
+		LOG_INFO(LOW,"[Main] \ttraining set file: %s",  *train_set);
 		inputfile_given = true;
 	}
 	if (test_label_no > 0) {
-		strcpy(test_label, argv[test_label_no]);
-		LOG_INFO(LOW,"[Main] \ttest label file: %s",  test_label);
+		strcpy(*test_label, argv[test_label_no]);
+		LOG_INFO(LOW,"[Main] \ttest label file: %s",  *test_label);
 		inputfile_given = true;
 	}
 	if (train_label_no > 0) {
-		strcpy(train_label, argv[train_label_no]);
-		LOG_INFO(LOW,"[Main] \ttraining label file: %s",  train_label);
+		strcpy(*train_label, argv[train_label_no]);
+		LOG_INFO(LOW,"[Main] \ttraining label file: %s",  *train_label);
 		inputfile_given = true;
 	}
 
 	// If no input file is given
 	ASSERT(inputfile_given == true);
-
-	test_parse_idx(test_set, train_set, test_label, train_label);
-
-	test_neural_network(test_set, train_set, test_label, train_label);
-
-	free_memory(test_set);
-	free_memory(train_set);
-	free_memory(test_label);
-	free_memory(train_label);
-
-	LOG_INFO(ZERO,"[Main] Tests completed.");
-	close_logfile();
-
-	return EXIT_SUCCESS;
-
 }
-/** @} */ // End of addtogroup Main group

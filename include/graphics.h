@@ -8,10 +8,16 @@
  * @brief Graphics header file
 */
 
-/** @defgroup FileGroup File Doxygen Group
- *  Functions and defines concerning file manipulation
+/** @defgroup GraphicsGroup Graphics Doxygen Group
+ *  Functions and defines concerning graphics
  *  @{
  */
+/**
+ * @brief Maximum length of the window title
+ *
+ */
+#define WIN_NAME_MAX_LENGTH 50
+
 /**
  * @brief Window position on the x coordinate
  *
@@ -25,6 +31,14 @@
 #define WIN_POS_Y 50
 
 /**
+ * @brief Window labels
+ *
+ */
+typedef enum win_label_list {
+	DATASET
+} win_label_e;
+
+/**
  * @brief Function: void init_gl (int argc, char ** argv)
  *
  * \param argc: argument count. Number of arguments including the executable itself.
@@ -35,23 +49,25 @@
 void init_gl (int argc, char** argv);
 
 /**
- * @brief Function: void create_window (char * title)
+ * @brief Function: void create_window (int no_img, int width, int height, double * pixels, int * labels, win_label_e window_label)
  *
- * \param title: title of the window.
+ * \param no_img: number of images in pixels array
  * \param width: width of the window.
  * \param height: height of the window.
  * \param pixels: pixels to be displayed (it can involve multiple sets of pixels).
+ * \param labels: labels (it contains all labels for the pixels displayed).
+ * \param window_label: window label (it specify the content of the window).
  *
  * Add window to display elements
  */
-void create_window (char * title, int width, int height, double * pixels);
+void create_window (int no_img, int width, int height, double * pixels, int * labels, win_label_e window_label);
 
 /**
  * @brief Function: void wrapper_cb ()
  *
  * Callback wrapper
  */
-void cb_wrapper ();
+void wrapper_cb ();
 
 /**
  * @brief Function: void display_cb (void)
@@ -101,7 +117,7 @@ void mouse_cb (int button, int state, int x, int y);
 void specialkey_cb (int key, int x, int y);
 
 /**
- * @brief Function: void keyboard_cb(int key, int x, int y);
+ * @brief Function: void keyboard_cb(unsigned char key, int x, int y);
  *
  * \param key: key pressed
  * \param x: x coordinate of the key pressed
@@ -109,6 +125,6 @@ void specialkey_cb (int key, int x, int y);
  *
  * This function assigns a function to some keys of the keyboard
  */
-void keyboard_cb (int key, int x, int y);
+void keyboard_cb (unsigned char key, int x, int y);
 
 #endif // GRAPHICS_H

@@ -56,7 +56,6 @@ typedef enum verb_level_list {
 	DEBUG
 } verb_level_e;
 
-
 /**
  * @brief Pointer to log file
  *
