@@ -11,7 +11,7 @@
 #include "log.h"
 #include "window.h"
 
-window_t * add_window (int id, int no_img, int width, int height, double * pixels, int * labels) {
+window_t * add_window (int id, int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type) {
 	window_t * window = NULL;
 
 	window = (window_t *) malloc(sizeof(window_t));
@@ -46,6 +46,8 @@ window_t * add_window (int id, int no_img, int width, int height, double * pixel
 	ASSERT(pixels!=NULL);
 	window->pixels = pixels;
 
+	window->window_type = window_type;
+
 	// ===========================================================================
 	// Labels
 	// ===========================================================================
@@ -57,6 +59,12 @@ window_t * add_window (int id, int no_img, int width, int height, double * pixel
 	LOG_INFO(ZERO,"[New window structure] Created window data structure: ID ->  %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d ", id, width, height, no_img);
 
 	return window;
+}
+
+win_type_e get_window_type (window_t * window) {
+	ASSERT(window != NULL);
+	LOG_INFO(DEBUG,"[Get window type] Type of content shown in window: %s",  win_type_to_str(window->window_type));
+	return window->window_type;
 }
 
 int get_no_img (window_t * window) {
@@ -95,6 +103,12 @@ int * get_labels (window_t * window) {
 	LOG_INFO(DEBUG,"[Get window labels] Labels of window data structure window_t");
 	ASSERT((window->labels) != NULL);
 	return window->labels;
+}
+
+void set_window_type (window_t ** window, win_type_e window_type) {
+	ASSERT((*window) != NULL);
+	(*window)->window_type = window_type;
+	LOG_INFO(DEBUG,"[Set window type] Set window type: %s",  win_type_to_str((*window)->window_type));
 }
 
 void set_no_img (window_t ** window, int no_img) {
@@ -145,3 +159,22 @@ void delete_window (window_t * window) {
 	LOG_INFO(DEBUG,"[Delete window] Free window data structure -> COMPLETED");
 }
 
+char * win_type_to_str (win_type_e window_type) {
+	char * window_type_str = NULL;
+
+	window_type_str = (char *) malloc(MAX_WINDOW_TYPE_LENGTH*sizeof(char));
+	if (window_type_str==NULL) {
+		LOG_ERROR("Can't allocate memory for string for data type");
+	}
+
+	switch (window_type) {
+		case DATASET:
+			strcpy(window_type_str, "DATASET");
+			break;
+		default:
+			LOG_ERROR("Unknown window type. Can't generate string with window type name");
+			break;
+	}
+
+	return window_type_str;
+}

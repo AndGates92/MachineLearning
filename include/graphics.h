@@ -8,6 +8,8 @@
  * @brief Graphics header file
 */
 
+#include "window.h"
+
 /** @defgroup GraphicsGroup Graphics Doxygen Group
  *  Functions and defines concerning graphics
  *  @{
@@ -31,70 +33,62 @@
 #define WIN_POS_Y 50
 
 /**
- * @brief Window labels
- *
- */
-typedef enum win_label_list {
-	DATASET
-} win_label_e;
-
-/**
- * @brief Function: void init_gl (int argc, char ** argv)
+ * @brief Function: void init_gl(int argc, char ** argv)
  *
  * \param argc: argument count. Number of arguments including the executable itself.
  * \param argv: argument vector. The first argument is the executable name. Last element of the array is NULL.
  *
  * Initialize GLUT library and shared variable values
  */
-void init_gl (int argc, char** argv);
+void init_gl(int argc, char** argv);
 
 /**
- * @brief Function: void create_window (int no_img, int width, int height, double * pixels, int * labels, win_label_e window_label)
+ * @brief Function: void create_window(int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type)
  *
  * \param no_img: number of images in pixels array
  * \param width: width of the window.
  * \param height: height of the window.
  * \param pixels: pixels to be displayed (it can involve multiple sets of pixels).
  * \param labels: labels (it contains all labels for the pixels displayed).
- * \param window_label: window label (it specify the content of the window).
+ * \param window_type: window label (it specify the content of the window).
  *
  * Add window to display elements
  */
-void create_window (int no_img, int width, int height, double * pixels, int * labels, win_label_e window_label);
+void create_window(int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type);
 
 /**
- * @brief Function: void wrapper_cb ()
+ * @brief Function: void wrapper_dataset_cb()
  *
- * Callback wrapper
+ * Callback datset wrapper
  */
-void wrapper_cb ();
+void wrapper_dataset_cb();
 
 /**
- * @brief Function: void display_cb (void)
+ * @brief Function: void display_dataset_cb()
  *
  * This function is called by the GLUT to display the graphics
  */
-void display_cb ();
+void display_dataset_cb();
 
 /**
- * @brief Function: void reshape_cb (int width, int height)
+ * @brief Function: void reshape_dataset_cb(int width, int height)
  *
  * \param width: width of the reshaped window
  * \param height: height of the reshaped window
  *
  * This function is called whenever the user (or OS) reshapes the OpenGL window. The GLUT sends the new window dimensions (x,y)
  */
-void reshape_cb (int width, int height);
+void reshape_dataset_cb(int width, int height);
 
 /**
- * @brief Function: void idle_cb (void)
+ * @brief Function: void idle_dataset_cb()
  *
  * This function call idle of the program
  */
-void idle_cb ();
+void idle_dataset_cb();
 
 /**
- * @brief Function: void mouse_cb(int button, int state, int x, int y);
+ * @brief Function: void mouse_dataset_cb(int button, int state, int x, int y);
  *
  * \param button: mouse button pressed
  * \param state: state of mouse button pressed
@@ -103,10 +97,10 @@ void idle_cb ();
  *
  * This function sets mouse button function
  */
-void mouse_cb (int button, int state, int x, int y);
+void mouse_dataset_cb(int button, int state, int x, int y);
 
 /**
- * @brief Function: void specialkey_cb(int key, int x, int y);
+ * @brief Function: void specialkey_dataset_cb(int key, int x, int y);
  *
  * \param key: key pressed
  * \param x: x coordinate of the key pressed
@@ -114,10 +108,10 @@ void mouse_cb (int button, int state, int x, int y);
  *
  * This function sets mouse button function
  */
-void specialkey_cb (int key, int x, int y);
+void specialkey_dataset_cb(int key, int x, int y);
 
 /**
- * @brief Function: void keyboard_cb(unsigned char key, int x, int y);
+ * @brief Function: void keyboard_dataset_cb(unsigned char key, int x, int y);
  *
  * \param key: key pressed
  * \param x: x coordinate of the key pressed
@@ -125,6 +119,14 @@ void specialkey_cb (int key, int x, int y);
  *
  * This function assigns a function to some keys of the keyboard
  */
-void keyboard_cb (unsigned char key, int x, int y);
+void keyboard_dataset_cb(unsigned char key, int x, int y);
 
+/**
+ * @brief Function: void show_window()
+ *
+ * This function starts displaying windows
+ */
+void show_window();
+
+/** @} */ // End of GraphicsGroup
 #endif // GRAPHICS_H

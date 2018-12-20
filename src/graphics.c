@@ -22,7 +22,7 @@
 
 #include "log.h"
 #include "graphics.h"
-#include "window.h"
+#include "window_list.h"
 
 /** @addtogroup GraphicsGroup
  *  @{
@@ -44,21 +44,21 @@ static GLfloat zNear = 1.0;
  *
  */
 static GLfloat zFar = 1.0e2;
-/** @} */ // End of addtogroup Graphics group
+
+/** @} */ // End of addtogroup GraphicsGroup
 
 // Shared variables 
 int no_windows;
-window_t * dataset_window;
 
 void init_gl(int argc, char** argv) {
 	glutInit( &argc, argv );
 
 	no_windows = 0;
-	dataset_window = NULL;
-	wrapper_cb();
+	initialize_window_list();
+	wrapper_dataset_cb();
 }
 
-void create_window (int no_img, int width, int height, double * pixels, int * labels, win_label_e window_label) {
+void create_window(int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type) {
 
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(WIN_POS_X, WIN_POS_Y);
@@ -80,22 +80,44 @@ void create_window (int no_img, int width, int height, double * pixels, int * la
 
 	window_t * window = NULL;
 	window = (window_t *) malloc(sizeof(window_t));
-	window = add_window(win_id, no_img, width, height, pixels, labels);
+	window = add_window(win_id, no_img, width, height, pixels, labels, window_type);
+	add_window_struct(window);
+	free(window);
 
-	switch (window_label) {
-		case DATASET:
-			dataset_window = window;
-			break;
-		default:
-			break;
-	}
+	wrapper_dataset_cb();
 
 	no_windows++;
 }
 
 
-void display_cb () {
+void display_dataset_cb() {
 	glClear( GL_COLOR_BUFFER_BIT );
+
+	/* 
+	* set matrix mode to modelview 
+	*/
+	glMatrixMode( GL_MODELVIEW );
+
+	int win_id = 0;
+	win_id = glutGetWindow();
+
+	window_t * window = NULL;
+	window = search_by_win_id(win_id);
+
+	int width = 0;
+	width = get_width(window);
+
+	int height = 0;
+	height = get_height(window);
+
+	free(window);
+ 
+	for (int row = 0; row < height; row++) {
+		for (int col = 0; col < width; col++) {
+
+		}
+	}
+
 
 	/* 
 	* swap buffers to display the frame 
@@ -103,7 +125,7 @@ void display_cb () {
  	glutSwapBuffers();
 }
 
-void reshape_cb (int width, int height) {
+void reshape_dataset_cb(int width, int height) {
 	/* 
 	* set viewport to new width and height 
 	*/
@@ -123,7 +145,7 @@ void reshape_cb (int width, int height) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void keyboard_cb (unsigned char key, int x, int y) {
+void keyboard_dataset_cb(unsigned char key, int x, int y) {
 	switch (key) {
 		default:
 			break;
@@ -137,20 +159,20 @@ void keyboard_cb (unsigned char key, int x, int y) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void specialkeys_cb (int key, int x, int y) {
+void specialkeys_dataset_cb(int key, int x, int y) {
 	switch (key) {
 		default:
 			break;
 	}
 
-	/* force glut to call the display functin */
+	/* force glut to call the display function */
 	glutPostRedisplay();
 }
 #pragma GCC diagnostic pop
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void mouse_cb (int button, int state, int x, int y) {
+void mouse_dataset_cb(int button, int state, int x, int y) {
 	switch (button) {
 		default:
 			break;
@@ -158,20 +180,22 @@ void mouse_cb (int button, int state, int x, int y) {
 }
 #pragma GCC diagnostic pop
 
-void idle_cb () {
+void idle_dataset_cb() {
 
 	/* force glut to call the display function */
 	glutPostRedisplay();
 
 }
 
-void wrapper_cb () {
-	glutDisplayFunc( display_cb );
-	glutKeyboardFunc( keyboard_cb );
-	glutReshapeFunc( reshape_cb );
-	glutIdleFunc( idle_cb );
-	glutSpecialFunc( specialkeys_cb );
-	glutMouseFunc( mouse_cb );
+void wrapper_dataset_cb() {
+	glutDisplayFunc( display_dataset_cb );
+	glutKeyboardFunc( keyboard_dataset_cb );
+	glutReshapeFunc( reshape_dataset_cb );
+	glutIdleFunc( idle_dataset_cb );
+	glutSpecialFunc( specialkeys_dataset_cb );
+	glutMouseFunc( mouse_dataset_cb );
+}
 
+void show_window() {
 	glutMainLoop();
 }

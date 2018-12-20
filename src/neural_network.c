@@ -51,6 +51,9 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 	parse_all_idx (test_set, train_set, test_label, train_label, &test_set_struct_t, &test_label_struct_t, &train_set_struct_t, &train_label_struct_t);
 
 	if ((test_set_struct_t != NULL) && (test_label_struct_t != NULL) && (train_set_struct_t != NULL) && (train_label_struct_t != NULL)) {
+
+		create_elements_window(test_set_struct_t, test_label_struct_t);
+
 		// Randomize the weight and the bias of every layer
 		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t, &learn_rate, &alpha);
 
@@ -199,48 +202,11 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
-	int no_dims = 0;
-	no_dims = get_no_dims(data_set);
-
-	int img_width = 0;
-	if (no_dims > 1) {
-		img_width = get_dimension(data_set, 1);
-	} else {
-		LOG_ERROR("Can't get image width as number of dimensions is 1");
-	}
-
-	int img_height = 0;
-	if (no_dims > 2) {
-		img_height = get_dimension(data_set, 2);
-	} else {
-		LOG_ERROR("Can't get image width as number of dimensions less than or equal to 2");
-	}
-
-	elementdatatype_t * pixels = NULL;
-	pixels = get_data_elements(data_set);
-
-	int no_pixels = 0;
-	no_pixels = compute_total_no_elements(data_set);
-
-	double * pixels_double = NULL;
-	pixels_double = cast_array_to_double(pixels, no_pixels);
-
-	free_memory(pixels);
-
-
-	elementdatatype_t * labels = NULL;
-	labels = get_data_elements(data_label);
-
-	int no_labels = 0;
-	no_labels = compute_total_no_elements(data_label);
-
-	int * labels_int = NULL;
-	labels_int = cast_array_to_int(labels, no_labels);
-
-	create_window (num_el, img_width, img_height, pixels_double, labels_int, DATASET);
-
 //	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 	for (int start_el_idx = 0; start_el_idx < 3; start_el_idx++) {
+
+		int no_dims = 0;
+		no_dims = get_no_dims(data_set);
 
 		int * set_coord = NULL;
 		set_coord = (int *) malloc(no_dims*sizeof(int));
@@ -331,5 +297,54 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	}
 
 	free_memory(node_val);
+
+}
+
+void create_elements_window(data_t * data_set, data_t * data_label) {
+	int no_dims = 0;
+	no_dims = get_no_dims(data_set);
+
+	int num_el = 0;
+	if (no_dims > 1) {
+		num_el = get_dimension(data_set, 0);
+	} else {
+		LOG_ERROR("Can't get number of elements in elements array as number of dimensions is set to 0");
+	}
+
+	int img_width = 0;
+	if (no_dims > 1) {
+		img_width = get_dimension(data_set, 1);
+	} else {
+		LOG_ERROR("Can't get image width as number of dimensions is 1");
+	}
+
+	int img_height = 0;
+	if (no_dims > 2) {
+		img_height = get_dimension(data_set, 2);
+	} else {
+		LOG_ERROR("Can't get image width as number of dimensions less than or equal to 2");
+	}
+
+	elementdatatype_t * pixels = NULL;
+	pixels = get_data_elements(data_set);
+
+	int no_pixels = 0;
+	no_pixels = compute_total_no_elements(data_set);
+
+	double * pixels_double = NULL;
+	pixels_double = cast_array_to_double(pixels, no_pixels);
+
+	free_memory(pixels);
+
+	elementdatatype_t * labels = NULL;
+	labels = get_data_elements(data_label);
+
+	int no_labels = 0;
+	no_labels = compute_total_no_elements(data_label);
+
+	int * labels_int = NULL;
+	labels_int = cast_array_to_int(labels, no_labels);
+
+	create_window(num_el, img_width, img_height, pixels_double, labels_int, DATASET);
 
 }
