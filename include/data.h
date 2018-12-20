@@ -325,7 +325,5 @@ int element_size(data_t * data);
  */
 size_t data_size();
 
-
-
 /** @} */ // End of DataGroup group
 #endif // DATA_H

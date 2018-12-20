@@ -509,5 +509,5 @@ int element_size (data_t * data) {
 }
 
 size_t data_size() {
-	return sizeof(data_t);
+	return (sizeof(data_t));
 }

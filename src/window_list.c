@@ -41,12 +41,7 @@ void add_window_struct(window_t * window) {
 		LOG_ERROR("Can't allocate memory for new window list data structure window_list_t");
 	}
 
-	new_window->window = NULL;
-	new_window->window = (window_t *) malloc((size_t) window_size);
-	if(new_window->window == NULL) {
-		LOG_ERROR("Can't allocate memory for new window data structure window_t");
-	}
-	memcpy(window, new_window->window, (size_t) window_size);
+	new_window->window = window;
 	new_window->previous = NULL;
 
 	if(head_window != NULL) {
@@ -64,17 +59,13 @@ window_t * search_by_win_id(int win_id) {
 	window_list = head_window;
 
 	window_t * window_found = NULL;
-	window_found = (window_t *) malloc((size_t) window_size);
-	if(window_found == NULL) {
-		LOG_ERROR("Can't allocate memory for new window data structure window_t");
-	}
 
 	while (window_list != NULL) {
 		int curr_win_id = 0;
 		curr_win_id = get_id(window_list->window);
 
 		if (curr_win_id == win_id) {
-			memcpy(window_list->window, window_found, (size_t) window_size);
+			window_found = window_list->window;
 			return window_found;
 		}
 
@@ -85,5 +76,5 @@ window_t * search_by_win_id(int win_id) {
 }
 
 size_t window_list_size() {
-	return sizeof(window_list_t);
+	return (sizeof(window_list_t));
 }

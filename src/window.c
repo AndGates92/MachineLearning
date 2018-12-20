@@ -198,5 +198,5 @@ char * win_type_to_str (win_type_e window_type) {
 }
 
 size_t window_size() {
-	return sizeof(window_t);
+	return (sizeof(window_t));
 }
