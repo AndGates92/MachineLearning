@@ -79,7 +79,7 @@ void create_window(int no_img, int width, int height, double * pixels, int * lab
 	free_memory(win_name);
 
 	window_t * window = NULL;
-	window = (window_t *) malloc(sizeof(window_t));
+	window = (window_t *) malloc((size_t) window_size);
 	window = add_window(win_id, no_img, width, height, pixels, labels, window_type);
 	add_window_struct(window);
 	free(window);

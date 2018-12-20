@@ -27,18 +27,10 @@ typedef enum win_type_list {
 } win_type_e;
 
 /**
- * @brief window data strcture window_t
+ * @brief window data strcture type window_t
  *
  */
-typedef struct window {
-	int id; /**< Window ID */
-	int width; /**< width of the window */
-	int height; /**< height of the window */
-	int no_img; /**< Number of images in pixels array */
-	double * pixels; /**< Pixel color */
-	int * labels; /**< Label */
-	win_type_e window_type; /**< Window type */
-} window_t;
+typedef struct window window_t;
 
 /**
  * @brief Function: window_t * add_window(int id, int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type)
@@ -213,6 +205,15 @@ void delete_window(window_t * window);
  * Convert the window type to a string that can be printed.
  */
 char * win_type_to_str(win_type_e window_type);
+
+/**
+ * @brief Function: size_t window_size()
+ *
+ * \return the size of window data structure window_t
+ * 
+ * Get the size of window data structure window_t.
+ */
+size_t window_size();
 
 /** @} */ // End of WindowGroup group
 #endif // WINDOW_H

@@ -11,6 +11,24 @@
 #include "log.h"
 #include "window.h"
 
+/** @addtogroup WindowGroup
+ *  @{
+ */
+/**
+ * @brief window data strcture window
+ *
+ */
+struct window {
+	int id; /**< Window ID */
+	int width; /**< width of the window */
+	int height; /**< height of the window */
+	int no_img; /**< Number of images in pixels array */
+	double * pixels; /**< Pixel color */
+	int * labels; /**< Label */
+	win_type_e window_type; /**< Window type */
+};
+/** @} */ // End of addtogroup WindowGroup
+
 window_t * add_window (int id, int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type) {
 	window_t * window = NULL;
 
@@ -177,4 +195,8 @@ char * win_type_to_str (win_type_e window_type) {
 	}
 
 	return window_type_str;
+}
+
+size_t window_size() {
+	return sizeof(window_t);
 }

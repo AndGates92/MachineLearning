@@ -12,6 +12,24 @@
 #include "data.h"
 #include "utility.h"
 
+/** @addtogroup DataGroup
+ *  @{
+ */
+/**
+ * @brief data structure data
+ *
+ */
+struct data {
+	int * dimensions; /**< Array of dimensions of the data structure data_t */
+	int no_dims; /**< number of dimensions of the data structure data_t */
+	data_type_e data_type; /**< data type of the data strcture data_t */
+	short no_bytes; /**< number of bytes of the data structure data_t data type */
+	elementdatatype_t * elements; /**< elements of the data structure data_t */
+	elementdatatype_t max_element; /**< highest numerical value in array elements */
+	elementdatatype_t min_element; /**< lowest numerical value in array elements */
+};
+/** @} */ // End of addtogroup DataGroup
+
 data_t * add_data (int* dimensions, int no_dims) {
 	data_t * data = NULL;
 
@@ -488,4 +506,8 @@ int element_size (data_t * data) {
 	free_memory(dimensions);
 
 	return el_size;
+}
+
+size_t data_size() {
+	return sizeof(data_t);
 }

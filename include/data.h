@@ -47,18 +47,10 @@ typedef enum data_type_list {
 } data_type_e;
 
 /**
- * @brief data strcture data_t
+ * @brief data structure data_t
  *
  */
-typedef struct data {
-	int * dimensions; /**< Array of dimensions of the data structure data_t */
-	int no_dims; /**< number of dimensions of the data structure data_t */
-	data_type_e data_type; /**< data type of the data strcture data_t */
-	short no_bytes; /**< number of bytes of the data structure data_t data type */
-	elementdatatype_t * elements; /**< elements of the data structure data_t */
-	elementdatatype_t max_element; /**< highest numerical value in array elements */
-	elementdatatype_t min_element; /**< lowest numerical value in array elements */
-} data_t;
+typedef struct data data_t;
 
 /**
  * @brief Function: data_t * add_data (int * dimensions, int no_dims)
@@ -323,6 +315,17 @@ int compute_total_no_elements(data_t * data);
  * Compute the total number of elements in the array of elements.
  */
 int element_size(data_t * data);
+
+/**
+ * @brief Function: size_t data_size()
+ *
+ * \return the size of data structure data_t
+ * 
+ * Get the size of data structure data_t.
+ */
+size_t data_size();
+
+
 
 /** @} */ // End of DataGroup group
 #endif // DATA_H

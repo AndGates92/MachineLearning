@@ -45,5 +45,14 @@ void add_window_struct(window_t * window);
  */
 window_t * search_by_win_id(int win_id);
 
+/**
+ * @brief Function: size_t window_list_size()
+ *
+ * \return the size of window linked list data structure window_list_t
+ * 
+ * Get the size of window linked list data structure window_list_t.
+ */
+size_t window_list_size();
+
 /** @} */ // End of WindowListGroup
 #endif // WINDOW_LIST_H
