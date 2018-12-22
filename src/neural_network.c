@@ -234,7 +234,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 		free_memory(set_coord);
 
 		double * input_data_double = NULL;
-		input_data_double = cast_array_to_double (input_data, el_size);
+		input_data_double = cast_array_to_double(input_data, el_size);
 
 		free_memory(input_data);
 
@@ -346,5 +346,8 @@ void create_elements_window(data_t * data_set, data_t * data_label) {
 	labels_int = cast_array_to_int(labels, no_labels);
 
 	create_window(num_el, img_width, img_height, pixels_double, labels_int, DATASET);
+
+	free_memory(pixels_double);
+	free_memory(labels_int);
 
 }

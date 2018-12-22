@@ -103,20 +103,14 @@ void display_dataset_cb() {
 	window_t * window = NULL;
 	window = search_by_win_id(win_id);
 
-	int width = 0;
-	width = get_width(window);
+//	int no_pixels_in_img = 0;
+//	no_pixels_in_img = compute_no_pixels_in_img(window);
 
-	int height = 0;
-	height = get_height(window);
+//	double * img_pixels = NULL;
+//	img_pixels = get_img (window, curr_img_ptr);
 
 	free(window);
  
-	for (int row = 0; row < height; row++) {
-		for (int col = 0; col < width; col++) {
-
-		}
-	}
-
 
 	/* 
 	* swap buffers to display the frame 

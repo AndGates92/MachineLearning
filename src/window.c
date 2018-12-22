@@ -62,7 +62,10 @@ window_t * add_window (int id, int no_img, int width, int height, double * pixel
 	LOG_INFO(MEDIUM,"[New window structure] Set number of images in pixels of window data struct to %0d",  no_img);
 
 	ASSERT(pixels!=NULL);
-	window->pixels = pixels;
+	int no_pixels = 0;
+	no_pixels = no_img * width * height;
+	window->pixels = (double *) malloc(no_pixels*sizeof(double));
+	memcpy(window->pixels, pixels, no_pixels*sizeof(double));
 
 	window->window_type = window_type;
 
@@ -70,10 +73,13 @@ window_t * add_window (int id, int no_img, int width, int height, double * pixel
 	// Labels
 	// ===========================================================================
 	// If labels is NULL, it will be ignored
+	window->labels = NULL;
 	if (labels == NULL) {
 		LOG_INFO(ZERO,"[New window structure] Array of labels is NULL. It will be ignored.");
+	} else {
+		window->labels = (int *) malloc(no_img*sizeof(int));
+		memcpy(window->labels, labels, no_img*sizeof(int));
 	}
-	window->labels = labels;
 	LOG_INFO(ZERO,"[New window structure] Created window data structure: ID ->  %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d ", id, width, height, no_img);
 
 	return window;
@@ -111,16 +117,59 @@ int get_height (window_t * window) {
 
 double * get_pixels (window_t * window) {
 	ASSERT(window != NULL);
-	LOG_INFO(DEBUG,"[Get window pixels] Pixels of window data structure window_t");
 	ASSERT((window->pixels) != NULL);
-	return window->pixels;
+
+	int no_pixels = 0;
+	no_pixels = compute_no_pixels(window);
+
+	double * pixels = NULL;
+	pixels = (double *) malloc(no_pixels*sizeof(double));
+	if (pixels==NULL) {
+		LOG_ERROR("Can't allocate memory for pixels array");
+	}
+	memcpy(pixels, window->pixels, (no_pixels*sizeof(double)));
+
+	LOG_INFO(DEBUG,"[Get window pixels] Pixels of window data structure window_t");
+
+	return pixels;
+}
+
+double * get_img (window_t * window, int img_no) {
+	ASSERT(window != NULL);
+	ASSERT((window->pixels) != NULL);
+
+	int no_pixels_in_img = 0;
+	no_pixels_in_img = compute_no_pixels_in_img(window);
+
+	double * img_pixels = NULL;
+	img_pixels = (double *) malloc(no_pixels_in_img*sizeof(double));
+	if (img_pixels==NULL) {
+		LOG_ERROR("Can't allocate memory for image pixels array");
+	}
+	memcpy(img_pixels, (window->pixels + (img_no*no_pixels_in_img)), (no_pixels_in_img*sizeof(double)));
+
+	LOG_INFO(DEBUG,"[Get image pixels] Pixels of window data structure window_t");
+
+	return img_pixels;
 }
 
 int * get_labels (window_t * window) {
 	ASSERT(window != NULL);
-	LOG_INFO(DEBUG,"[Get window labels] Labels of window data structure window_t");
 	ASSERT((window->labels) != NULL);
-	return window->labels;
+
+	int no_img = 0;
+	no_img = get_no_img(window);
+
+	int * labels = NULL;
+	labels = (int *) malloc(no_img*sizeof(int));
+	if (labels==NULL) {
+		LOG_ERROR("Can't allocate memory for labels array");
+	}
+	memcpy(labels, window->labels, (no_img*sizeof(int)));
+
+	LOG_INFO(DEBUG,"[Get window labels] Labels of window data structure window_t");
+
+	return labels;
 }
 
 void set_window_type (window_t ** window, win_type_e window_type) {
@@ -195,6 +244,38 @@ char * win_type_to_str (win_type_e window_type) {
 	}
 
 	return window_type_str;
+}
+
+int compute_no_pixels_in_img(window_t * window) {
+	ASSERT(window != NULL);
+
+	int width = 0;
+	width = get_width(window);
+
+	int height = 0;
+	height = get_height(window);
+
+	int no_pixels_in_img = 0;
+	no_pixels_in_img = width*height;
+	LOG_INFO(DEBUG, "[Compute number pixels in image] Total number of pixels in window_t array: %0d", no_pixels_in_img);
+
+	return no_pixels_in_img;
+}
+
+int compute_no_pixels(window_t * window) {
+	ASSERT(window != NULL);
+
+	int no_img = 0;
+	no_img = get_no_img(window);
+
+	int no_pixels_in_img = 0;
+	no_pixels_in_img = compute_no_pixels_in_img(window);
+
+	int no_pixels = 0;
+	no_pixels = no_img*no_pixels_in_img;
+	LOG_INFO(DEBUG, "[Compute number pixels] Total number of pixels in window_t array: %0d", no_pixels);
+
+	return no_pixels;
 }
 
 size_t window_size() {

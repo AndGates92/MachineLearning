@@ -178,6 +178,17 @@ int get_height(window_t * window);
 double * get_pixels(window_t * window);
 
 /**
+ * @brief Function: double * get_img(window_t * window, int img_no)
+ *
+ * \param window: input window data structure window_t
+ * \param img_no: image number to be extracted
+ * \return the pixels of the image requested
+ *
+ * Get pixels of image requested
+ */
+double * get_img(window_t * window, int img_no);
+
+/**
  * @brief Function: int * get_labels(window_t * window)
  *
  * \param window: input window data structure window_t
@@ -205,6 +216,26 @@ void delete_window(window_t * window);
  * Convert the window type to a string that can be printed.
  */
 char * win_type_to_str(win_type_e window_type);
+
+ /**
+ * @brief Function: int compute_no_pixels(window_t * window)
+ *
+ * \param window:    window data structure
+ * \return the number of pixels in the array of pixels
+ *
+ * Compute the number of pixels in the array of pixels.
+ */
+int compute_no_pixels(window_t * window);
+
+ /**
+ * @brief Function: int compute_img_dim(window_t * window)
+ *
+ * \param window:    window data structure
+ * \return the number of pixels in an image
+ *
+ * Compute the number of pixels in an image.
+ */
+int compute_no_pixels_in_img(window_t * window);
 
 /**
  * @brief Function: size_t window_size()
