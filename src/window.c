@@ -20,6 +20,7 @@
  */
 struct window {
 	int id; /**< Window ID */
+	int img_ptr; /**< Image pointer */
 	int width; /**< width of the window */
 	int height; /**< height of the window */
 	int no_img; /**< Number of images in pixels array */
@@ -41,6 +42,12 @@ window_t * add_window (int id, int no_img, int width, int height, double * pixel
 	// ===========================================================================
 	window->id = id;
 	LOG_INFO(MEDIUM,"[New window structure] Set ID handler of window data struct to %0d",  id);
+
+	// ===========================================================================
+	// Image pointer
+	// ===========================================================================
+	window->img_ptr = 0;
+	LOG_INFO(MEDIUM,"[New window structure] Set image pointer to 0");
 
 	// ===========================================================================
 	// Dimensions
@@ -99,7 +106,13 @@ int get_no_img (window_t * window) {
 
 int get_id (window_t * window) {
 	ASSERT(window != NULL);
-	LOG_INFO(DEBUG,"[Get ID handler] ID handler of dimensions of window data structure window_t: %0d",  window->id);
+	LOG_INFO(DEBUG,"[Get ID handler] ID handler of window data structure window_t: %0d",  window->id);
+	return window->id;
+}
+
+int get_img_ptr (window_t * window) {
+	ASSERT(window != NULL);
+	LOG_INFO(DEBUG,"[Get image pointer] Image pointer of window data structure window_t: %0d",  window->img_ptr);
 	return window->id;
 }
 
@@ -187,7 +200,13 @@ void set_no_img (window_t ** window, int no_img) {
 void set_id (window_t ** window, int id) {
 	ASSERT((*window) != NULL);
 	(*window)->id = id;
-	LOG_INFO(DEBUG,"[Set ID handler] Set ID handler of dimensions of window data structure window_t: %0d",  (*window)->id);
+	LOG_INFO(DEBUG,"[Set ID handler] Set ID handler of window data structure window_t: %0d",  (*window)->id);
+}
+
+void set_img_ptr (window_t ** window, int img_ptr) {
+	ASSERT((*window) != NULL);
+	(*window)->img_ptr = img_ptr;
+	LOG_INFO(DEBUG,"[Set image pointer] Set image pointer of window data structure window_t: %0d",  (*window)->img_ptr);
 }
 
 void set_width (window_t ** window, int width) {

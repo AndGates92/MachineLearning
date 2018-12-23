@@ -57,6 +57,7 @@ window_t * add_window(int id, int no_img, int width, int height, double * pixels
  * Set type of content displayed on the window
  */
 void set_window_type(window_t ** window, win_type_e window_type);
+
 /**
  * @brief Function: void set_no_img(window_t ** window, int no_img)
  *
@@ -76,6 +77,16 @@ void set_no_img(window_t ** window, int no_img);
  * Set window handler ID
  */
 void set_id(window_t ** window, int id);
+
+/**
+ * @brief Function: void set_img_ptr(window_t ** window, int img_ptr)
+ *
+ * \param window: input window data structure window_t
+ * \param img_ptr: image pointer
+ *
+ * Set image pointer
+ */
+void set_img_ptr(window_t ** window, int img_ptr);
 
 /**
  * @brief Function: void set_width(window_t ** window, int width)
@@ -146,6 +157,16 @@ int get_no_img(window_t * window);
  * Get window handler ID
  */
 int get_id(window_t * window);
+
+/**
+ * @brief Function: int get_img_ptr(window_t * window)
+ *
+ * \param window: input window data structure window_t
+ * \return the image pointer
+ *
+ * Get image pointer
+ */
+int get_img_ptr(window_t * window);
 
 /**
  * @brief Function: int get_width(window_t * window)

@@ -111,6 +111,15 @@ void mouse_dataset_cb(int button, int state, int x, int y);
 void specialkey_dataset_cb(int key, int x, int y);
 
 /**
+ * @brief Function: void change_img_ptr(int step)
+ *
+ * \param step: value to add to the image pointer 
+ *
+ * Get current window ID and increment the image pointer by the value of step input
+ */
+void change_img_ptr();
+
+/**
  * @brief Function: void keyboard_dataset_cb(unsigned char key, int x, int y);
  *
  * \param key: key pressed

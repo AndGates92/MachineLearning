@@ -55,7 +55,6 @@ void init_gl(int argc, char** argv) {
 
 	no_windows = 0;
 	initialize_window_list();
-	wrapper_dataset_cb();
 }
 
 void create_window(int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type) {
@@ -85,9 +84,10 @@ void create_window(int no_img, int width, int height, double * pixels, int * lab
 
 	wrapper_dataset_cb();
 
+	show_window();
+
 	no_windows++;
 }
-
 
 void display_dataset_cb() {
 	glClear( GL_COLOR_BUFFER_BIT );
@@ -103,19 +103,26 @@ void display_dataset_cb() {
 	window_t * window = NULL;
 	window = search_by_win_id(win_id);
 
-//	int no_pixels_in_img = 0;
-//	no_pixels_in_img = compute_no_pixels_in_img(window);
+	int width = 0;
+	width = get_width(window);
 
-//	double * img_pixels = NULL;
-//	img_pixels = get_img (window, curr_img_ptr);
+	int height = 0;
+	height = get_height(window);
 
-	free(window);
- 
+	int curr_img_ptr = 0;
+	curr_img_ptr = get_img_ptr(window);
+
+	double * img_pixels = NULL;
+	img_pixels = get_img (window, curr_img_ptr);
+
+	glDrawPixels(width, height, GL_COLOR_INDEX, GL_FLOAT, img_pixels);
+
+	free_memory(window);
 
 	/* 
 	* swap buffers to display the frame 
 	*/
- 	glutSwapBuffers();
+	glutSwapBuffers();
 }
 
 void reshape_dataset_cb(int width, int height) {
@@ -136,10 +143,33 @@ void reshape_dataset_cb(int width, int height) {
 	gluPerspective( zoom, (GLdouble)width/(GLdouble)height, zNear, zFar );
 }
 
+void change_img_ptr(int step) {
+	int win_id = 0;
+	win_id = glutGetWindow();
+
+	window_t * window = NULL;
+	window = search_by_win_id(win_id);
+
+	int curr_img_ptr = 0;
+	curr_img_ptr = get_img_ptr(window);
+
+	curr_img_ptr += step;
+
+	set_img_ptr(&window, curr_img_ptr);
+
+	free_memory(window);
+}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 void keyboard_dataset_cb(unsigned char key, int x, int y) {
 	switch (key) {
+		case 'n':
+			change_img_ptr(+1);
+			break;
+		case 'p':
+			change_img_ptr(-1);
+			break;
 		default:
 			break;
 	}
@@ -152,8 +182,14 @@ void keyboard_dataset_cb(unsigned char key, int x, int y) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void specialkeys_dataset_cb(int key, int x, int y) {
+void specialkey_dataset_cb(int key, int x, int y) {
 	switch (key) {
+		case GLUT_KEY_UP:
+			change_img_ptr(+1);
+			break;
+		case GLUT_KEY_DOWN:
+			change_img_ptr(-1);
+			break;
 		default:
 			break;
 	}
@@ -185,7 +221,7 @@ void wrapper_dataset_cb() {
 	glutKeyboardFunc( keyboard_dataset_cb );
 	glutReshapeFunc( reshape_dataset_cb );
 	glutIdleFunc( idle_dataset_cb );
-	glutSpecialFunc( specialkeys_dataset_cb );
+	glutSpecialFunc( specialkey_dataset_cb );
 	glutMouseFunc( mouse_dataset_cb );
 }
 
