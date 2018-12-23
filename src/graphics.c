@@ -115,9 +115,11 @@ void display_dataset_cb() {
 	double * img_pixels = NULL;
 	img_pixels = get_img (window, curr_img_ptr);
 
+	free_memory(window);
+
 	glDrawPixels(width, height, GL_COLOR_INDEX, GL_FLOAT, img_pixels);
 
-	free_memory(window);
+	free_memory(img_pixels);
 
 	/* 
 	* swap buffers to display the frame 

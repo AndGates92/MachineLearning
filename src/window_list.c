@@ -64,10 +64,15 @@ window_t * search_by_win_id(int win_id) {
 		int curr_win_id = 0;
 		curr_win_id = get_id(window_list->window);
 
+		LOG_INFO(DEBUG,"[New search by windows ID] Window ID: current %0d searched %0d0d",  curr_win_id, win_id);
+		printf("[New search by windows ID] Window ID: current %0d searched %0d0d",  curr_win_id, win_id);
+
 		if (curr_win_id == win_id) {
 			window_found = window_list->window;
 			return window_found;
 		}
+
+		window_list = window_list->next;
 
 	}
 
