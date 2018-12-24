@@ -100,6 +100,8 @@ void display_dataset_cb() {
 	int win_id = 0;
 	win_id = glutGetWindow();
 
+	LOG_INFO(ZERO,"[Display cb] Display cb");
+
 	window_t * window = NULL;
 	window = search_by_win_id(win_id);
 
@@ -113,9 +115,7 @@ void display_dataset_cb() {
 	curr_img_ptr = get_img_ptr(window);
 
 	double * img_pixels = NULL;
-	img_pixels = get_img (window, curr_img_ptr);
-
-	free_memory(window);
+	img_pixels = get_img(window, curr_img_ptr);
 
 	glDrawPixels(width, height, GL_COLOR_INDEX, GL_FLOAT, img_pixels);
 

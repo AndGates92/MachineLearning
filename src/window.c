@@ -87,8 +87,7 @@ window_t * add_window (int id, int no_img, int width, int height, double * pixel
 		window->labels = (int *) malloc(no_img*sizeof(int));
 		memcpy(window->labels, labels, no_img*sizeof(int));
 	}
-	LOG_INFO(ZERO,"[New window structure] Created window data structure: ID ->  %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d ", id, width, height, no_img);
-	printf("[New window structure] Created window data structure: ID ->  %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d ", id, width, height, no_img);
+	LOG_INFO(ZERO,"[New window structure] Created window data structure: ID ->  %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d", id, width, height, no_img);
 
 	return window;
 }
