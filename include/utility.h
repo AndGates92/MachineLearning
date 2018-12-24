@@ -43,6 +43,16 @@
 void free_memory (void * ptr);
 
 /**
+ * @brief Function: unsigned char * cast_array_to_unsigned_byte (elementdatatype_t * element_set, int dimension)
+ *
+ * \param element_set: array fo elements to cast to unsigned char
+ * \param dimension: dimension of the array to cast
+ *
+ * Cast elements of array element_set to unsigned char.
+ */
+unsigned char * cast_array_to_unsigned_byte (elementdatatype_t * element_set, int dimension);
+
+/**
  * @brief Function: float * cast_array_to_float (elementdatatype_t * element_set, int dimension)
  *
  * \param element_set: array fo elements to cast to float

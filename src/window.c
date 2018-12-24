@@ -24,13 +24,13 @@ struct window {
 	int width; /**< width of the window */
 	int height; /**< height of the window */
 	int no_img; /**< Number of images in pixels array */
-	float * pixels; /**< Pixel color */
+	unsigned char * pixels; /**< Pixel color */
 	int * labels; /**< Label */
 	win_type_e window_type; /**< Window type */
 };
 /** @} */ // End of addtogroup WindowGroup
 
-window_t * add_window (int id, int no_img, int width, int height, float * pixels, int * labels, win_type_e window_type) {
+window_t * add_window (int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type) {
 	window_t * window = NULL;
 
 	window = (window_t *) malloc(sizeof(window_t));
@@ -71,8 +71,8 @@ window_t * add_window (int id, int no_img, int width, int height, float * pixels
 	ASSERT(pixels!=NULL);
 	int no_pixels = 0;
 	no_pixels = no_img * width * height;
-	window->pixels = (float *) malloc(no_pixels*sizeof(float));
-	memcpy(window->pixels, pixels, no_pixels*sizeof(float));
+	window->pixels = (unsigned char *) malloc(no_pixels*sizeof(unsigned char));
+	memcpy(window->pixels, pixels, no_pixels*sizeof(unsigned char));
 
 	window->window_type = window_type;
 
@@ -128,38 +128,38 @@ int get_height (window_t * window) {
 	return window->height;
 }
 
-float * get_pixels (window_t * window) {
+unsigned char * get_pixels (window_t * window) {
 	ASSERT(window != NULL);
 	ASSERT((window->pixels) != NULL);
 
 	int no_pixels = 0;
 	no_pixels = compute_no_pixels(window);
 
-	float * pixels = NULL;
-	pixels = (float *) malloc(no_pixels*sizeof(float));
+	unsigned char * pixels = NULL;
+	pixels = (unsigned char *) malloc(no_pixels*sizeof(unsigned char));
 	if (pixels==NULL) {
 		LOG_ERROR("Can't allocate memory for pixels array");
 	}
-	memcpy(pixels, window->pixels, (no_pixels*sizeof(float)));
+	memcpy(pixels, window->pixels, (no_pixels*sizeof(unsigned char)));
 
 	LOG_INFO(DEBUG,"[Get window pixels] Pixels of window data structure window_t");
 
 	return pixels;
 }
 
-float * get_img (window_t * window, int img_no) {
+unsigned char * get_img (window_t * window, int img_no) {
 	ASSERT(window != NULL);
 	ASSERT((window->pixels) != NULL);
 
 	int no_pixels_in_img = 0;
 	no_pixels_in_img = compute_no_pixels_in_img(window);
 
-	float * img_pixels = NULL;
-	img_pixels = (float *) malloc(no_pixels_in_img*sizeof(float));
+	unsigned char * img_pixels = NULL;
+	img_pixels = (unsigned char *) malloc(no_pixels_in_img*sizeof(unsigned char));
 	if (img_pixels==NULL) {
 		LOG_ERROR("Can't allocate memory for image pixels array");
 	}
-	memcpy(img_pixels, (window->pixels + (img_no*no_pixels_in_img)), (no_pixels_in_img*sizeof(float)));
+	memcpy(img_pixels, (window->pixels + (img_no*no_pixels_in_img)), (no_pixels_in_img*sizeof(unsigned char)));
 
 	LOG_INFO(DEBUG,"[Get image pixels] Pixels of window data structure window_t");
 
@@ -221,7 +221,7 @@ void set_height (window_t ** window, int height) {
 	LOG_INFO(DEBUG,"[Set window height] Set height of window data structure window_t: %0d",  (*window)->height);
 }
 
-void set_pixels (window_t ** window, float * pixels) {
+void set_pixels (window_t ** window, unsigned char * pixels) {
 	ASSERT((*window) != NULL);
 	(*window)->pixels = pixels;
 	LOG_INFO(DEBUG,"[Set window pixels] Set pixels of window data structure window_t");

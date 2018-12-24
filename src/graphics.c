@@ -43,7 +43,7 @@ static GLfloat zNear = 1.0;
  * @brief Far clip
  *
  */
-static GLfloat zFar = 1.0e2;
+static GLfloat zFar = 1.0;
 
 /** @} */ // End of addtogroup GraphicsGroup
 
@@ -57,7 +57,7 @@ void init_gl(int argc, char** argv) {
 	initialize_window_list();
 }
 
-void create_window(int no_img, int width, int height, float * pixels, int * labels, win_type_e window_type) {
+void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type) {
 
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(WIN_POS_X, WIN_POS_Y);
@@ -98,7 +98,7 @@ void display_dataset_cb() {
 	int win_id = 0;
 	win_id = glutGetWindow();
 
-	LOG_INFO(ZERO,"[Display cb] Display cb");
+	LOG_INFO(DEBUG,"[Display cb] Display cb");
 
 	window_t * window = NULL;
 	window = search_by_win_id(win_id);
@@ -112,14 +112,39 @@ void display_dataset_cb() {
 	int curr_img_ptr = 0;
 	curr_img_ptr = get_img_ptr(window);
 
-	float * img_pixels = NULL;
+	unsigned char * img_pixels = NULL;
 	img_pixels = get_img(window, curr_img_ptr);
 
-	glDrawPixels(width, height, GL_COLOR_INDEX, GL_FLOAT, img_pixels);
+	unsigned char * img_1 = NULL;
+	img_1 = (unsigned char *) malloc(width*height*4*sizeof(unsigned char));
+
+	for (int i=0; i < width; i++) {
+		for (int j=0; j < height; j++) {
+//			printf("%0d ", *(img_pixels + i*width + j));
+*(img_1 + 3*(i*width + j)) = 127 - (i+j);
+*(img_1 + 3*(i*width + j) + 1) = (i+j);
+*(img_1 + 3*(i*width + j) + 2) = 3*(i+j);
+		}
+//		printf("\n");
+	}
+
+	double win_width = 0;
+	win_width = glutGet(GLUT_WINDOW_WIDTH);
+
+	double win_height = 0;
+	win_height = glutGet(GLUT_WINDOW_HEIGHT);
+
+	unsigned char * img_reshaped = NULL;
+	img_reshaped = reshape_img(width, height, win_width, win_height, img_1);
+
+//	glDrawPixels(width, height, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, img);
+	glDrawPixels((int)win_width, (int)win_height, GL_RGB, GL_UNSIGNED_BYTE, img_reshaped);
 
 	free_memory(img_pixels);
+	free_memory(img_1);
+	free_memory(img_reshaped);
 
-	// swap buffers to display the frame 
+	// swap buffers to display the frame
 	glutSwapBuffers();
 }
 
@@ -134,6 +159,73 @@ void reshape_dataset_cb(int width, int height) {
 
 	// perspective parameters: field of view, aspect, near clip, far clip 
 	gluPerspective( zoom, (GLdouble)width/(GLdouble)height, zNear, zFar );
+
+//	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+unsigned char * reshape_img(int width_orig, int height_orig, double win_width, double win_height, unsigned char * img_orig) {
+
+	double win_img_width_ratio = 0.0;
+	win_img_width_ratio = win_width/(double)width_orig;
+
+	double win_img_height_ratio = 0.0;
+	win_img_height_ratio = win_height/(double)height_orig;
+
+	unsigned char * img = NULL;
+	img = (unsigned char *) malloc(win_width*win_height*4*sizeof(unsigned char));
+
+	bool width_reduced = false;
+	int win_img_width_ratio_int = 0;
+	if (win_img_width_ratio < 1.0) {
+		win_img_width_ratio_int = (int)(1.0/win_img_width_ratio);
+		width_reduced = true;
+	} else {
+		win_img_width_ratio_int = (int)(win_img_width_ratio);
+		width_reduced = false;
+	}
+
+	bool height_reduced = false;
+	int win_img_height_ratio_int = 0;
+	if (win_img_height_ratio < 1.0) {
+		win_img_height_ratio_int = (int)(1.0/win_img_height_ratio);
+		height_reduced = true;
+	} else {
+		win_img_height_ratio_int = (int)(win_img_height_ratio);
+		height_reduced = false;
+	}
+
+	int img_width_idx = 0;
+	int img_height_idx = 0;
+
+	printf("Dimensions Original Width %0d Height %0d\n", width_orig, height_orig);
+	printf("Dimensions Window Width %0f Height %0f\n", win_width, win_height);
+	printf("Dimensions Rato Width %0d Height %0d\n", win_img_width_ratio_int, win_img_height_ratio_int);
+
+	for (int width_idx = 0; width_idx < win_width; width_idx++) {
+		for (int height_idx = 0; height_idx < win_height; height_idx++) {
+			*(img + 3*(width_idx*(int)win_width + height_idx)) = *(img_orig + 3*(img_width_idx*width_orig + img_height_idx));
+			*(img + 3*(width_idx*(int)win_width + height_idx) + 1) = *(img_orig + 3*(img_width_idx*width_orig + img_height_idx) + 1);
+			*(img + 3*(width_idx*(int)win_width + height_idx) + 2) = *(img_orig + 3*(img_width_idx*width_orig + img_height_idx) + 2);
+
+			if (width_reduced == false) {
+				if ((width_idx % win_img_width_ratio_int) == (win_img_width_ratio_int - 1)) {
+					img_width_idx++;
+				}
+			} else {
+			
+			}
+
+			if (height_reduced == false) {
+				if ((height_idx % win_img_height_ratio_int) == (win_img_height_ratio_int - 1)) {
+					img_height_idx++;
+				}
+			} else {
+			
+			}
+		}
+	}
+
+	return img;
 }
 
 void change_img_ptr(int step) {
@@ -146,11 +238,16 @@ void change_img_ptr(int step) {
 	int curr_img_ptr = 0;
 	curr_img_ptr = get_img_ptr(window);
 
-	curr_img_ptr += step;
+	if (curr_img_ptr >= step) {
+		curr_img_ptr += step;
+	} else {
+		int no_img = 0;
+		no_img = get_no_img(window);
+
+		curr_img_ptr += (no_img + step);
+	}
 
 	set_img_ptr(&window, curr_img_ptr);
-
-	free_memory(window);
 }
 
 #pragma GCC diagnostic push
@@ -158,10 +255,16 @@ void change_img_ptr(int step) {
 void keyboard_dataset_cb(unsigned char key, int x, int y) {
 	switch (key) {
 		case 'n':
+			LOG_INFO(ZERO,"[Keyboard callbak] Increase image pointer because of pressing key %c", key);
 			change_img_ptr(+1);
 			break;
 		case 'p':
+			LOG_INFO(ZERO,"[Keyboard callbak] Decrease image pointer because of pressing key %c", key);
 			change_img_ptr(-1);
+			break;
+		case 'q':
+			LOG_INFO(ZERO,"[Keyboard callbak] Exit program because of pressing key %c", key);
+			exit(EXIT_SUCCESS);
 			break;
 		default:
 			break;
@@ -178,9 +281,11 @@ void keyboard_dataset_cb(unsigned char key, int x, int y) {
 void specialkey_dataset_cb(int key, int x, int y) {
 	switch (key) {
 		case GLUT_KEY_UP:
+			LOG_INFO(ZERO,"[Keyboard callbak] Increase image pointer because of pressing key Arrow Up");
 			change_img_ptr(+1);
 			break;
 		case GLUT_KEY_DOWN:
+			LOG_INFO(ZERO,"[Keyboard callbak] Decrease image pointer because of pressing key Arrow Down");
 			change_img_ptr(-1);
 			break;
 		default:

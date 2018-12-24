@@ -43,7 +43,7 @@
 void init_gl(int argc, char** argv);
 
 /**
- * @brief Function: void create_window(int no_img, int width, int height, float * pixels, int * labels, win_type_e window_type)
+ * @brief Function: void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type)
  *
  * \param no_img: number of images in pixels array
  * \param width: width of the window.
@@ -54,7 +54,20 @@ void init_gl(int argc, char** argv);
  *
  * Add window to display elements
  */
-void create_window(int no_img, int width, int height, float * pixels, int * labels, win_type_e window_type);
+void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type);
+
+/**
+ * @brief Function: unsigned char * reshape_img(int width_orig, int height_orig, double win_width, double win_height, unsigned char * img_orig)
+ *
+ * \param img_orig: image pixels as stored in window array
+ * \param win_width: width of the window.
+ * \param win_height: height of the window.
+ * \param width: width of the image stored in window array.
+ * \param height: height of the image stored in window array.
+ *
+ * Reshape image array
+ */
+unsigned char * reshape_img(int width_orig, int height_orig, double win_width, double win_height, unsigned char * img_orig);
 
 /**
  * @brief Function: void wrapper_dataset_cb()

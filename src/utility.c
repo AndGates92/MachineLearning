@@ -18,6 +18,27 @@ void free_memory (void * ptr) {
 	}
 }
 
+unsigned char * cast_array_to_unsigned_byte (elementdatatype_t * element_set, int dimension) {
+
+	// Pointer to the elements after casting
+	unsigned char * element_set_unsigned_byte = NULL;
+
+	element_set_unsigned_byte = (unsigned char *) malloc(dimension*sizeof(unsigned char));
+	if (element_set_unsigned_byte==NULL) {
+		LOG_ERROR("Can't allocate memory for element_set_unsigned_byte array");
+	}
+
+	if (sizeof(elementdatatype_t) == sizeof(unsigned char)) {
+		memcpy(element_set_unsigned_byte, element_set, (dimension*sizeof(unsigned char)));
+	} else {
+		for (int idx=0; idx < dimension; idx++) {
+			(*(element_set_unsigned_byte + idx)) = (unsigned char)(*(element_set + idx));
+		}
+	}
+
+	return element_set_unsigned_byte;
+}
+
 float * cast_array_to_float (elementdatatype_t * element_set, int dimension) {
 
 	// Pointer to the elements after casting

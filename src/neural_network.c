@@ -331,8 +331,8 @@ void create_elements_window(data_t * data_set, data_t * data_label) {
 	int no_pixels = 0;
 	no_pixels = compute_total_no_elements(data_set);
 
-	float * pixels_float = NULL;
-	pixels_float = cast_array_to_float(pixels, no_pixels);
+	unsigned char * pixels_unsigned_byte = NULL;
+	pixels_unsigned_byte = cast_array_to_unsigned_byte(pixels, no_pixels);
 
 	free_memory(pixels);
 
@@ -345,9 +345,9 @@ void create_elements_window(data_t * data_set, data_t * data_label) {
 	int * labels_int = NULL;
 	labels_int = cast_array_to_int(labels, no_labels);
 
-	create_window(num_el, img_width, img_height, pixels_float, labels_int, DATASET);
+	create_window(num_el, img_width, img_height, pixels_unsigned_byte, labels_int, DATASET);
 
-	free_memory(pixels_float);
+	free_memory(pixels_unsigned_byte);
 	free_memory(labels_int);
 
 }
