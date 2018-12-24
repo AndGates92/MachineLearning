@@ -213,11 +213,22 @@ unsigned char * get_img(window_t * window, int img_no);
  * @brief Function: int * get_labels(window_t * window)
  *
  * \param window: input window data structure window_t
- * \return the window pixels
+ * \return the window label 
  *
  * Get window pixels
  */
 int * get_labels(window_t * window);
+
+/**
+ * @brief Function: int get_label(window_t * window, int idx)
+ *
+ * \param window: input window data structure window_t
+ * \param idx: index of label searched
+ * \return one dataset label
+ *
+ * Get window pixels
+ */
+int get_label(window_t * window, int idx);
 
 /**
  * @brief Function: void delete_window(window_t * window)

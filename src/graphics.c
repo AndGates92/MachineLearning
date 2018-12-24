@@ -112,18 +112,33 @@ void display_dataset_cb() {
 	int curr_img_ptr = 0;
 	curr_img_ptr = get_img_ptr(window);
 
+	int label = 0;
+	label = get_label(window, curr_img_ptr);
+
+	char * win_name = NULL;
+	win_name = (char *) malloc(WIN_NAME_MAX_LENGTH*sizeof(char));
+	if (win_name==NULL) {
+		LOG_ERROR("Can't allocate memory for window title");
+	}
+	int win_name_length = 0;
+	win_name_length = sprintf(win_name, "Element number %0d (Expected %0d)", curr_img_ptr, label);
+	ASSERT(win_name_length <= WIN_NAME_MAX_LENGTH);
+	ASSERT(win_name_length > 0);
+	glutSetWindowTitle(win_name);
+	free_memory(win_name);
+
 	unsigned char * img_pixels = NULL;
 	img_pixels = get_img(window, curr_img_ptr);
 
-	unsigned char * img_1 = NULL;
-	img_1 = (unsigned char *) malloc(width*height*4*sizeof(unsigned char));
+	unsigned char * img_rgb = NULL;
+	img_rgb = (unsigned char *) malloc(width*height*4*sizeof(unsigned char));
 
 	for (int i=0; i < width; i++) {
 		for (int j=0; j < height; j++) {
 //			printf("%0d ", *(img_pixels + i*width + j));
-*(img_1 + 3*(i*width + j)) = 127 - (i+j);
-*(img_1 + 3*(i*width + j) + 1) = (i+j);
-*(img_1 + 3*(i*width + j) + 2) = 3*(i+j);
+			*(img_rgb + 3*(i*width + j)) = *(img_pixels + i*width + j);
+			*(img_rgb + 3*(i*width + j) + 1) = 0;
+			*(img_rgb + 3*(i*width + j) + 2) = 0;
 		}
 //		printf("\n");
 	}
@@ -135,13 +150,13 @@ void display_dataset_cb() {
 	win_height = glutGet(GLUT_WINDOW_HEIGHT);
 
 	unsigned char * img_reshaped = NULL;
-	img_reshaped = reshape_img(width, height, win_width, win_height, img_1);
+	img_reshaped = reshape_img(width, height, win_width, win_height, img_rgb);
 
 //	glDrawPixels(width, height, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, img);
 	glDrawPixels((int)win_width, (int)win_height, GL_RGB, GL_UNSIGNED_BYTE, img_reshaped);
 
 	free_memory(img_pixels);
-	free_memory(img_1);
+	free_memory(img_rgb);
 	free_memory(img_reshaped);
 
 	// swap buffers to display the frame
@@ -197,10 +212,6 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 	int img_width_idx = 0;
 	int img_height_idx = 0;
 
-	printf("Dimensions Original Width %0d Height %0d\n", width_orig, height_orig);
-	printf("Dimensions Window Width %0f Height %0f\n", win_width, win_height);
-	printf("Dimensions Rato Width %0d Height %0d\n", win_img_width_ratio_int, win_img_height_ratio_int);
-
 	for (int width_idx = 0; width_idx < win_width; width_idx++) {
 		for (int height_idx = 0; height_idx < win_height; height_idx++) {
 			*(img + 3*(width_idx*(int)win_width + height_idx)) = *(img_orig + 3*(img_width_idx*width_orig + img_height_idx));
@@ -238,13 +249,15 @@ void change_img_ptr(int step) {
 	int curr_img_ptr = 0;
 	curr_img_ptr = get_img_ptr(window);
 
-	if (curr_img_ptr >= step) {
-		curr_img_ptr += step;
-	} else {
-		int no_img = 0;
-		no_img = get_no_img(window);
+	int no_img = 0;
+	no_img = get_no_img(window);
 
+	if ((step < 0) && (curr_img_ptr < abs(step))) {
 		curr_img_ptr += (no_img + step);
+	} else if ((step > 0) && (curr_img_ptr >= (no_img - abs(step)))) {
+		curr_img_ptr -= (no_img - step);
+	} else {
+		curr_img_ptr += step;
 	}
 
 	set_img_ptr(&window, curr_img_ptr);

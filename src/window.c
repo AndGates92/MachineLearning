@@ -166,6 +166,20 @@ unsigned char * get_img (window_t * window, int img_no) {
 	return img_pixels;
 }
 
+int get_label (window_t * window, int idx) {
+	int * labels = NULL;
+	labels = get_labels(window);
+
+	int label  =0;
+	label = *(labels + idx);
+
+	free_memory(labels);
+
+	LOG_INFO(DEBUG,"[Get window label] Label %0d of window data structure window_t: %0d", idx, label);
+
+	return label;
+}
+
 int * get_labels (window_t * window) {
 	ASSERT(window != NULL);
 	ASSERT((window->labels) != NULL);
