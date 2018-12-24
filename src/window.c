@@ -113,7 +113,7 @@ int get_id (window_t * window) {
 int get_img_ptr (window_t * window) {
 	ASSERT(window != NULL);
 	LOG_INFO(DEBUG,"[Get image pointer] Image pointer of window data structure window_t: %0d",  window->img_ptr);
-	return window->id;
+	return window->img_ptr;
 }
 
 int get_width (window_t * window) {
