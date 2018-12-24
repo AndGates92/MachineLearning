@@ -42,7 +42,17 @@
  */
 void free_memory (void * ptr);
 
-/** 
+/**
+ * @brief Function: float * cast_array_to_float (elementdatatype_t * element_set, int dimension)
+ *
+ * \param element_set: array fo elements to cast to float
+ * \param dimension: dimension of the array to cast
+ *
+ * Cast elements of array element_set to float.
+ */
+float * cast_array_to_float (elementdatatype_t * element_set, int dimension);
+
+/**
  * @brief Function: double * cast_array_to_double (elementdatatype_t * element_set, int dimension)
  *
  * \param element_set: array fo elements to cast to double
@@ -52,7 +62,7 @@ void free_memory (void * ptr);
  */
 double * cast_array_to_double (elementdatatype_t * element_set, int dimension);
 
-/** 
+/**
  * @brief Function: double * normalize_elements (double * element_set, elementdatatype_t max_element, int dimension)
  *
  * \param element_set: array of elements to cast to double
@@ -63,7 +73,7 @@ double * cast_array_to_double (elementdatatype_t * element_set, int dimension);
  */
 double * normalize_elements (double * element_set, elementdatatype_t max_element, int dimension);
 
-/** 
+/**
  * @brief Function: int * cast_array_to_int (elementdatatype_t * element_set, int dimension)
  *
  * \param element_set: array of elements to cast to int

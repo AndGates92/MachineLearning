@@ -18,6 +18,27 @@ void free_memory (void * ptr) {
 	}
 }
 
+float * cast_array_to_float (elementdatatype_t * element_set, int dimension) {
+
+	// Pointer to the elements after casting
+	float * element_set_float = NULL;
+
+	element_set_float = (float *) malloc(dimension*sizeof(float));
+	if (element_set_float==NULL) {
+		LOG_ERROR("Can't allocate memory for element_set_float array");
+	}
+
+	if (sizeof(elementdatatype_t) == sizeof(float)) {
+		memcpy(element_set_float, element_set, (dimension*sizeof(float)));
+	} else {
+		for (int idx=0; idx < dimension; idx++) {
+			(*(element_set_float + idx)) = (float)(*(element_set + idx));
+		}
+	}
+
+	return element_set_float;
+}
+
 double * cast_array_to_double (elementdatatype_t * element_set, int dimension) {
 
 	// Pointer to the elements after casting

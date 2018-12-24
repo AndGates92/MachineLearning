@@ -57,7 +57,7 @@ void init_gl(int argc, char** argv) {
 	initialize_window_list();
 }
 
-void create_window(int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type) {
+void create_window(int no_img, int width, int height, float * pixels, int * labels, win_type_e window_type) {
 
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(WIN_POS_X, WIN_POS_Y);
@@ -92,9 +92,7 @@ void create_window(int no_img, int width, int height, double * pixels, int * lab
 void display_dataset_cb() {
 	glClear( GL_COLOR_BUFFER_BIT );
 
-	/* 
-	* set matrix mode to modelview 
-	*/
+	// set matrix mode to modelview 
 	glMatrixMode( GL_MODELVIEW );
 
 	int win_id = 0;
@@ -114,34 +112,27 @@ void display_dataset_cb() {
 	int curr_img_ptr = 0;
 	curr_img_ptr = get_img_ptr(window);
 
-	double * img_pixels = NULL;
+	float * img_pixels = NULL;
 	img_pixels = get_img(window, curr_img_ptr);
 
 	glDrawPixels(width, height, GL_COLOR_INDEX, GL_FLOAT, img_pixels);
 
 	free_memory(img_pixels);
 
-	/* 
-	* swap buffers to display the frame 
-	*/
+	// swap buffers to display the frame 
 	glutSwapBuffers();
 }
 
 void reshape_dataset_cb(int width, int height) {
-	/* 
-	* set viewport to new width and height 
-	*/
+	// set viewport to new width and height 
 	glViewport( 0, 0, width, height );
 
-	/* 
-	 * set viewing window using perspective projection
-	 */
+	// set viewing window using perspective projection
 	glMatrixMode( GL_PROJECTION ); 
-	glLoadIdentity(); /* init projection matrix */
+	// init projection matrix
+	glLoadIdentity();
 
-	/* 
-	* perspective parameters: field of view, aspect, near clip, far clip 
-	*/
+	// perspective parameters: field of view, aspect, near clip, far clip 
 	gluPerspective( zoom, (GLdouble)width/(GLdouble)height, zNear, zFar );
 }
 
@@ -176,7 +167,7 @@ void keyboard_dataset_cb(unsigned char key, int x, int y) {
 			break;
 	}
 
-	/* force glut to call the display functin */
+	// force glut to call the display function
 	glutPostRedisplay();
 
 }
@@ -196,7 +187,7 @@ void specialkey_dataset_cb(int key, int x, int y) {
 			break;
 	}
 
-	/* force glut to call the display function */
+	// force glut to call the display function
 	glutPostRedisplay();
 }
 #pragma GCC diagnostic pop
@@ -213,7 +204,7 @@ void mouse_dataset_cb(int button, int state, int x, int y) {
 
 void idle_dataset_cb() {
 
-	/* force glut to call the display function */
+	// force glut to call the display function
 	glutPostRedisplay();
 
 }

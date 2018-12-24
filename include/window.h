@@ -33,7 +33,7 @@ typedef enum win_type_list {
 typedef struct window window_t;
 
 /**
- * @brief Function: window_t * add_window(int id, int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type)
+ * @brief Function: window_t * add_window(int id, int no_img, int width, int height, float * pixels, int * labels, win_type_e window_type)
  *
  * \param id: window id handler
  * \param no_img: number of images stored in pixels array
@@ -46,7 +46,7 @@ typedef struct window window_t;
  *
  * Create and allocate memory for a new window data strcture window_t
  */
-window_t * add_window(int id, int no_img, int width, int height, double * pixels, int * labels, win_type_e window_type);
+window_t * add_window(int id, int no_img, int width, int height, float * pixels, int * labels, win_type_e window_type);
 
 /**
  * @brief Function: void set_no_img(window_t ** window, win_type_e window_type)
@@ -109,14 +109,14 @@ void set_width(window_t ** window, int width);
 void set_height(window_t ** window, int height);
 
 /**
- * @brief Function: void set_pixels(window_t ** window, double * pixels)
+ * @brief Function: void set_pixels(window_t ** window, float * pixels)
  *
  * \param window: input window data structure window_t
  * \param pixels: pixels of the window
  *
  * Set window pixels
  */
-void set_pixels(window_t ** window, double * pixels);
+void set_pixels(window_t ** window, float * pixels);
 
 /**
  * @brief Function: void set_label(window_t ** window, int * pixels)
@@ -189,17 +189,17 @@ int get_width(window_t * window);
 int get_height(window_t * window);
 
 /**
- * @brief Function: double * get_pixels(window_t * window)
+ * @brief Function: float * get_pixels(window_t * window)
  *
  * \param window: input window data structure window_t
  * \return the window pixels
  *
  * Get window pixels
  */
-double * get_pixels(window_t * window);
+float * get_pixels(window_t * window);
 
 /**
- * @brief Function: double * get_img(window_t * window, int img_no)
+ * @brief Function: float * get_img(window_t * window, int img_no)
  *
  * \param window: input window data structure window_t
  * \param img_no: image number to be extracted
@@ -207,7 +207,7 @@ double * get_pixels(window_t * window);
  *
  * Get pixels of image requested
  */
-double * get_img(window_t * window, int img_no);
+float * get_img(window_t * window, int img_no);
 
 /**
  * @brief Function: int * get_labels(window_t * window)
