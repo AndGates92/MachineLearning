@@ -64,10 +64,23 @@ void create_window(int no_img, int width, int height, unsigned char * pixels, in
  * \param win_height: height of the window.
  * \param width: width of the image stored in window array.
  * \param height: height of the image stored in window array.
+ * \return reshaped image
  *
  * Reshape image array
  */
 unsigned char * reshape_img(int width_orig, int height_orig, double win_width, double win_height, unsigned char * img_orig);
+
+/**
+ * @brief Function: unsigned char * flip_img(int win_width, int win_height, unsigned char * img_in)
+ *
+ * \param img_in: image pixels as stored in window array
+ * \param win_width: width of the window.
+ * \param win_height: height of the window.
+ * \return flipped image
+ *
+ * Flip image as OpenGL puts coordinates in the lower right corner of the image
+ */
+unsigned char * flip_img(int win_width, int win_height, unsigned char * img_in);
 
 /**
  * @brief Function: void wrapper_dataset_cb()
