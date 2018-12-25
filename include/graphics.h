@@ -78,7 +78,7 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
  * \param win_height: height of the window.
  * \return flipped image
  *
- * Flip image as OpenGL puts coordinates in the lower right corner of the image
+ * Flip image as OpenGL puts coordinates in the lower left corner of the image
  */
 unsigned char * flip_img(int win_width, int win_height, unsigned char * img_in);
 

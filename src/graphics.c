@@ -84,8 +84,6 @@ void create_window(int no_img, int width, int height, unsigned char * pixels, in
 
 	wrapper_dataset_cb();
 
-	show_window();
-
 	no_windows++;
 }
 

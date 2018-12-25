@@ -59,6 +59,8 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t, &learn_rate, &alpha);
 
 		train_neural_network(weights, biases, layers_dim, train_set_struct_t, train_label_struct_t, learn_rate, alpha); 
+
+		show_window();
 	} else {
 		LOG_INFO(LOW,"[Neural Network] Can't run neural network as input informations are not sufficient");
 	}
