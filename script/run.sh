@@ -38,9 +38,9 @@ TIME_FORMAT=%H:%M:%S
 usage () {
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]  - Usage:"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]  - >$0 <options>"
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`] "
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --clean|-c:	delete generated files"
-	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --doc|-d:		generate documentation"
+	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --doc|-d:	generate documentation"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --debug|-g:	dump makefile flags to ${LOGDIR}/${DEBUGLOG}"
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --memleak|-m:	compile and check memory leaks using valgrind" 
 	echo "[`date "+${DATE_FORMAT} ${TIME_FORMAT}"`]       --test|-t:	compile and run tests"
@@ -49,6 +49,7 @@ usage () {
 
 if [ $# -lt 1 ]; then
 	usage
+	exit 0
 fi
 
 for args
