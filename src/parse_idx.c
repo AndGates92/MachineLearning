@@ -166,14 +166,16 @@ void parse_body(FILE * fid, data_t ** data) {
 	// Compute total dimension of the array of elements
 	total_elements = compute_total_no_elements(*data);
 
+	element_cnt = datatype_element_ratio;
+
 	do {
-		// Variable storing parsed data
+		// Variable storing parsed data (reading sizeof(elementdatatype_t) bytes)
 		elementdatatype_t data_read = 0;
 		eof = read_body(fid, &data_read);
 
 		LOG_INFO(DEBUG,"[Parse Body] Data read %0d, End of file %s", data_read, bool_to_str(eof));
 
-		// Variable storing the 32 bits of the magic number grouped as bytes (8 bits)
+		// Variable storing sizeof(elementdatatype_t) bytes of the data grouped as bytes
 		byte * element_bytes = NULL;
 		element_bytes = (byte *) malloc(sizeof(elementdatatype_t));
 		if (element_bytes == NULL) {
@@ -184,13 +186,18 @@ void parse_body(FILE * fid, data_t ** data) {
 
 		int valid_elements = 0;
 		if (eof) {
-			ASSERT((total_elements - element_cnt) <= datatype_element_ratio);
-			valid_elements = (total_elements - element_cnt);
+			ASSERT((total_elements + datatype_element_ratio - element_cnt) <= datatype_element_ratio);
+			ASSERT((total_elements + datatype_element_ratio - element_cnt) >= 0);
+			valid_elements = (total_elements + datatype_element_ratio - element_cnt);
 		} else {
-			ASSERT((total_elements - element_cnt) >= datatype_element_ratio);
+			ASSERT((total_elements - element_cnt) >= 0);
 			valid_elements = datatype_element_ratio;
 		}
 		for (int el = 0; el < valid_elements; el++) {
+
+			element_cnt--;
+			ASSERT(element_cnt >= 0);
+
 			elementdatatype_t element = 0;
 			for (int byte = 0; byte < no_bytes; byte++) {
 				int idx = 0;
@@ -228,17 +235,15 @@ void parse_body(FILE * fid, data_t ** data) {
 			free_memory(coordinates);
 
 			ASSERT(element_cnt < total_elements);
-
-			element_cnt++;
 		}
+
+		element_cnt += (2*datatype_element_ratio);
 
 		free_memory (element_bytes);
 
 	} while (eof == false);
 
 	free_memory(dimensions);
-
-	ASSERT(element_cnt == total_elements);
 
 }
 
