@@ -52,7 +52,8 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 
 	if ((test_set_struct_t != NULL) && (test_label_struct_t != NULL) && (train_set_struct_t != NULL) && (train_label_struct_t != NULL)) {
 
-		create_elements_window(test_set_struct_t, test_label_struct_t);
+//		create_elements_window(test_set_struct_t, test_label_struct_t);
+		create_elements_window(train_set_struct_t, train_label_struct_t);
 
 		// Randomize the weight and the bias of every layer
 		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t, &learn_rate, &alpha);

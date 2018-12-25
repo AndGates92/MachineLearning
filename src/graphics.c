@@ -133,14 +133,16 @@ void display_dataset_cb() {
 	unsigned char * img_rgb = NULL;
 	img_rgb = (unsigned char *) malloc(width*height*4*sizeof(unsigned char));
 
-	for (int i=0; i < width; i++) {
-		for (int j=0; j < height; j++) {
-//			printf("%0d ", *(img_pixels + i*width + j));
-			*(img_rgb + 3*(i*width + j)) = *(img_pixels + i*width + j);
-			*(img_rgb + 3*(i*width + j) + 1) = 0;
-			*(img_rgb + 3*(i*width + j) + 2) = 0;
+	for (int width_idx=0; width_idx < width; width_idx++) {
+		for (int height_idx=0; height_idx < height; height_idx++) {
+			*(img_rgb + 3*(height_idx*width + width_idx)) = *(img_pixels + height_idx*width + width_idx);
+			*(img_rgb + 3*(height_idx*width + width_idx) + 1) = 0;
+			*(img_rgb + 3*(height_idx*width + width_idx) + 2) = 0;
+
+//			*(img_rgb + 3*(height_idx*width + width_idx)) = 255 * ((height_idx < height/3) ? 1 : 0);
+//			*(img_rgb + 3*(height_idx*width + width_idx) + 1) = 255 * (((height_idx > height/3) && (height_idx < 2*height/3)) ? 1 : 0);
+//			*(img_rgb + 3*(height_idx*width + width_idx) + 2) = 255 * (((height_idx > 2*height/3) && (height_idx < height)) ? 1 : 0);
 		}
-//		printf("\n");
 	}
 
 	double win_width = 0;
@@ -210,21 +212,22 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 	}
 
 	int img_width_idx = 0;
-	int img_height_idx = 0;
 
 	for (int width_idx = 0; width_idx < win_width; width_idx++) {
-		for (int height_idx = 0; height_idx < win_height; height_idx++) {
-			*(img + 3*(width_idx*(int)win_width + height_idx)) = *(img_orig + 3*(img_width_idx*width_orig + img_height_idx));
-			*(img + 3*(width_idx*(int)win_width + height_idx) + 1) = *(img_orig + 3*(img_width_idx*width_orig + img_height_idx) + 1);
-			*(img + 3*(width_idx*(int)win_width + height_idx) + 2) = *(img_orig + 3*(img_width_idx*width_orig + img_height_idx) + 2);
-
-			if (width_reduced == false) {
-				if ((width_idx % win_img_width_ratio_int) == (win_img_width_ratio_int - 1)) {
-					img_width_idx++;
-				}
-			} else {
-			
+		if (width_reduced == false) {
+			if ((width_idx % win_img_width_ratio_int) == (win_img_width_ratio_int - 1)) {
+				img_width_idx++;
 			}
+		} else {
+			
+		}
+
+		int img_height_idx = 0;
+
+		for (int height_idx = 0; height_idx < win_height; height_idx++) {
+			*(img + 3*(height_idx*(int)win_width + width_idx)) = *(img_orig + 3*(img_height_idx*width_orig + img_width_idx));
+			*(img + 3*(height_idx*(int)win_width + width_idx) + 1) = *(img_orig + 3*(img_height_idx*width_orig + img_width_idx) + 1);
+			*(img + 3*(height_idx*(int)win_width + width_idx) + 2) = *(img_orig + 3*(img_height_idx*width_orig + img_width_idx) + 2);
 
 			if (height_reduced == false) {
 				if ((height_idx % win_img_height_ratio_int) == (win_img_height_ratio_int - 1)) {
