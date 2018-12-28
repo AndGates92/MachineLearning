@@ -58,7 +58,9 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 		// Randomize the weight and the bias of every layer
 		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t, &learn_rate, &alpha);
 
-		train_neural_network(weights, biases, layers_dim, train_set_struct_t, train_label_struct_t, learn_rate, alpha); 
+		train_neural_network(weights, biases, layers_dim, train_set_struct_t, train_label_struct_t, learn_rate, alpha);
+
+		testing_neural_network(weights, biases, layers_dim, test_set_struct_t, test_label_struct_t);
 
 		show_window();
 	} else {
@@ -353,4 +355,127 @@ void create_elements_window(data_t * data_set, data_t * data_label) {
 	free_memory(pixels_unsigned_byte);
 	free_memory(labels_int);
 
+}
+
+void testing_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label) {
+
+	int num_el = 0;
+	num_el = get_dimension(data_set, 0);
+
+	int total_num_layers = 0;
+	// Hidden layers plus input layer plus output layer
+	total_num_layers = (NUM_HIDDEN_LAYERS + 2);
+
+	int total_num_nodes = 0;
+
+	for (int layer_no = 0; layer_no < total_num_layers; layer_no++) {
+		total_num_nodes += (*(layers_dim + layer_no));
+	}
+
+	double * node_val = NULL;
+	node_val = (double *) malloc(total_num_nodes*sizeof(double));
+
+//	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
+	for (int start_el_idx = 0; start_el_idx < 3; start_el_idx++) {
+
+		double * input_data_double_norm = NULL;
+		input_data_double_norm = get_data_el(data_set, start_el_idx);
+
+		int label_int = 0;
+		label_int = get_label_el(data_label, start_el_idx);
+
+		int outcome = 0;
+
+		LOG_INFO(LOW, "[Neural network testing] Feedforward stage: Start iteration %0d out of %0d", start_el_idx, num_el);
+		feedforward_stage(weights, biases, layers_dim, input_data_double_norm, &node_val, &outcome);
+
+		free_memory(input_data_double_norm);
+
+		LOG_INFO(LOW,"[Neural network testing] Neural network estimates: %0d Label %0d", outcome, label_int);
+		if (outcome == label_int) {
+			LOG_INFO(LOW,"[Neural network testing] PASS: label matches neural network prediction");
+		} else {
+			LOG_INFO(LOW,"[Neural network testing] FAIL: label doesn't match neural network prediction");
+		}
+
+	}
+
+	free_memory(node_val);
+
+}
+
+int * set_el_coord(int no_dims, int el_idx) {
+
+	int * coord = NULL;
+	coord = (int *) malloc(no_dims*sizeof(int));
+	if (coord==NULL) {
+		LOG_ERROR("Can't allocate memory for element coordinate");
+	}
+
+	for (int set_dim = 0; set_dim < no_dims; set_dim++) {
+		int coordinate = 0;
+		switch (set_dim) {
+			case 0:
+				coordinate = el_idx;
+				break;
+			default:
+				coordinate = 0;
+				break;
+		}
+		coord[set_dim] = coordinate;
+		LOG_INFO(HIGH, "[Element coordinates] Start data set coordinate %0d out of %0d: %0d", set_dim, no_dims, coord[set_dim]);
+	}
+
+	return coord;
+}
+
+
+double * get_data_el(data_t * data_set, int el_idx) {
+
+	int el_size = 0;
+	el_size = element_size(data_set);
+
+	int no_dims = 0;
+	no_dims = get_no_dims(data_set);
+
+	int * set_coord = NULL;
+	set_coord = set_el_coord(no_dims, el_idx);
+
+	elementdatatype_t * input_data = NULL;
+	input_data = get_elements_subset(data_set, el_size, set_coord);
+
+	free_memory(set_coord);
+
+	double * input_data_double = NULL;
+	input_data_double = cast_array_to_double(input_data, el_size);
+
+	free_memory(input_data);
+
+	elementdatatype_t max_el = 0;
+	max_el =  get_max_element (data_set);
+
+	double * input_data_double_norm = NULL;
+	input_data_double_norm = normalize_elements (input_data_double, max_el, el_size);
+
+	free_memory(input_data_double);
+
+	return input_data_double_norm;
+}
+
+int get_label_el(data_t * data_label, int el_idx) {
+
+	int label_no_dims = 0;
+	label_no_dims = get_no_dims(data_label);
+
+	int * label_coord = NULL;
+	label_coord = set_el_coord(label_no_dims, el_idx);
+
+	elementdatatype_t label = 0;
+	label = get_element(data_label, label_coord);
+
+	// Cast label to integer
+	int label_int = 0;
+	label_int = (int) label;
+
+	return label_int;
 }
