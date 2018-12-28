@@ -290,6 +290,8 @@ void create_elements_window(data_t * data_set, data_t * data_label) {
 
 void testing_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label) {
 
+	int num_pass = 0;
+
 	int num_el = 0;
 	num_el = get_dimension(data_set, 0);
 
@@ -324,12 +326,23 @@ void testing_neural_network(double * weights, double * biases, int * layers_dim,
 
 		LOG_INFO(LOW,"[Neural network testing] Neural network estimates: %0d Label %0d", outcome, label_int);
 		if (outcome == label_int) {
+			num_pass++;
 			LOG_INFO(LOW,"[Neural network testing] PASS: label matches neural network prediction");
 		} else {
 			LOG_INFO(LOW,"[Neural network testing] FAIL: label doesn't match neural network prediction");
 		}
 
 	}
+
+	double num_pass_pc = 0;
+	num_pass_pc = 100.0*(((double) num_pass)/((double) num_el));
+	LOG_INFO(LOW,"[Neural network testing] Total number of PASS: %0d out of %0d -> %0f%", num_pass, num_el, num_pass_pc);
+
+	int num_fail = 0;
+	num_fail = num_el - num_pass;
+	double num_fail_pc = 0;
+	num_fail_pc = 100.0*(((double) num_fail)/((double) num_el));
+	LOG_INFO(LOW,"[Neural network testing] Total number of FAIL: %0d out of %0d -> %0f%", num_fail, num_el, num_fail_pc);
 
 	free_memory(node_val);
 
