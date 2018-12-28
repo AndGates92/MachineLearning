@@ -188,9 +188,6 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 
 void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label, double learn_rate, double alpha) {
 
-	int el_size = 0;
-	el_size = element_size(data_set);
-
 	int num_el = 0;
 	num_el = get_dimension(data_set, 0);
 
@@ -210,77 +207,11 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 //	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 	for (int start_el_idx = 0; start_el_idx < 3; start_el_idx++) {
 
-		int no_dims = 0;
-		no_dims = get_no_dims(data_set);
-
-		int * set_coord = NULL;
-		set_coord = (int *) malloc(no_dims*sizeof(int));
-		if (set_coord==NULL) {
-			LOG_ERROR("Can't allocate memory for data set element coordinate");
-		}
-
-		for (int set_dim = 0; set_dim < no_dims; set_dim++) {
-			int coordinate = 0;
-			switch (set_dim) {
-				case 0:
-					coordinate = start_el_idx;
-					break;
-				default:
-					coordinate = 0;
-					break;
-			}
-			set_coord[set_dim] = coordinate;
-			LOG_INFO(HIGH, "[Neural network training] Start data set coordinate %0d out of %0d: %0d", set_dim, no_dims, set_coord[set_dim]);
-		}
-
-		elementdatatype_t * input_data = NULL;
-		input_data = get_elements_subset(data_set, el_size, set_coord);
-
-		free_memory(set_coord);
-
-		double * input_data_double = NULL;
-		input_data_double = cast_array_to_double(input_data, el_size);
-
-		free_memory(input_data);
-
-		elementdatatype_t max_el = 0;
-		max_el =  get_max_element (data_set);
-
 		double * input_data_double_norm = NULL;
-		input_data_double_norm = normalize_elements (input_data_double, max_el, el_size);
+		input_data_double_norm = get_data_el(data_set, start_el_idx);
 
-		free_memory(input_data_double);
-
-		int label_no_dims = 0;
-		label_no_dims = get_no_dims(data_label);
-		int * label_coord = NULL;
-		label_coord = (int *) malloc(label_no_dims*sizeof(int));
-		if (label_coord==NULL) {
-			LOG_ERROR("Can't allocate memory for label element coordinate");
-		}
-
-		for (int lab_dim = 0; lab_dim < label_no_dims; lab_dim++) {
-			int coordinate = 0;
-			switch (lab_dim) {
-				case 0:
-					coordinate = start_el_idx;
-					break;
-				default:
-					coordinate = 0;
-					break;
-			}
-			label_coord[lab_dim] = coordinate;
-			LOG_INFO(HIGH, "[Neural network training] Start label coordinate %0d: %0d", lab_dim, label_coord[lab_dim]);
-		}
-
-		elementdatatype_t label = 0;
-		label = get_element(data_label, label_coord);
-
-		// Cast label to integer
 		int label_int = 0;
-		label_int = (int) label;
-
-		free_memory(label_coord);
+		label_int = get_label_el(data_label, start_el_idx);
 
 		int outcome = 0;
 
