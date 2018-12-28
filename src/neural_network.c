@@ -334,13 +334,13 @@ void testing_neural_network(double * weights, double * biases, int * layers_dim,
 
 	}
 
-	double num_pass_pc = 0;
+	double num_pass_pc = 0.0;
 	num_pass_pc = 100.0*(((double) num_pass)/((double) num_el));
 	LOG_INFO(LOW,"[Neural network testing] Total number of PASS: %0d out of %0d -> %0f%", num_pass, num_el, num_pass_pc);
 
 	int num_fail = 0;
 	num_fail = num_el - num_pass;
-	double num_fail_pc = 0;
+	double num_fail_pc = 0.0;
 	num_fail_pc = 100.0*(((double) num_fail)/((double) num_el));
 	LOG_INFO(LOW,"[Neural network testing] Total number of FAIL: %0d out of %0d -> %0f%", num_fail, num_el, num_fail_pc);
 
