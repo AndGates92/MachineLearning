@@ -52,8 +52,27 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 
 	if ((test_set_struct_t != NULL) && (test_label_struct_t != NULL) && (train_set_struct_t != NULL) && (train_label_struct_t != NULL)) {
 
-		create_elements_window(test_set_struct_t, test_label_struct_t);
-//		create_elements_window(train_set_struct_t, train_label_struct_t);
+		char * win_name_prefix = NULL;
+		win_name_prefix = (char *) malloc(MAX_WIN_NAME_PREFIX*sizeof(char));
+		if (win_name_prefix==NULL) {
+			LOG_ERROR("Can't allocate memory for window title prefix");
+		}
+		strcpy(win_name_prefix, "Training set");
+		int win_name_prefix_length = 0;
+		win_name_prefix_length = strlen(win_name_prefix);
+		ASSERT(win_name_prefix_length < MAX_WIN_NAME_PREFIX);
+		ASSERT(win_name_prefix_length > 0);
+
+		create_elements_window(test_set_struct_t, test_label_struct_t, win_name_prefix);
+
+		strcpy(win_name_prefix, "Test set");
+		win_name_prefix_length = strlen(win_name_prefix);
+		ASSERT(win_name_prefix_length < MAX_WIN_NAME_PREFIX);
+		ASSERT(win_name_prefix_length > 0);
+
+		create_elements_window(train_set_struct_t, train_label_struct_t, win_name_prefix);
+
+		free_memory(win_name_prefix);
 
 		// Randomize the weight and the bias of every layer
 		initialize_neuronetwork(&weights, &biases, &layers_dim, test_set_struct_t, test_label_struct_t, &learn_rate, &alpha);
@@ -236,7 +255,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 }
 
-void create_elements_window(data_t * data_set, data_t * data_label) {
+void create_elements_window(data_t * data_set, data_t * data_label, char * win_name_prefix) {
 	int no_dims = 0;
 	no_dims = get_no_dims(data_set);
 
@@ -281,7 +300,7 @@ void create_elements_window(data_t * data_set, data_t * data_label) {
 	int * labels_int = NULL;
 	labels_int = cast_array_to_int(labels, no_labels);
 
-	create_window(num_el, img_width, img_height, pixels_unsigned_byte, labels_int, DATASET);
+	create_window(num_el, img_width, img_height, pixels_unsigned_byte, labels_int, DATASET, win_name_prefix);
 
 	free_memory(pixels_unsigned_byte);
 	free_memory(labels_int);

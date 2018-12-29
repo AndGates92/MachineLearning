@@ -19,6 +19,12 @@
 #define MAX_WINDOW_TYPE_LENGTH 10
 
 /**
+ * @brief Length of window name prefix
+ *
+ */
+#define MAX_WIN_NAME_PREFIX 15
+
+/**
  * @brief Window labels
  *
  */
@@ -33,9 +39,10 @@ typedef enum win_type_list {
 typedef struct window window_t;
 
 /**
- * @brief Function: window_t * add_window(int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type)
+ * @brief Function: window_t * add_window(int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix)
  *
  * \param id: window id handler
+ * \param prefix: window name prefix
  * \param no_img: number of images stored in pixels array
  * \param width: width of the window
  * \param height: height of the window
@@ -46,7 +53,17 @@ typedef struct window window_t;
  *
  * Create and allocate memory for a new window data strcture window_t
  */
-window_t * add_window(int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type);
+window_t * add_window(int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix);
+
+/**
+ * @brief Function: void set_prefix(window_t ** window, char * prefix)
+ *
+ * \param window: input window data structure window_t
+ * \param prefix: window name prefix
+ *
+ * Set window name prefix
+ */
+void set_prefix(window_t ** window, char * prefix);
 
 /**
  * @brief Function: void set_no_img(window_t ** window, win_type_e window_type)
@@ -127,6 +144,16 @@ void set_pixels(window_t ** window, unsigned char * pixels);
  * Set window pixels
  */
 void set_label(window_t ** window, int * labels);
+
+/**
+ * @brief Function: char * get_prefix(window_t * window)
+ *
+ * \param window: input window data structure window_t
+ * \return the window name prefix
+ *
+ * Get window name prefix
+ */
+char * get_prefix(window_t * window);
 
 /**
  * @brief Function: win_type_e get_window_type(window_t * window)

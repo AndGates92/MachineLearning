@@ -57,7 +57,7 @@ void init_gl(int argc, char** argv) {
 	initialize_window_list();
 }
 
-void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type) {
+void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * win_name_prefix) {
 
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(WIN_POS_X, WIN_POS_Y);
@@ -70,7 +70,7 @@ void create_window(int no_img, int width, int height, unsigned char * pixels, in
 		LOG_ERROR("Can't allocate memory for window title");
 	}
 	int win_name_length = 0;
-	win_name_length = sprintf(win_name, "Element number 0 (Expected %0d)", (int)*labels);
+	win_name_length = sprintf(win_name, "[%s] Element number 0 (Expected %0d)", win_name_prefix, (int)*labels);
 	ASSERT(win_name_length <= WIN_NAME_MAX_LENGTH);
 	ASSERT(win_name_length > 0);
 	int win_id = 0;
@@ -79,7 +79,7 @@ void create_window(int no_img, int width, int height, unsigned char * pixels, in
 
 	window_t * window = NULL;
 	window = (window_t *) malloc((size_t) window_size);
-	window = add_window(win_id, no_img, width, height, pixels, labels, window_type);
+	window = add_window(win_id, no_img, width, height, pixels, labels, window_type, win_name_prefix);
 	add_window_struct(window);
 
 	wrapper_dataset_cb();
@@ -113,16 +113,20 @@ void display_dataset_cb() {
 	int label = 0;
 	label = get_label(window, curr_img_ptr);
 
+	char * win_name_prefix = NULL;
+	win_name_prefix = get_prefix(window);
+
 	char * win_name = NULL;
 	win_name = (char *) malloc(WIN_NAME_MAX_LENGTH*sizeof(char));
 	if (win_name==NULL) {
 		LOG_ERROR("Can't allocate memory for window title");
 	}
 	int win_name_length = 0;
-	win_name_length = sprintf(win_name, "Element number %0d (Expected %0d)", curr_img_ptr, label);
+	win_name_length = sprintf(win_name, "[%s] Element number %0d (Expected %0d)", win_name_prefix, curr_img_ptr, label);
 	ASSERT(win_name_length <= WIN_NAME_MAX_LENGTH);
 	ASSERT(win_name_length > 0);
 	glutSetWindowTitle(win_name);
+	free_memory(win_name_prefix);
 	free_memory(win_name);
 
 	unsigned char * img_pixels = NULL;

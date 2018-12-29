@@ -113,14 +113,15 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_dim, data_t * data_set, data_t * data_label, double * learn_rate, double * alpha);
 
 /** 
- * @brief Function: void create_elements_window(data_t * data_set, data_t * data_label)
+ * @brief Function: void create_elements_window(data_t * data_set, data_t * data_label, char * win_name_prefix)
  *
  * \param data_set:  data structure to extract dimensions of the input layer of the neural network
  * \param data_label:  data structure to extract dimensions of the output layer of the neural network
+ * \param win_name_prefix: window name prefix
  *
  * Create a windows where elements can be displayed
  */
-void create_elements_window(data_t * data_set, data_t * data_label);
+void create_elements_window(data_t * data_set, data_t * data_label, char * win_name_prefix);
 
 /**
  * @brief Function: void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label, double learn_rate, double alpha)

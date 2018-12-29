@@ -19,6 +19,7 @@
  *
  */
 struct window {
+	char * prefix; /**< Name prefix */
 	int id; /**< Window ID */
 	int img_ptr; /**< Image pointer */
 	int width; /**< width of the window */
@@ -30,18 +31,29 @@ struct window {
 };
 /** @} */ // End of addtogroup WindowGroup
 
-window_t * add_window (int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type) {
+window_t * add_window (int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix) {
 	window_t * window = NULL;
 
 	window = (window_t *) malloc(sizeof(window_t));
 	if (window==NULL) {
-		LOG_ERROR("Can't allocate memory for a new window data strcuture window_t");
+		LOG_ERROR("Can't allocate memory for a new window data structure window_t");
 	}
 	// ===========================================================================
 	// ID handler
 	// ===========================================================================
 	window->id = id;
 	LOG_INFO(MEDIUM,"[New window structure] Set ID handler of window data struct to %0d",  id);
+
+	// ===========================================================================
+	// Prefix
+	// ===========================================================================
+	window->prefix = (char *) malloc(MAX_WIN_NAME_PREFIX*sizeof(char));
+	if (window->prefix==NULL) {
+		LOG_ERROR("Can't allocate memory for the window name prefix of window data structure window_t");
+	}
+	int prefix_len = 0;
+	prefix_len = sprintf(window->prefix, "%s", prefix);
+	ASSERT(prefix_len < MAX_WIN_NAME_PREFIX);
 
 	// ===========================================================================
 	// Image pointer
@@ -72,6 +84,9 @@ window_t * add_window (int id, int no_img, int width, int height, unsigned char 
 	int no_pixels = 0;
 	no_pixels = no_img * width * height;
 	window->pixels = (unsigned char *) malloc(no_pixels*sizeof(unsigned char));
+	if (window->pixels==NULL) {
+		LOG_ERROR("Can't allocate memory for a new set of pixels in window data structure window_t");
+	}
 	memcpy(window->pixels, pixels, no_pixels*sizeof(unsigned char));
 
 	window->window_type = window_type;
@@ -90,6 +105,16 @@ window_t * add_window (int id, int no_img, int width, int height, unsigned char 
 	LOG_INFO(ZERO,"[New window structure] Created window data structure: ID ->  %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d", id, width, height, no_img);
 
 	return window;
+}
+
+char * get_prefix (window_t * window) {
+	char * prefix = NULL;
+	prefix = (char *) malloc(MAX_WIN_NAME_PREFIX*sizeof(char));
+	if (prefix==NULL) {
+		LOG_ERROR("Can't allocate memory for the window name prefix");
+	}
+	sprintf(prefix, "%s", window->prefix);
+	return prefix;
 }
 
 win_type_e get_window_type (window_t * window) {
@@ -199,6 +224,17 @@ int * get_labels (window_t * window) {
 	return labels;
 }
 
+void set_prefix (window_t ** window, char * prefix) {
+	ASSERT((*window) != NULL);
+
+	int prefix_len = 0;
+	prefix_len = sprintf((*window)->prefix, "%s", prefix);
+	ASSERT(prefix_len < MAX_WIN_NAME_PREFIX);
+	ASSERT(prefix_len > 0);
+
+	LOG_INFO(DEBUG,"[Set window name prefix] Set window name prefix of window data structure window_t: %s",  prefix);
+}
+
 void set_window_type (window_t ** window, win_type_e window_type) {
 	ASSERT((*window) != NULL);
 	(*window)->window_type = window_type;
@@ -237,18 +273,37 @@ void set_height (window_t ** window, int height) {
 
 void set_pixels (window_t ** window, unsigned char * pixels) {
 	ASSERT((*window) != NULL);
-	(*window)->pixels = pixels;
+	int no_img = 0;
+	no_img = get_no_img(*window);
+
+	int width = 0;
+	width = get_width(*window);
+
+	int height = 0;
+	height = get_height(*window);
+
+	int no_pixels = 0;
+	no_pixels = no_img * width * height;
+
+	memcpy((*window)->pixels, pixels, no_pixels*sizeof(unsigned char));
+
 	LOG_INFO(DEBUG,"[Set window pixels] Set pixels of window data structure window_t");
 }
 
 void set_labels (window_t ** window, int * labels) {
 	ASSERT((*window) != NULL);
-	(*window)->labels = labels;
+	int no_img = 0;
+	no_img = get_no_img(*window);
+
+	memcpy((*window)->labels, labels, no_img*sizeof(unsigned char));
+
 	LOG_INFO(DEBUG,"[Set window labels] Set labels of window data structure window_t");
 }
 
 void delete_window (window_t * window) {
 	if (window != NULL) {
+		free_memory(window->prefix);
+		LOG_INFO(DEBUG,"[Delete window] Free window name prefix -> COMPLETED");
 		free_memory(window->pixels);
 		LOG_INFO(DEBUG,"[Delete window] Free window pixels -> COMPLETED");
 		free_memory(window->labels);

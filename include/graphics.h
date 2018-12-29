@@ -18,7 +18,7 @@
  * @brief Maximum length of the window title
  *
  */
-#define WIN_NAME_MAX_LENGTH 50
+#define WIN_NAME_MAX_LENGTH (MAX_WIN_NAME_PREFIX + 50)
 
 /**
  * @brief Window position on the x coordinate
@@ -43,9 +43,10 @@
 void init_gl(int argc, char** argv);
 
 /**
- * @brief Function: void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type)
+ * @brief Function: void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * win_name_prefix)
  *
  * \param no_img: number of images in pixels array
+ * \param win_name_prefix: window name prefix
  * \param width: width of the window.
  * \param height: height of the window.
  * \param pixels: pixels to be displayed (it can involve multiple sets of pixels).
@@ -54,7 +55,7 @@ void init_gl(int argc, char** argv);
  *
  * Add window to display elements
  */
-void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type);
+void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * win_name_prefix);
 
 /**
  * @brief Function: unsigned char * reshape_img(int width_orig, int height_orig, double win_width, double win_height, unsigned char * img_orig)
