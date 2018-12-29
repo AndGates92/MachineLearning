@@ -133,13 +133,24 @@ void display_dataset_cb() {
 	img_pixels = get_img(window, curr_img_ptr);
 
 	unsigned char * img_rgb = NULL;
-	img_rgb = (unsigned char *) malloc(width*height*3*sizeof(unsigned char));
+	img_rgb = (unsigned char *) malloc(width*height*NO_COLOURS*sizeof(unsigned char));
 
 	for (int width_idx=0; width_idx < width; width_idx++) {
 		for (int height_idx=0; height_idx < height; height_idx++) {
-			*(img_rgb + 3*(height_idx*width + width_idx)) = *(img_pixels + height_idx*width + width_idx);
-			*(img_rgb + 3*(height_idx*width + width_idx) + 1) = 0;
-			*(img_rgb + 3*(height_idx*width + width_idx) + 2) = 0;
+			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
+				unsigned char colour = 0;
+
+				switch (colour_idx) {
+					case 0:
+						colour = *(img_pixels + height_idx*width + width_idx);
+						break;
+					default :
+						colour = 0;
+						break;
+				}
+
+				*(img_rgb + NO_COLOURS*(height_idx*width + width_idx) + colour_idx) = colour;
+			}
 		}
 	}
 
@@ -155,6 +166,7 @@ void display_dataset_cb() {
 	unsigned char * img_flipped = NULL;
 	img_flipped = flip_img((int)win_width, (int)win_height, img_reshaped);
 
+	//glDrawPixels((int)win_width, (int)win_height, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, img_flipped);
 	glDrawPixels((int)win_width, (int)win_height, GL_RGB, GL_UNSIGNED_BYTE, img_flipped);
 
 	free_memory(img_pixels);
@@ -190,7 +202,7 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 	win_img_height_ratio = win_height/(double)height_orig;
 
 	unsigned char * img = NULL;
-	img = (unsigned char *) malloc(win_width*win_height*3*sizeof(unsigned char));
+	img = (unsigned char *) malloc(win_width*win_height*NO_COLOURS*sizeof(unsigned char));
 
 	bool width_reduced = false;
 	int win_img_width_ratio_int = 0;
@@ -226,9 +238,9 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 		int img_height_idx = 0;
 
 		for (int height_idx = 0; height_idx < win_height; height_idx++) {
-			*(img + 3*(height_idx*(int)win_width + width_idx)) = *(img_orig + 3*(img_height_idx*width_orig + img_width_idx));
-			*(img + 3*(height_idx*(int)win_width + width_idx) + 1) = *(img_orig + 3*(img_height_idx*width_orig + img_width_idx) + 1);
-			*(img + 3*(height_idx*(int)win_width + width_idx) + 2) = *(img_orig + 3*(img_height_idx*width_orig + img_width_idx) + 2);
+			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
+				*(img + NO_COLOURS*(height_idx*(int)win_width + width_idx) + colour_idx) = *(img_orig + NO_COLOURS*(img_height_idx*width_orig + img_width_idx) + colour_idx);
+			}
 
 			if (height_reduced == false) {
 				if ((height_idx % win_img_height_ratio_int) == (win_img_height_ratio_int - 1)) {
@@ -237,6 +249,7 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 			} else {
 			
 			}
+
 		}
 	}
 
@@ -246,13 +259,13 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 unsigned char * flip_img(int win_width, int win_height, unsigned char * img_in) {
 
 	unsigned char * img = NULL;
-	img = (unsigned char *) malloc(win_width*win_height*3*sizeof(unsigned char));
+	img = (unsigned char *) malloc(win_width*win_height*NO_COLOURS*sizeof(unsigned char));
 
 	for (int width_idx = 0; width_idx < win_width; width_idx++) {
 		for (int height_idx = 0; height_idx < win_height; height_idx++) {
-			*(img + 3*((win_height - 1 - height_idx)*win_width + width_idx)) = *(img_in + 3*(height_idx*win_width + width_idx));
-			*(img + 3*((win_height - 1 - height_idx)*win_width + width_idx) + 1) = *(img_in + 3*(height_idx*win_width + width_idx) + 1);
-			*(img + 3*((win_height - 1 - height_idx)*win_width + width_idx) + 2) = *(img_in + 3*(height_idx*win_width + width_idx) + 2);
+			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
+				*(img + NO_COLOURS*((win_height - 1 - height_idx)*win_width + width_idx) + colour_idx) = *(img_in + NO_COLOURS*(height_idx*win_width + width_idx) + colour_idx);
+			}
 		}
 	}
 

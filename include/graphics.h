@@ -33,6 +33,12 @@
 #define WIN_POS_Y 50
 
 /**
+ * @brief Number of base colours
+ *
+ */
+#define NO_COLOURS 3
+
+/**
  * @brief Function: void init_gl(int argc, char ** argv)
  *
  * \param argc: argument count. Number of arguments including the executable itself.
