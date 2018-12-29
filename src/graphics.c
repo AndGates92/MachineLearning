@@ -145,7 +145,8 @@ void display_dataset_cb() {
 						colour = *(img_pixels + height_idx*width + width_idx);
 						break;
 					default :
-						colour = 0;
+						colour = *(img_pixels + height_idx*width + width_idx);
+//						colour = 0;
 						break;
 				}
 
@@ -166,7 +167,6 @@ void display_dataset_cb() {
 	unsigned char * img_flipped = NULL;
 	img_flipped = flip_img((int)win_width, (int)win_height, img_reshaped);
 
-	//glDrawPixels((int)win_width, (int)win_height, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, img_flipped);
 	glDrawPixels((int)win_width, (int)win_height, GL_RGB, GL_UNSIGNED_BYTE, img_flipped);
 
 	free_memory(img_pixels);
@@ -265,6 +265,28 @@ unsigned char * flip_img(int win_width, int win_height, unsigned char * img_in) 
 		for (int height_idx = 0; height_idx < win_height; height_idx++) {
 			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
 				*(img + NO_COLOURS*((win_height - 1 - height_idx)*win_width + width_idx) + colour_idx) = *(img_in + NO_COLOURS*(height_idx*win_width + width_idx) + colour_idx);
+			}
+		}
+	}
+
+	return img;
+}
+
+float * normalize_img(int win_width, int win_height, unsigned char * img_in) {
+
+	float * img = NULL;
+	img = (float *) malloc(win_width*win_height*NO_COLOURS*sizeof(float));
+
+	int max_pixel_val = 0;
+	// Choose first element of img_pixels to extract datatype width
+	max_pixel_val = (2^(BIT_IN_BYTE*sizeof(*img_in)))-1;
+
+	for (int width_idx = 0; width_idx < win_width; width_idx++) {
+		for (int height_idx = 0; height_idx < win_height; height_idx++) {
+			int idx = 0;
+			idx = NO_COLOURS*((win_height - 1 - height_idx)*win_width + width_idx);
+			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
+				*(img + idx + colour_idx) = ((float)(*(img_in + idx + colour_idx)))/((float)max_pixel_val);
 			}
 		}
 	}

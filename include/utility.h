@@ -34,6 +34,12 @@
 #define STRINGIFY_EXPR(x) STRINGIFY(x)
 
 /**
+ * @brief A byte constains 8 bits
+ *
+ */
+#define BIT_IN_BYTE 8
+
+/**
  * @brief Function: void free_memory (void * ptr)
  *
  * \param ptr: pointer to the memory to free

@@ -78,6 +78,18 @@ void create_window(int no_img, int width, int height, unsigned char * pixels, in
 unsigned char * reshape_img(int width_orig, int height_orig, double win_width, double win_height, unsigned char * img_orig);
 
 /**
+ * @brief Function: float * normalize_img(int win_width, int win_height, unsigned char * img_in)
+ *
+ * \param img_in: image pixels as stored in window array
+ * \param win_width: width of the window.
+ * \param win_height: height of the window.
+ * \return normalized image
+ *
+ * Normalize image
+ */
+float * normalize_img(int win_width, int win_height, unsigned char * img_in);
+
+/**
  * @brief Function: unsigned char * flip_img(int win_width, int win_height, unsigned char * img_in)
  *
  * \param img_in: image pixels as stored in window array
