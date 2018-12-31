@@ -318,6 +318,24 @@ void change_img_ptr(int step) {
 	set_img_ptr(&window, curr_img_ptr);
 }
 
+void destroy_window() {
+	int win_id = 0;
+	win_id = glutGetWindow();
+
+	remove_window_struct(win_id);
+
+	glutDestroyWindow(win_id);
+
+	window_list_t * window_head_list = NULL;
+	window_head_list = get_window_list_head();
+
+	if (window_head_list == NULL) {
+		// Exit only if no windows are left
+		exit(EXIT_SUCCESS);
+	}
+
+}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 void keyboard_dataset_cb(unsigned char key, int x, int y) {
@@ -325,22 +343,23 @@ void keyboard_dataset_cb(unsigned char key, int x, int y) {
 		case 'n':
 			LOG_INFO(ZERO,"[Keyboard callbak] Increase image pointer because of pressing key %c", key);
 			change_img_ptr(+1);
+			// force glut to call the display function
+			glutPostRedisplay();
 			break;
 		case 'p':
 			LOG_INFO(ZERO,"[Keyboard callbak] Decrease image pointer because of pressing key %c", key);
 			change_img_ptr(-1);
+			// force glut to call the display function
+			glutPostRedisplay();
 			break;
 		case 'q':
 			LOG_INFO(ZERO,"[Keyboard callbak] Exit program because of pressing key %c", key);
-			exit(EXIT_SUCCESS);
+			destroy_window();
+//			exit(EXIT_SUCCESS);
 			break;
 		default:
 			break;
 	}
-
-	// force glut to call the display function
-	glutPostRedisplay();
-
 }
 #pragma GCC diagnostic pop
 
@@ -351,17 +370,18 @@ void specialkey_dataset_cb(int key, int x, int y) {
 		case GLUT_KEY_UP:
 			LOG_INFO(ZERO,"[Keyboard callbak] Increase image pointer because of pressing key Arrow Up");
 			change_img_ptr(+1);
+			// force glut to call the display function
+			glutPostRedisplay();
 			break;
 		case GLUT_KEY_DOWN:
 			LOG_INFO(ZERO,"[Keyboard callbak] Decrease image pointer because of pressing key Arrow Down");
 			change_img_ptr(-1);
+			// force glut to call the display function
+			glutPostRedisplay();
 			break;
 		default:
 			break;
 	}
-
-	// force glut to call the display function
-	glutPostRedisplay();
 }
 #pragma GCC diagnostic pop
 
@@ -378,7 +398,7 @@ void mouse_dataset_cb(int button, int state, int x, int y) {
 void idle_dataset_cb() {
 
 	// force glut to call the display function
-	glutPostRedisplay();
+	//glutPostRedisplay();
 
 }
 

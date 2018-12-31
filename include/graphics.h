@@ -158,11 +158,11 @@ void specialkey_dataset_cb(int key, int x, int y);
 /**
  * @brief Function: void change_img_ptr(int step)
  *
- * \param step: value to add to the image pointer 
+ * \param step: value to add to the image pointer
  *
  * Get current window ID and increment the image pointer by the value of step input
  */
-void change_img_ptr();
+void change_img_ptr(int step);
 
 /**
  * @brief Function: void keyboard_dataset_cb(unsigned char key, int x, int y);
@@ -175,6 +175,19 @@ void change_img_ptr();
  */
 void keyboard_dataset_cb(unsigned char key, int x, int y);
 
+/**
+ * @brief Function: void destroy_window()
+ *
+ * This function destroys a window
+ */
+void destroy_window();
+
+/**
+ * @brief Function: void show_window()
+ *
+ * This function starts displaying windows
+ */
+void show_window();
 /**
  * @brief Function: void show_window()
  *
