@@ -71,3 +71,7 @@ void show_window() {
 void change_no_windows(int step) {
 	no_windows += step;
 }
+
+int get_no_windows() {
+	return no_windows;
+}

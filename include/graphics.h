@@ -79,5 +79,14 @@ void show_window();
  */
 void change_no_windows(int step);
 
+/**
+ * @brief Function: int get_no_windows()
+ *
+ * \return number of active windows
+ *
+ * Get the number of active windows
+ */
+int get_no_windows();
+
 /** @} */ // End of GraphicsGroup
 #endif // GRAPHICS_H

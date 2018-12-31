@@ -286,15 +286,21 @@ void destroy_window() {
 	remove_window_struct(win_id);
 
 	glutDestroyWindow(win_id);
+	change_no_windows(-1);
 
 	window_list_t * window_head_list = NULL;
 	window_head_list = get_window_list_head();
 
+	int no_windows = 0;
+	no_windows = get_no_windows();
+
 	if (window_head_list == NULL) {
+		ASSERT(no_windows == 0);
 		// Exit only if no windows are left
 		exit(EXIT_SUCCESS);
+	} else {
+		ASSERT(no_windows > 0);
 	}
-
 }
 
 #pragma GCC diagnostic push
