@@ -10,7 +10,7 @@
 
 #include "window.h"
 
-/** @defgroup GraphicsGroup Object Graphics Doxygen Group
+/** @defgroup GraphicsGroup Graphics Doxygen Group
  *  Functions and defines concerning graphics of objects
  *  @{
  */
@@ -19,6 +19,30 @@
  *
  */
 #define WIN_NAME_MAX_LENGTH (MAX_WIN_NAME_PREFIX + 50)
+
+/**
+ * @brief Menu width
+ *
+ */
+#define MENU_WIDTH 50
+
+/**
+ * @brief Menu height
+ *
+ */
+#define MENU_HEIGHT 300
+
+/**
+ * @brief Menu position on the x coordinate
+ *
+ */
+#define MENU_POS_X 50
+
+/**
+ * @brief Menu position on the y coordinate
+ *
+ */
+#define MENU_POS_Y 50
 
 /**
  * @brief Window position on the x coordinate
@@ -62,6 +86,26 @@ void init_gl(int argc, char** argv);
  * Add window to display elements
  */
 void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * win_name_prefix);
+
+/**
+ * @brief Function: void create_menu()
+ *
+ * Add menu
+ */
+void create_menu();
+
+/**
+ * @brief Function: int init_window(int width, int height, int pos_x, int pos_y, char * win_name)
+ *
+ * \param width: width of the window.
+ * \param height: height of the window.
+ * \param pos_x: menu position along X coordinate.
+ * \param pos_y: menu position along Y coordinate.
+ * \param win_name: window name
+ *
+ * Initialize window position, name and dimensions
+ */
+int init_window(int width, int height, int pos_x, int pos_y, char * win_name);
 
 /**
  * @brief Function: void show_window()
