@@ -31,8 +31,6 @@ void init_gl(int argc, char** argv) {
 
 	no_windows = 0;
 	initialize_window_list();
-
-	create_menu();
 }
 
 void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * win_name_prefix) {
@@ -49,7 +47,7 @@ void create_window(int no_img, int width, int height, unsigned char * pixels, in
 	ASSERT(win_name_length > 0);
 
 	int win_id = 0;
-	win_id = init_window (width, height, WIN_POS_X, WIN_POS_Y, win_name);
+	win_id = init_window(width, height, WIN_POS_X, WIN_POS_Y, win_name);
 
 	free_memory(win_name);
 
@@ -91,7 +89,7 @@ void create_menu () {
 	ASSERT(menu_name_length > 0);
 
 	int menu_win_id = 0;
-	menu_win_id = init_window (MENU_WIDTH, MENU_HEIGHT, MENU_POS_X, MENU_POS_Y, menu_name);
+	menu_win_id = init_window(MENU_WIDTH, MENU_HEIGHT, MENU_POS_X, MENU_POS_Y, menu_name);
 
 	free_memory(menu_name);
 

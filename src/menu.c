@@ -19,7 +19,26 @@
 
 #include "menu.h"
 
+int menu_id;
+
+void menu_items(int item) {
+	switch (item) {
+		case QUIT:
+			exit(EXIT_SUCCESS);
+			break;
+		default:
+			glutPostRedisplay();
+			break;
+	}
+
+	glutPostRedisplay();
+}
+
 void add_menu (int menu_win_id) {
 
+//	menu_id = glutCreateMenu(menu_items);
+//	glutAddMenuEntry("Quit", QUIT);
+
+//	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	menu_win_id++;
 }

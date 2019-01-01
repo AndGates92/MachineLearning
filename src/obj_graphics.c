@@ -324,6 +324,7 @@ void keyboard_dataset_cb(unsigned char key, int x, int y) {
 			destroy_window();
 			break;
 		default:
+			glutPostRedisplay();
 			break;
 	}
 }
@@ -346,6 +347,7 @@ void specialkey_dataset_cb(int key, int x, int y) {
 			glutPostRedisplay();
 			break;
 		default:
+			glutPostRedisplay();
 			break;
 	}
 }

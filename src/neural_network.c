@@ -52,6 +52,8 @@ void neural_network (char * test_set, char * train_set, char * test_label, char 
 
 	if ((test_set_struct_t != NULL) && (test_label_struct_t != NULL) && (train_set_struct_t != NULL) && (train_label_struct_t != NULL)) {
 
+		create_menu();
+
 		char * win_name_prefix = NULL;
 		win_name_prefix = (char *) malloc(MAX_WIN_NAME_PREFIX*sizeof(char));
 		if (win_name_prefix==NULL) {
