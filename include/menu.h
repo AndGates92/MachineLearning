@@ -13,12 +13,20 @@
  *  @{
  */
 /**
- * @brief menu list data type enumeration menu_list_e
+ * @brief Length of menu entry string
  *
  */
-typedef enum menu_list {
+#define MAX_MENU_ENTRY_LENGTH 10
+
+/**
+ * @brief menu entry data type enumeration menu_entry_e
+ *
+ */
+typedef enum menu_entry {
+	PREV_OBJ,
+	NEXT_OBJ,
 	QUIT
-} menu_list_e;
+} menu_entry_e;
 
 /**
  * @brief Function: int add_menu()
@@ -30,13 +38,23 @@ typedef enum menu_list {
 int add_menu();
 
 /**
- * @brief Function: void menu_items(int item)
+ * @brief Function: void menu_entries(int entry)
  *
- * \param item: item of the menu
+ * \param entry: entry of the menu
  *
- * This function selects actions based on selected item
+ * This function selects actions based on selected entry
  */
-void menu_items(int item);
+void menu_entries(int entry);
+
+/**
+ * @brief Function: char * menu_entry_to_str(menu_entry_e menu_entry)
+ *
+ * \param menu_entry: menu entry
+ * \return a string with the name of the menu entry
+ * 
+ * Convert the window type to a string that can be printed.
+ */
+char * menu_entry_to_str(menu_entry_e menu_entry);
 
 /** @} */ // End of MenuGroup
 #endif // MENU_H
