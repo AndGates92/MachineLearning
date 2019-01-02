@@ -15,6 +15,9 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 
+// math library
+#include <math.h>
+
 #include "log.h"
 #include "graphics.h"
 #include "window.h"
@@ -24,10 +27,10 @@
 unsigned char * reshape_img(int width_orig, int height_orig, double win_width, double win_height, unsigned char * img_orig) {
 
 	double win_img_width_ratio = 0.0;
-	win_img_width_ratio = win_width/(double)width_orig;
+	win_img_width_ratio = ceil(win_width/(double)width_orig);
 
 	double win_img_height_ratio = 0.0;
-	win_img_height_ratio = win_height/(double)height_orig;
+	win_img_height_ratio = ceil(win_height/(double)height_orig);
 
 	unsigned char * img = NULL;
 	img = (unsigned char *) malloc(win_width*win_height*NO_COLOURS*sizeof(unsigned char));
@@ -54,7 +57,10 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 
 	int img_width_idx = 0;
 
-	for (int width_idx = 0; width_idx < win_width; width_idx++) {
+	for (int width_idx = 0; width_idx < (int)win_width; width_idx++) {
+
+		ASSERT(img_width_idx < width_orig);
+
 		if (width_reduced == false) {
 			if ((width_idx % win_img_width_ratio_int) == (win_img_width_ratio_int - 1)) {
 				img_width_idx++;
@@ -65,10 +71,12 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 
 		int img_height_idx = 0;
 
-		for (int height_idx = 0; height_idx < win_height; height_idx++) {
+		for (int height_idx = 0; height_idx < (int)win_height; height_idx++) {
 			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
 				*(img + NO_COLOURS*(height_idx*(int)win_width + width_idx) + colour_idx) = *(img_orig + NO_COLOURS*(img_height_idx*width_orig + img_width_idx) + colour_idx);
 			}
+
+			ASSERT(img_height_idx < height_orig);
 
 			if (height_reduced == false) {
 				if ((height_idx % win_img_height_ratio_int) == (win_img_height_ratio_int - 1)) {
