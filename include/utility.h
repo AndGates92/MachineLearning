@@ -34,6 +34,34 @@
 #define STRINGIFY_EXPR(x) STRINGIFY(x)
 
 /**
+ * @brief max(x,y)
+ *
+ * \param x : first argument
+ * \param y : second argument
+ *
+ * Returns the maximum value between x and y
+ *
+ */
+#define max(x,y) \
+	({ __typeof__ (x) first_el = (x); \
+	__typeof__ (y) second_el = (y); \
+	(first_el > second_el) ? first_el : second_el; })
+
+/**
+ * @brief max(x,y)
+ *
+ * \param x : first argument
+ * \param y : second argument
+ *
+ * Returns the minimum value between x and y
+ *
+ */
+#define min(x,y) \
+	({ __typeof__ (x) first_el = (x); \
+	__typeof__ (y) second_el = (y); \
+	(first_el < second_el) ? first_el : second_el; })
+
+/**
  * @brief A byte constains 8 bits
  *
  */
