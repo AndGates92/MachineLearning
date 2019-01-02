@@ -290,7 +290,7 @@ void delete_window(window_t * window);
 /**
  * @brief Function: char * win_type_to_str(window_type_e window_type)
  *
- * \param window_type:    window type of window data strcture window_t
+ * \param window_type:    window type of window data structure window_t
  * \return a string with the name of the window type
  * 
  * Convert the window type to a string that can be printed.
