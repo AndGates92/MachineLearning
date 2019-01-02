@@ -15,12 +15,6 @@
  *  @{
  */
 /**
- * @brief Maximum length of the window title
- *
- */
-#define WIN_NAME_MAX_LENGTH (MAX_WIN_NAME_PREFIX + 50)
-
-/**
  * @brief Menu width
  *
  */
@@ -55,12 +49,6 @@
  *
  */
 #define WIN_POS_Y 50
-
-/**
- * @brief Number of base colours
- *
- */
-#define NO_COLOURS 3
 
 /**
  * @brief Function: void init_gl(int argc, char ** argv)

@@ -38,12 +38,5 @@ int add_menu();
  */
 void menu_items(int item);
 
-/**
- * @brief Function: void destroy_menu()
- *
- * This function destroys a menu
- */
-void destroy_menu();
-
 /** @} */ // End of MenuGroup
 #endif // MENU_H
