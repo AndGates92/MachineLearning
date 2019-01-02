@@ -34,11 +34,10 @@ void menu_items(int item) {
 	glutPostRedisplay();
 }
 
-void add_menu (int menu_win_id) {
+void add_menu() {
 
-//	menu_id = glutCreateMenu(menu_items);
-//	glutAddMenuEntry("Quit", QUIT);
+	menu_id = glutCreateMenu(menu_items);
+	glutAddMenuEntry("Quit", QUIT);
 
-//	glutAttachMenu(GLUT_RIGHT_BUTTON);
-	menu_win_id++;
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }

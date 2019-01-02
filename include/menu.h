@@ -21,13 +21,11 @@ typedef enum menu_list {
 } menu_list_e;
 
 /**
- * @brief Function: void add_menu(int menu_win_id)
- *
- * \param menu_win_id: ID of menu window
+ * @brief Function: void add_menu()
  *
  * This function adds a menu
  */
-void add_menu(int menu_win_id);
+void add_menu();
 
 /**
  * @brief Function: void menu_items(int item)

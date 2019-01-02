@@ -63,6 +63,7 @@ void create_window(int no_img, int width, int height, unsigned char * pixels, in
 
 int init_window (int width, int height, int pos_x, int pos_y, char * win_name) {
 
+	LOG_INFO(DEBUG,"[Init window] Create window at %0d, %0d. Dimensions: width %0d height %0d", pos_x, pos_y, width, height);
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(pos_x, pos_y);
 
@@ -77,23 +78,7 @@ int init_window (int width, int height, int pos_x, int pos_y, char * win_name) {
 
 void create_menu () {
 
-	char * menu_name = NULL;
-	menu_name = (char *) malloc(WIN_NAME_MAX_LENGTH*sizeof(char));
-	if (menu_name==NULL) {
-		LOG_ERROR("Can't allocate memory for menu window title");
-	}
-
-	int menu_name_length = 0;
-	menu_name_length = sprintf(menu_name, "Menu");
-	ASSERT(menu_name_length <= WIN_NAME_MAX_LENGTH);
-	ASSERT(menu_name_length > 0);
-
-	int menu_win_id = 0;
-	menu_win_id = init_window(MENU_WIDTH, MENU_HEIGHT, MENU_POS_X, MENU_POS_Y, menu_name);
-
-	free_memory(menu_name);
-
-	add_menu(menu_win_id);
+	add_menu();
 
 }
 
