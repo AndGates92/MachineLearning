@@ -177,14 +177,10 @@ void destroy_menu() {
 	window_t * window = NULL;
 	window = search_by_win_id(win_id);
 
-	int menu_id = 0;
-	menu_id = glutGetMenu();
-
 	int curr_menu_id = 0;
 	curr_menu_id = get_menu_id(window);
-	ASSERT((menu_id == curr_menu_id) || (menu_id == 0));
 
-	glutDestroyMenu(menu_id);
+	glutDestroyMenu(curr_menu_id);
 }
 
 void remove_window() {
