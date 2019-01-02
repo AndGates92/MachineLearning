@@ -27,33 +27,34 @@
 unsigned char * reshape_img(int width_orig, int height_orig, double win_width, double win_height, unsigned char * img_orig) {
 
 	double win_img_width_ratio = 0.0;
-	win_img_width_ratio = ceil(win_width/(double)width_orig);
-
-	double win_img_height_ratio = 0.0;
-	win_img_height_ratio = ceil(win_height/(double)height_orig);
-
-	unsigned char * img = NULL;
-	img = (unsigned char *) malloc(win_width*win_height*NO_COLOURS*sizeof(unsigned char));
-
 	bool width_reduced = false;
-	int win_img_width_ratio_int = 0;
-	if (win_img_width_ratio < 1.0) {
-		win_img_width_ratio_int = (int)(1.0/win_img_width_ratio);
+	if (win_width < width_orig) {
+		win_img_width_ratio = ceil((double)width_orig/win_width);
 		width_reduced = true;
 	} else {
-		win_img_width_ratio_int = (int)(win_img_width_ratio);
+		win_img_width_ratio = ceil(win_width/(double)width_orig);
 		width_reduced = false;
 	}
 
+	int win_img_width_ratio_int = 0;
+	win_img_width_ratio_int = (int)(win_img_width_ratio);
+
+	double win_img_height_ratio = 0.0;
+
 	bool height_reduced = false;
-	int win_img_height_ratio_int = 0;
-	if (win_img_height_ratio < 1.0) {
-		win_img_height_ratio_int = (int)(1.0/win_img_height_ratio);
+	if (win_height < height_orig) {
+		win_img_height_ratio = ceil((double)height_orig/win_height);
 		height_reduced = true;
 	} else {
-		win_img_height_ratio_int = (int)(win_img_height_ratio);
+		win_img_height_ratio = ceil(win_height/(double)height_orig);
 		height_reduced = false;
 	}
+
+	int win_img_height_ratio_int = 0;
+	win_img_height_ratio_int = (int)(win_img_height_ratio);
+
+	unsigned char * img = NULL;
+	img = (unsigned char *) malloc(win_width*win_height*NO_COLOURS*sizeof(unsigned char));
 
 	int img_width_idx = 0;
 
