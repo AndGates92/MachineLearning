@@ -88,11 +88,13 @@ void init_gl(int argc, char** argv);
 void create_window(int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * win_name_prefix);
 
 /**
- * @brief Function: void create_menu()
+ * @brief Function: int create_menu()
+ *
+ * \return menu ID
  *
  * Add menu
  */
-void create_menu();
+int create_menu();
 
 /**
  * @brief Function: int init_window(int width, int height, int pos_x, int pos_y, char * win_name)

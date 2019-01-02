@@ -23,6 +23,7 @@
 #include "log.h"
 #include "graphics.h"
 #include "obj_graphics.h"
+#include "menu.h"
 #include "window_list.h"
 
 /** @addtogroup ObjGraphicsGroup
@@ -321,6 +322,7 @@ void keyboard_dataset_cb(unsigned char key, int x, int y) {
 			break;
 		case 'q':
 			LOG_INFO(ZERO,"[Keyboard callbak] Exit program because of pressing key %c", key);
+			destroy_menu();
 			destroy_window();
 			break;
 		default:

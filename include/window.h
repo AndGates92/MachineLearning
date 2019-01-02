@@ -39,9 +39,10 @@ typedef enum win_type_list {
 typedef struct window window_t;
 
 /**
- * @brief Function: window_t * add_window(int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix)
+ * @brief Function: window_t * add_window(int win_id, int menu_id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix)
  *
- * \param id: window id handler
+ * \param win_id: window ID handler
+ * \param menu_id: menu ID handler
  * \param prefix: window name prefix
  * \param no_img: number of images stored in pixels array
  * \param width: width of the window
@@ -53,7 +54,7 @@ typedef struct window window_t;
  *
  * Create and allocate memory for a new window data strcture window_t
  */
-window_t * add_window(int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix);
+window_t * add_window(int win_id, int menu_id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix);
 
 /**
  * @brief Function: void set_prefix(window_t ** window, char * prefix)
@@ -86,14 +87,24 @@ void set_window_type(window_t ** window, win_type_e window_type);
 void set_no_img(window_t ** window, int no_img);
 
 /**
- * @brief Function: void set_id(window_t ** window, int id)
+ * @brief Function: void set_menu_id(window_t ** window, int id)
  *
  * \param window: input window data structure window_t
- * \param id: window id handler
+ * \param id: menu ID handler
+ *
+ * Set menu handler ID
+ */
+void set_menu_id(window_t ** window, int id);
+
+/**
+ * @brief Function: void set_win_id(window_t ** window, int id)
+ *
+ * \param window: input window data structure window_t
+ * \param id: window ID handler
  *
  * Set window handler ID
  */
-void set_id(window_t ** window, int id);
+void set_win_id(window_t ** window, int id);
 
 /**
  * @brief Function: void set_img_ptr(window_t ** window, int img_ptr)
@@ -176,14 +187,24 @@ win_type_e get_window_type(window_t * window);
 int get_no_img(window_t * window);
 
 /**
- * @brief Function: int get_id(window_t * window)
+ * @brief Function: int get_menu_id(window_t * window)
+ *
+ * \param window: input window data structure window_t
+ * \return the menu handler ID
+ *
+ * Get menu handler ID
+ */
+int get_menu_id(window_t * window);
+
+/**
+ * @brief Function: int get_win_id(window_t * window)
  *
  * \param window: input window data structure window_t
  * \return the window handler ID
  *
  * Get window handler ID
  */
-int get_id(window_t * window);
+int get_win_id(window_t * window);
 
 /**
  * @brief Function: int get_img_ptr(window_t * window)

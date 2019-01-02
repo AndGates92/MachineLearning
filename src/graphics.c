@@ -51,17 +51,21 @@ void create_window(int no_img, int width, int height, unsigned char * pixels, in
 
 	free_memory(win_name);
 
+	int menu_id = 0;
+	menu_id = create_menu();
+
 	window_t * window = NULL;
 	window = (window_t *) malloc((size_t) window_size);
-	window = add_window(win_id, no_img, width, height, pixels, labels, window_type, win_name_prefix);
+	window = add_window(win_id, menu_id, no_img, width, height, pixels, labels, window_type, win_name_prefix);
 	add_window_struct(window);
+
 
 	wrapper_dataset_cb();
 
 	no_windows++;
 }
 
-int init_window (int width, int height, int pos_x, int pos_y, char * win_name) {
+int init_window(int width, int height, int pos_x, int pos_y, char * win_name) {
 
 	LOG_INFO(DEBUG,"[Init window] Create window at %0d, %0d. Dimensions: width %0d height %0d", pos_x, pos_y, width, height);
 	glutInitWindowSize(width, height);
@@ -76,9 +80,12 @@ int init_window (int width, int height, int pos_x, int pos_y, char * win_name) {
 
 }
 
-void create_menu () {
+int create_menu() {
 
-	add_menu();
+	int menu_id = 0;
+	menu_id = add_menu();
+
+	return menu_id;
 
 }
 

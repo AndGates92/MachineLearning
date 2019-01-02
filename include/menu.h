@@ -21,11 +21,13 @@ typedef enum menu_list {
 } menu_list_e;
 
 /**
- * @brief Function: void add_menu()
+ * @brief Function: int add_menu()
+ *
+ * \return menu ID
  *
  * This function adds a menu
  */
-void add_menu();
+int add_menu();
 
 /**
  * @brief Function: void menu_items(int item)
@@ -35,6 +37,13 @@ void add_menu();
  * This function selects actions based on selected item
  */
 void menu_items(int item);
+
+/**
+ * @brief Function: void destroy_menu()
+ *
+ * This function destroys a menu
+ */
+void destroy_menu();
 
 /** @} */ // End of MenuGroup
 #endif // MENU_H

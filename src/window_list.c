@@ -60,7 +60,7 @@ void remove_window_struct(int win_id) {
 
 	while (window_list != NULL) {
 		int curr_win_id = 0;
-		curr_win_id = get_id(window_list->window);
+		curr_win_id = get_win_id(window_list->window);
 
 		LOG_INFO(DEBUG,"[Delete window structure] Window ID: current %0d searched %0d",  curr_win_id, win_id);
 
@@ -113,7 +113,7 @@ window_t * search_by_win_id(int win_id) {
 
 	while (window_list != NULL) {
 		int curr_win_id = 0;
-		curr_win_id = get_id(window_list->window);
+		curr_win_id = get_win_id(window_list->window);
 
 		LOG_INFO(DEBUG,"[New search by windows ID] Window ID: current %0d searched %0d",  curr_win_id, win_id);
 

@@ -17,9 +17,10 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 
+#include "log.h"
 #include "menu.h"
-
-int menu_id;
+#include "window_list.h"
+#include "window.h"
 
 void menu_items(int item) {
 	switch (item) {
@@ -34,10 +35,30 @@ void menu_items(int item) {
 	glutPostRedisplay();
 }
 
-void add_menu() {
+int add_menu() {
 
+	int menu_id;
 	menu_id = glutCreateMenu(menu_items);
 	glutAddMenuEntry("Quit", QUIT);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+	return menu_id;
+}
+
+void destroy_menu() {
+	int win_id = 0;
+	win_id = glutGetWindow();
+
+	window_t * window = NULL;
+	window = search_by_win_id(win_id);
+
+	int menu_id = 0;
+	menu_id = glutGetMenu();
+
+	int curr_menu_id = 0;
+	curr_menu_id = get_menu_id(window);
+	ASSERT((menu_id == curr_menu_id) || (menu_id == 0));
+
+	glutDestroyMenu(menu_id);
 }

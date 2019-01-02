@@ -20,7 +20,8 @@
  */
 struct window {
 	char * prefix; /**< Name prefix */
-	int id; /**< Window ID */
+	int win_id; /**< Window ID */
+	int menu_id; /**< Menu ID */
 	int img_ptr; /**< Image pointer */
 	int width; /**< width of the window */
 	int height; /**< height of the window */
@@ -31,7 +32,7 @@ struct window {
 };
 /** @} */ // End of addtogroup WindowGroup
 
-window_t * add_window (int id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix) {
+window_t * add_window (int win_id, int menu_id, int no_img, int width, int height, unsigned char * pixels, int * labels, win_type_e window_type, char * prefix) {
 	window_t * window = NULL;
 
 	window = (window_t *) malloc(sizeof(window_t));
@@ -41,8 +42,11 @@ window_t * add_window (int id, int no_img, int width, int height, unsigned char 
 	// ===========================================================================
 	// ID handler
 	// ===========================================================================
-	window->id = id;
-	LOG_INFO(MEDIUM,"[New window structure] Set ID handler of window data struct to %0d",  id);
+	window->win_id = win_id;
+	LOG_INFO(MEDIUM,"[New window structure] Set window ID handler of window data struct to %0d",  win_id);
+
+	window->menu_id = menu_id;
+	LOG_INFO(MEDIUM,"[New window structure] Set menu ID handler of window data struct to %0d",  menu_id);
 
 	// ===========================================================================
 	// Prefix
@@ -102,7 +106,7 @@ window_t * add_window (int id, int no_img, int width, int height, unsigned char 
 		window->labels = (int *) malloc(no_img*sizeof(int));
 		memcpy(window->labels, labels, no_img*sizeof(int));
 	}
-	LOG_INFO(ZERO,"[New window structure] Created window data structure: ID ->  %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d", id, width, height, no_img);
+	LOG_INFO(ZERO,"[New window structure] Created window data structure: ID -> window %0d menu %0d Window dimensions -> (width %0d, height %0d) number of images -> %0d", win_id, menu_id, width, height, no_img);
 
 	return window;
 }
@@ -129,10 +133,16 @@ int get_no_img (window_t * window) {
 	return window->no_img;
 }
 
-int get_id (window_t * window) {
+int get_menu_id (window_t * window) {
 	ASSERT(window != NULL);
-	LOG_INFO(DEBUG,"[Get ID handler] ID handler of window data structure window_t: %0d",  window->id);
-	return window->id;
+	LOG_INFO(DEBUG,"[Get menu ID handler] ID handler of window data structure window_t: %0d",  window->menu_id);
+	return window->menu_id;
+}
+
+int get_win_id (window_t * window) {
+	ASSERT(window != NULL);
+	LOG_INFO(DEBUG,"[Get menu ID handler] ID handler of window data structure window_t: %0d",  window->win_id);
+	return window->win_id;
 }
 
 int get_img_ptr (window_t * window) {
@@ -247,10 +257,16 @@ void set_no_img (window_t ** window, int no_img) {
 	LOG_INFO(DEBUG,"[Set number of images] Set number of images in pixels array of window data structure window_t: %0d",  (*window)->no_img);
 }
 
-void set_id (window_t ** window, int id) {
+void set_menu_id (window_t ** window, int menu_id) {
 	ASSERT((*window) != NULL);
-	(*window)->id = id;
-	LOG_INFO(DEBUG,"[Set ID handler] Set ID handler of window data structure window_t: %0d",  (*window)->id);
+	(*window)->menu_id = menu_id;
+	LOG_INFO(DEBUG,"[Set menu ID handler] Set menu ID handler of window data structure window_t: %0d",  (*window)->menu_id);
+}
+
+void set_win_id (window_t ** window, int win_id) {
+	ASSERT((*window) != NULL);
+	(*window)->win_id = win_id;
+	LOG_INFO(DEBUG,"[Set window ID handler] Set window ID handler of window data structure window_t: %0d",  (*window)->win_id);
 }
 
 void set_img_ptr (window_t ** window, int img_ptr) {
