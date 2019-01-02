@@ -15,30 +15,6 @@
  *  @{
  */
 /**
- * @brief Menu width
- *
- */
-#define MENU_WIDTH 50
-
-/**
- * @brief Menu height
- *
- */
-#define MENU_HEIGHT 300
-
-/**
- * @brief Menu position on the x coordinate
- *
- */
-#define MENU_POS_X 50
-
-/**
- * @brief Menu position on the y coordinate
- *
- */
-#define MENU_POS_Y 50
-
-/**
  * @brief Window position on the x coordinate
  *
  */
