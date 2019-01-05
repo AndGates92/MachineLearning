@@ -98,7 +98,7 @@ void delete_window_struct(window_list_t * window_list) {
 
 	delete_window(window_list->window);
 	LOG_INFO(DEBUG,"[Delete window list] Free window data structure -> COMPLETED");
-	free(window_list);
+	free_memory(window_list);
 	LOG_INFO(DEBUG,"[Delete window list] Free window list data structure -> COMPLETED");
 
 }
