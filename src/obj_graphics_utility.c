@@ -29,65 +29,112 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 	double win_img_width_ratio = 0.0;
 	bool width_reduced = false;
 	if (win_width < width_orig) {
-		win_img_width_ratio = ceil((double)width_orig/win_width);
+		win_img_width_ratio = ((double)width_orig/win_width);
 		width_reduced = true;
 	} else {
-		win_img_width_ratio = ceil(win_width/(double)width_orig);
+		win_img_width_ratio = (win_width/(double)width_orig);
 		width_reduced = false;
 	}
 
 	int win_img_width_ratio_int = 0;
-	win_img_width_ratio_int = (int)(win_img_width_ratio);
+	win_img_width_ratio_int = (int)(floor(win_img_width_ratio));
+
+	double win_img_width_ratio_dec = 0.0;
+	if (win_img_width_ratio == (double)(win_img_width_ratio_int)) {
+		win_img_width_ratio_dec = 1.0;
+	} else {
+		win_img_width_ratio_dec = ceil(1.0/(win_img_width_ratio - (double)(win_img_width_ratio_int)));
+	}
 
 	double win_img_height_ratio = 0.0;
-
 	bool height_reduced = false;
 	if (win_height < height_orig) {
-		win_img_height_ratio = ceil((double)height_orig/win_height);
+		win_img_height_ratio = ((double)height_orig/win_height);
 		height_reduced = true;
 	} else {
-		win_img_height_ratio = ceil(win_height/(double)height_orig);
+		win_img_height_ratio = (win_height/(double)height_orig);
 		height_reduced = false;
 	}
 
 	int win_img_height_ratio_int = 0;
 	win_img_height_ratio_int = (int)(win_img_height_ratio);
 
+	double win_img_height_ratio_dec = 0.0;
+	if (win_img_height_ratio == (double)(win_img_height_ratio_int)) {
+		win_img_height_ratio_dec = 1.0;
+	} else {
+		win_img_height_ratio_dec = ceil(1.0/(win_img_height_ratio - (double)(win_img_height_ratio_int)));
+	}
+
 	unsigned char * img = NULL;
 	img = (unsigned char *) malloc(win_width*win_height*NO_COLOURS*sizeof(unsigned char));
 
 	int img_width_idx = 0;
+	int width_corr = 0;
+	bool add_extra_col = false;
 
+printf("orig width %0d height %0d \n", width_orig,height_orig);
+printf("width %0lf height %0lf \n", win_width,win_height);
+printf("ratio width %0lf height %0lf \n", win_img_width_ratio,win_img_height_ratio);
+printf("int ratio width %0d height %0d \n", win_img_width_ratio_int,win_img_height_ratio_int);
+printf("dec ratio width %0lf height %0lf \n", win_img_width_ratio_dec,win_img_height_ratio_dec);
 	for (int width_idx = 0; width_idx < (int)win_width; width_idx++) {
 
 		ASSERT(img_width_idx < width_orig);
 
-		if (width_reduced == false) {
-			if ((width_idx % win_img_width_ratio_int) == (win_img_width_ratio_int - 1)) {
-				img_width_idx++;
-			}
-		} else {
-			
-		}
-
 		int img_height_idx = 0;
+		int height_corr = 0;
+		bool add_extra_line = false;
 
 		for (int height_idx = 0; height_idx < (int)win_height; height_idx++) {
+
+			ASSERT(img_height_idx < height_orig);
+
 			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
 				*(img + NO_COLOURS*(height_idx*(int)win_width + width_idx) + colour_idx) = *(img_orig + NO_COLOURS*(img_height_idx*width_orig + img_width_idx) + colour_idx);
 			}
 
-			ASSERT(img_height_idx < height_orig);
+//printf("%0d ", *(img + NO_COLOURS*(height_idx*(int)win_width + width_idx)));
 
 			if (height_reduced == false) {
-				if ((height_idx % win_img_height_ratio_int) == (win_img_height_ratio_int - 1)) {
-					img_height_idx++;
+				int height_idx_corr = 0;
+				height_idx_corr = (height_idx - height_corr);
+				if ((height_idx_corr % win_img_height_ratio_int) == (win_img_height_ratio_int - 1)) {
+					if (((height_idx_corr % ((int) win_img_height_ratio_dec)) < (((int) win_img_height_ratio_dec) - 1)) || (add_extra_line == true) || (win_img_height_ratio == (double)(win_img_height_ratio_int))) {
+						if (img_height_idx < (height_orig - 1)) {
+							img_height_idx++;
+						}
+						add_extra_line = false;
+					} else {
+						height_corr++;
+						add_extra_line = true;
+					}
 				}
 			} else {
 			
 			}
+printf("reshaped (%0d, %0d) <--- orig (%0d, %0d) \n", width_idx, height_idx, img_width_idx,img_height_idx);
 
 		}
+
+		if (width_reduced == false) {
+			int width_idx_corr = 0;
+			width_idx_corr = (width_idx - width_corr);
+			if ((width_idx_corr % win_img_width_ratio_int) == (win_img_width_ratio_int - 1)) {
+				if (((width_idx_corr % ((int) win_img_width_ratio_dec)) < (((int) win_img_width_ratio_dec) - 1)) || (add_extra_col == true) || (win_img_width_ratio == (double)(win_img_width_ratio_int))) {
+					if (img_width_idx < (width_orig - 1)) {
+						img_width_idx++;
+					}
+					add_extra_col = false;
+				} else {
+					width_corr++;
+					add_extra_col = true;
+				}
+			}
+		} else {
+			
+		}
+//printf("\n");
 	}
 
 	return img;
