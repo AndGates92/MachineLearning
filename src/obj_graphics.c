@@ -128,8 +128,8 @@ void display_dataset_cb() {
 	unsigned char * img_flipped = NULL;
 	img_flipped = flip_img((int)win_width, (int)win_height, img_reshaped);
 
-//	glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, img_rgb);
-//	glDrawPixels((int)win_width, (int)win_height, GL_RGB, GL_UNSIGNED_BYTE, img_reshaped);
+	glPixelStoref(GL_PACK_ALIGNMENT, 1);
+	glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
 	glDrawPixels((int)win_width, (int)win_height, GL_RGB, GL_UNSIGNED_BYTE, img_flipped);
 
 	free_memory(img_pixels);

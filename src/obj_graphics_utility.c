@@ -73,11 +73,12 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 	int width_corr = 0;
 	bool add_extra_col = false;
 
-printf("orig width %0d height %0d \n", width_orig,height_orig);
-printf("width %0lf height %0lf \n", win_width,win_height);
-printf("ratio width %0lf height %0lf \n", win_img_width_ratio,win_img_height_ratio);
-printf("int ratio width %0d height %0d \n", win_img_width_ratio_int,win_img_height_ratio_int);
-printf("dec ratio width %0lf height %0lf \n", win_img_width_ratio_dec,win_img_height_ratio_dec);
+	LOG_INFO(DEBUG,"[Reshape image] original image width %0d height %0d \n", width_orig,height_orig);
+	LOG_INFO(DEBUG,"[Reshape image] reshape image width %0lf height %0lf \n", win_width,win_height);
+	LOG_INFO(DEBUG,"[Reshape image] ratio width %0lf height %0lf \n", win_img_width_ratio,win_img_height_ratio);
+	LOG_INFO(DEBUG,"[Reshape image] Integer part of ratio width %0d height %0d \n", win_img_width_ratio_int,win_img_height_ratio_int);
+	LOG_INFO(DEBUG,"[Reshape image] Inverse of decimal part of ratio width %0lf height %0lf \n", win_img_width_ratio_dec,win_img_height_ratio_dec);
+
 	for (int width_idx = 0; width_idx < (int)win_width; width_idx++) {
 
 		ASSERT(img_width_idx < width_orig);
@@ -89,17 +90,17 @@ printf("dec ratio width %0lf height %0lf \n", win_img_width_ratio_dec,win_img_he
 		for (int height_idx = 0; height_idx < (int)win_height; height_idx++) {
 
 			ASSERT(img_height_idx < height_orig);
+			LOG_INFO(DEBUG, "[Reshape image] orig (%0d, %0d) ---> reshaped (%0d, %0d): %0d \n", width_idx, height_idx, img_width_idx,img_height_idx,*(img_orig + NO_COLOURS*(img_height_idx*width_orig + img_width_idx)));
 
 			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
 				*(img + NO_COLOURS*(height_idx*(int)win_width + width_idx) + colour_idx) = *(img_orig + NO_COLOURS*(img_height_idx*width_orig + img_width_idx) + colour_idx);
 			}
 
-//printf("%0d ", *(img + NO_COLOURS*(height_idx*(int)win_width + width_idx)));
-
 			if (height_reduced == false) {
 				int height_idx_corr = 0;
 				height_idx_corr = (height_idx - height_corr);
 				if ((height_idx_corr % win_img_height_ratio_int) == (win_img_height_ratio_int - 1)) {
+					// Increase height only if no need to add extra line, extra line was not added the previous time around or ratio has no decimal part
 					if (((height_idx_corr % ((int) win_img_height_ratio_dec)) < (((int) win_img_height_ratio_dec) - 1)) || (add_extra_line == true) || (win_img_height_ratio == (double)(win_img_height_ratio_int))) {
 						if (img_height_idx < (height_orig - 1)) {
 							img_height_idx++;
@@ -113,14 +114,13 @@ printf("dec ratio width %0lf height %0lf \n", win_img_width_ratio_dec,win_img_he
 			} else {
 			
 			}
-printf("reshaped (%0d, %0d) <--- orig (%0d, %0d) \n", width_idx, height_idx, img_width_idx,img_height_idx);
-
 		}
 
 		if (width_reduced == false) {
 			int width_idx_corr = 0;
 			width_idx_corr = (width_idx - width_corr);
 			if ((width_idx_corr % win_img_width_ratio_int) == (win_img_width_ratio_int - 1)) {
+				// Increase width only if no need to add extra column, extra line was not added the previous time around or ratio has no decimal part
 				if (((width_idx_corr % ((int) win_img_width_ratio_dec)) < (((int) win_img_width_ratio_dec) - 1)) || (add_extra_col == true) || (win_img_width_ratio == (double)(win_img_width_ratio_int))) {
 					if (img_width_idx < (width_orig - 1)) {
 						img_width_idx++;
@@ -134,7 +134,6 @@ printf("reshaped (%0d, %0d) <--- orig (%0d, %0d) \n", width_idx, height_idx, img
 		} else {
 			
 		}
-//printf("\n");
 	}
 
 	return img;
