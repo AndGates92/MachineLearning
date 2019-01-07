@@ -87,5 +87,22 @@ void destroy_menu();
  */
 void remove_window();
 
+/**
+ * @brief Function: int orig_idx_mgmt (bool reduced, int orig, int reshaped_idx, int orig_idx, int * corr, double ratio, int ratio_int, double ratio_dec, bool * add_extra)
+ *
+ * \param reduced: dimension is reduced with respect to original dimensions
+ * \param orig: original dinension
+ * \param reshaped_idx: index of reshaped dimension
+ * \param orig_idx: index of original dimension
+ * \param corr: correction for idx increase logic.
+ * \param ratio: ratio between new and original dimension.
+ * \param ratio_int: integer part of ratio between new and original dimension.
+ * \param ratio_dec: decimal part of ratio between new and original dimension.
+ * \param add_extra: need to add extra line or column flag.
+ * \return index of original image
+ *
+ * Computes the inex of a given dimensione in the original image
+ */
+int orig_idx_mgmt (bool reduced, int orig, int reshaped_idx, int orig_idx, int * corr, double ratio, int ratio_int, double ratio_dec, bool * add_extra);
 /** @} */ // End of UtilityObjGraphicsGroup
 #endif // OBJ_GRAPHICS_UTILITY_H

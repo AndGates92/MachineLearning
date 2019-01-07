@@ -69,7 +69,7 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 	unsigned char * img = NULL;
 	img = (unsigned char *) malloc(win_width*win_height*NO_COLOURS*sizeof(unsigned char));
 
-	int img_width_idx = 0;
+	int orig_width_idx = 0;
 	int width_corr = 0;
 	bool add_extra_col = false;
 
@@ -81,62 +81,54 @@ unsigned char * reshape_img(int width_orig, int height_orig, double win_width, d
 
 	for (int width_idx = 0; width_idx < (int)win_width; width_idx++) {
 
-		ASSERT(img_width_idx < width_orig);
+		ASSERT(orig_width_idx < width_orig);
 
-		int img_height_idx = 0;
+		int orig_height_idx = 0;
 		int height_corr = 0;
 		bool add_extra_line = false;
 
 		for (int height_idx = 0; height_idx < (int)win_height; height_idx++) {
 
-			ASSERT(img_height_idx < height_orig);
-			LOG_INFO(DEBUG, "[Reshape image] orig (%0d, %0d) ---> reshaped (%0d, %0d): %0d \n", width_idx, height_idx, img_width_idx,img_height_idx,*(img_orig + NO_COLOURS*(img_height_idx*width_orig + img_width_idx)));
+			ASSERT(orig_height_idx < height_orig);
+			LOG_INFO(DEBUG, "[Reshape image] orig (%0d, %0d) ---> reshaped (%0d, %0d): %0d \n", width_idx, height_idx, orig_width_idx,orig_height_idx,*(img_orig + NO_COLOURS*(orig_height_idx*width_orig + orig_width_idx)));
 
 			for (int colour_idx = 0; colour_idx < NO_COLOURS; colour_idx++) {
-				*(img + NO_COLOURS*(height_idx*(int)win_width + width_idx) + colour_idx) = *(img_orig + NO_COLOURS*(img_height_idx*width_orig + img_width_idx) + colour_idx);
+				*(img + NO_COLOURS*(height_idx*(int)win_width + width_idx) + colour_idx) = *(img_orig + NO_COLOURS*(orig_height_idx*width_orig + orig_width_idx) + colour_idx);
 			}
 
-			if (height_reduced == false) {
-				int height_idx_corr = 0;
-				height_idx_corr = (height_idx - height_corr);
-				if ((height_idx_corr % win_img_height_ratio_int) == (win_img_height_ratio_int - 1)) {
-					// Increase height only if no need to add extra line, extra line was not added the previous time around or ratio has no decimal part
-					if (((height_idx_corr % ((int) win_img_height_ratio_dec)) < (((int) win_img_height_ratio_dec) - 1)) || (add_extra_line == true) || (win_img_height_ratio == (double)(win_img_height_ratio_int))) {
-						if (img_height_idx < (height_orig - 1)) {
-							img_height_idx++;
-						}
-						add_extra_line = false;
-					} else {
-						height_corr++;
-						add_extra_line = true;
-					}
-				}
-			} else {
-			
-			}
+			orig_height_idx = orig_idx_mgmt (height_reduced, height_orig, height_idx, orig_height_idx, &height_corr, win_img_height_ratio, win_img_height_ratio_int, win_img_height_ratio_dec, &add_extra_line);
+
 		}
 
-		if (width_reduced == false) {
-			int width_idx_corr = 0;
-			width_idx_corr = (width_idx - width_corr);
-			if ((width_idx_corr % win_img_width_ratio_int) == (win_img_width_ratio_int - 1)) {
-				// Increase width only if no need to add extra column, extra line was not added the previous time around or ratio has no decimal part
-				if (((width_idx_corr % ((int) win_img_width_ratio_dec)) < (((int) win_img_width_ratio_dec) - 1)) || (add_extra_col == true) || (win_img_width_ratio == (double)(win_img_width_ratio_int))) {
-					if (img_width_idx < (width_orig - 1)) {
-						img_width_idx++;
+		orig_width_idx = orig_idx_mgmt (width_reduced, width_orig, width_idx, orig_width_idx, &width_corr, win_img_width_ratio, win_img_width_ratio_int, win_img_width_ratio_dec, &add_extra_col);
+
+	}
+
+	return img;
+}
+
+int orig_idx_mgmt (bool reduced, int orig, int reshaped_idx, int orig_idx, int * corr, double ratio, int ratio_int, double ratio_dec, bool * add_extra) {
+
+		if (reduced == false) {
+			int idx_corr = 0;
+			idx_corr = (reshaped_idx - *corr);
+			if ((idx_corr % ratio_int) == (ratio_int - 1)) {
+				// Increase only if no need to add extra column, extra line was not added the previous time around or ratio has no decimal part
+				if (((idx_corr % ((int) ratio_dec)) < (((int) ratio_dec) - 1)) || (*add_extra == true) || (ratio == (double)(ratio_int))) {
+					if (orig_idx < (orig - 1)) {
+						orig_idx++;
 					}
-					add_extra_col = false;
+					*add_extra = false;
 				} else {
-					width_corr++;
-					add_extra_col = true;
+					(*corr)++;
+					*add_extra = true;
 				}
 			}
 		} else {
 			
 		}
-	}
 
-	return img;
+	return orig_idx;
 }
 
 unsigned char * flip_img(int win_width, int win_height, unsigned char * img_in) {
