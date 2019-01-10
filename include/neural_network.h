@@ -70,6 +70,24 @@
 #define MIN_LEARN_RATE 0
 
 /**
+ * @brief Minimum value of bias
+ *
+ */
+#define MIN_LEARN_RATE 0
+
+/**
+ * @brief Progress ID string maximum length when training
+ *
+ */
+#define TRAIN_PROGRESS_ID_BAR_LENGTH 50
+
+/**
+ * @brief Progress ID string maximum length when test
+ *
+ */
+#define TEST_PROGRESS_ID_BAR_LENGTH 50
+
+/**
  * @brief Function: void parse_all_idx (char * test_set, char * train_set, char * test_label, char * train_label, data_t ** test_set_struct_t, data_t ** test_label_struct_t, data_t ** train_set_struct_t, data_t ** train_label_struct_t)
  *
  * \param test_set: filename of the IDX file containing the test set

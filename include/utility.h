@@ -68,6 +68,20 @@
 #define BIT_IN_BYTE 8
 
 /**
+ * @brief Progress bar symbol
+ *
+ */
+#define PROGRESS_BAR_SYMBOL #
+
+/**
+ * @brief Progress bar length
+ *
+ */
+#define PROGRESS_BAR_LENGTH 50
+
+
+
+/**
  * @brief Function: void free_memory (void * ptr)
  *
  * \param ptr: pointer to the memory to free
@@ -126,6 +140,17 @@ double * normalize_elements (double * element_set, elementdatatype_t max_element
  * Cast elements of array element_set to int.
  */
 int * cast_array_to_int (elementdatatype_t * element_set, int dimension);
+
+/**
+ * @brief Function: void statusbar(char * str, int idx, int max_val)
+ *
+ * \param str: string to put in front of percentage
+ * \param idx: current index
+ * \param max_val: maximum value of idx
+ *
+ * Prints a progress bar on the screen using the following format: [<str> percentage] <bar>.
+ */
+void statusbar(char * str, int idx, int max_val);
 
 /** @} */ // End of UtilityGroup group
 #endif // UTILITY_H

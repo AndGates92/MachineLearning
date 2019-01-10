@@ -124,3 +124,21 @@ int * cast_array_to_int (elementdatatype_t * element_set, int dimension) {
 
 	return element_set_int;
 }
+
+void statusbar(char * str, int idx, int max_val) {
+
+	ASSERT(idx <= max_val);
+
+	double ratio = 0;
+	ratio = ((double) idx)/((double) max_val);
+	double percentage = 0;
+	percentage = 100.0*ratio;
+	int no_of_symbols_in_progress_bar = 0;
+	no_of_symbols_in_progress_bar = (int)((((double) (PROGRESS_BAR_LENGTH))*((double) idx))/((double) max_val));
+
+	fflush(stdout);
+	printf("[%s %.3lf%%] ", str, percentage);
+	for (int no_sym = 0; no_sym < no_of_symbols_in_progress_bar; no_sym++) {
+		printf("%s", STRINGIFY_EXPR(PROGRESS_BAR_SYMBOL));
+	}
+}

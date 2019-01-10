@@ -208,7 +208,8 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label, double learn_rate, double alpha) {
 
 	int num_el = 0;
-	num_el = get_dimension(data_set, 0);
+//	num_el = get_dimension(data_set, 0);
+	num_el = 2;
 
 	int total_num_layers = 0;
 	// Hidden layers plus input layer plus output layer
@@ -223,8 +224,16 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
-//	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
-	for (int start_el_idx = 0; start_el_idx < 3; start_el_idx++) {
+	char * progress_id_str = NULL;
+	progress_id_str = (char *) malloc(TRAIN_PROGRESS_ID_BAR_LENGTH*sizeof(char));
+	if (progress_id_str==NULL) {
+		LOG_ERROR("Can't allocate memory for progress ID string while training the neural network");
+	}
+	strcpy(progress_id_str, "TRAINING SET");
+
+	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
+
+		statusbar(progress_id_str, start_el_idx, num_el);
 
 		double * input_data_double_norm = NULL;
 		input_data_double_norm = get_data_el(data_set, start_el_idx);
@@ -251,6 +260,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 	}
 
+	free_memory(progress_id_str);
 	free_memory(node_val);
 
 }
@@ -327,8 +337,17 @@ void testing_neural_network(double * weights, double * biases, int * layers_dim,
 	double * node_val = NULL;
 	node_val = (double *) malloc(total_num_nodes*sizeof(double));
 
+	char * progress_id_str = NULL;
+	progress_id_str = (char *) malloc(TRAIN_PROGRESS_ID_BAR_LENGTH*sizeof(char));
+	if (progress_id_str==NULL) {
+		LOG_ERROR("Can't allocate memory for progress ID string while training the neural network");
+	}
+	strcpy(progress_id_str, "TEST SET");
+
 //	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 	for (int start_el_idx = 0; start_el_idx < 3; start_el_idx++) {
+
+		statusbar(progress_id_str, start_el_idx, num_el);
 
 		double * input_data_double_norm = NULL;
 		input_data_double_norm = get_data_el(data_set, start_el_idx);
@@ -363,6 +382,7 @@ void testing_neural_network(double * weights, double * biases, int * layers_dim,
 	num_fail_pc = 100.0*(((double) num_fail)/((double) num_el));
 	LOG_INFO(LOW,"[Neural network testing] Total number of FAIL: %0d out of %0d -> %0f%", num_fail, num_el, num_fail_pc);
 
+	free_memory(progress_id_str);
 	free_memory(node_val);
 
 }
