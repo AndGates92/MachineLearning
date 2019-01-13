@@ -233,7 +233,7 @@ void train_neural_network(double * weights, double * biases, int * layers_dim, d
 
 	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 
-		statusbar(progress_id_str, start_el_idx, num_el);
+		statusbar(progress_id_str, start_el_idx, (num_el-1));
 
 		double * input_data_double_norm = NULL;
 		input_data_double_norm = get_data_el(data_set, start_el_idx);
@@ -322,7 +322,8 @@ void testing_neural_network(double * weights, double * biases, int * layers_dim,
 	int num_pass = 0;
 
 	int num_el = 0;
-	num_el = get_dimension(data_set, 0);
+//	num_el = get_dimension(data_set, 0);
+	num_el = 3;
 
 	int total_num_layers = 0;
 	// Hidden layers plus input layer plus output layer
@@ -344,10 +345,9 @@ void testing_neural_network(double * weights, double * biases, int * layers_dim,
 	}
 	strcpy(progress_id_str, "TEST SET");
 
-//	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
-	for (int start_el_idx = 0; start_el_idx < 3; start_el_idx++) {
+	for (int start_el_idx = 0; start_el_idx < num_el; start_el_idx++) {
 
-		statusbar(progress_id_str, start_el_idx, num_el);
+		statusbar(progress_id_str, start_el_idx, (num_el-1));
 
 		double * input_data_double_norm = NULL;
 		input_data_double_norm = get_data_el(data_set, start_el_idx);
