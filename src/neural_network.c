@@ -208,8 +208,7 @@ void initialize_neuronetwork(double ** weights, double ** biases, int ** layers_
 void train_neural_network(double * weights, double * biases, int * layers_dim, data_t * data_set, data_t * data_label, double learn_rate, double alpha) {
 
 	int num_el = 0;
-//	num_el = get_dimension(data_set, 0);
-	num_el = 2;
+	num_el = get_dimension(data_set, 0);
 
 	int total_num_layers = 0;
 	// Hidden layers plus input layer plus output layer
@@ -322,8 +321,7 @@ void testing_neural_network(double * weights, double * biases, int * layers_dim,
 	int num_pass = 0;
 
 	int num_el = 0;
-//	num_el = get_dimension(data_set, 0);
-	num_el = 3;
+	num_el = get_dimension(data_set, 0);
 
 	int total_num_layers = 0;
 	// Hidden layers plus input layer plus output layer
