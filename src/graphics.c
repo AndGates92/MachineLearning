@@ -23,8 +23,16 @@
 #include "obj_graphics.h"
 #include "window_list.h"
 
+/** @addtogroup GraphicsGroup
+ *  @{
+ */
+/** 
+ * @brief Number of windows in the program
+ *
+ */
 // Shared variables 
 int no_windows;
+/** @} */ // End of addtogroup GraphicsGroup
 
 void init_gl(int argc, char** argv) {
 	glutInit( &argc, argv );

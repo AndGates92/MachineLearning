@@ -25,8 +25,8 @@
  * \param img_orig: image pixels as stored in window array
  * \param win_width: width of the window.
  * \param win_height: height of the window.
- * \param width: width of the image stored in window array.
- * \param height: height of the image stored in window array.
+ * \param width_orig: width of the image stored in window array.
+ * \param height_orig: height of the image stored in window array.
  * \return reshaped image
  *
  * Reshape image array

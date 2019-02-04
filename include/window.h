@@ -147,14 +147,14 @@ void set_height(window_t ** window, int height);
 void set_pixels(window_t ** window, unsigned char * pixels);
 
 /**
- * @brief Function: void set_label(window_t ** window, int * pixels)
+ * @brief Function: void set_labels(window_t ** window, int * pixels)
  *
  * \param window: input window data structure window_t
  * \param labels: labels matching the pixels
  *
  * Set window pixels
  */
-void set_label(window_t ** window, int * labels);
+void set_labels(window_t ** window, int * labels);
 
 /**
  * @brief Function: char * get_prefix(window_t * window)

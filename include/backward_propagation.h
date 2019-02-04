@@ -12,7 +12,7 @@
  * @brief Function: void backward_propagation (double ** weights, double * biases, int * layers_dim, double * node_val, int label, double learn_rate, double alpha)
  *
  * \param weights: weights of neural network layers
- * \param bias: bias of neural network
+ * \param biases: pointer to bias array of neural network
  * \param layers_dim:  array storing dimensions of every layer in the neural network
  * \param node_val:  result from the neural network. It is a vector of values between zero and one
  * \param label:  label of the training set

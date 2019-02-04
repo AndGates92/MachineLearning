@@ -24,9 +24,13 @@ struct window_list {
 	window_t * window; /**< Window */
 	window_list_t * next; /**< Next Window */
 };
-/** @} */ // End of addtogroup WindowListGroup
 
+/**
+ * @brief Head pointer to the linked list of windows
+ *
+ */
 window_list_t * head_window;
+/** @} */ // End of addtogroup WindowListGroup
 
 void initialize_window_list() {
 	head_window = NULL;

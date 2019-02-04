@@ -148,7 +148,7 @@ int * cast_array_to_int (elementdatatype_t * element_set, int dimension);
  * \param idx: current index
  * \param max_val: maximum value of idx
  *
- * Prints a progress bar on the screen using the following format: [<str> percentage] <bar>.
+ * Prints a progress bar on the screen using the following format: [\<str\> percentage] \<bar\>.
  */
 void statusbar(char * str, int idx, int max_val);
 
