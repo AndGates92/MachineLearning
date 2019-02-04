@@ -3,7 +3,7 @@
  * @file main.c
  * @author Andrea Gianarda
  * @date 22nd of October 2018
- * @brief Function body handling images
+ * @brief Main function
 */
 #include <stdlib.h>
 #include <stdio.h>
