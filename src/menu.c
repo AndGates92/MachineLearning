@@ -1,6 +1,6 @@
 /**
  * @copyright
- * @file graphics.c
+ * @file menu.c
  * @author Andrea Gianarda
  * @date 31st of December 2018
  * @brief Functions related to OpenGL graphics

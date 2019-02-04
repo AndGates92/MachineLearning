@@ -1,6 +1,6 @@
 /**
  * @copyright
- * @file image.c
+ * @file main.c
  * @author Andrea Gianarda
  * @date 22nd of October 2018
  * @brief Function body handling images
@@ -30,10 +30,10 @@
  * Decodes the arguments and call functions for further processing
  *
  * Syntax:
- * --> -trs <filename> : training set file
- * --> -tes <filename> : test set file
- * --> -trl <filename> : training label file
- * --> -tel <filename> : test label file
+ * --> -trs \<filename\> : training set file
+ * --> -tes \<filename\> : test set file
+ * --> -trl \<filename\> : training label file
+ * --> -tel \<filename\> : test label file
  *
  */
 int main (int argc, char * argv []) {
